@@ -1,19 +1,27 @@
 // Here I'm including the standard stdio.h header. I need to learn what exactly the different headers are for, but hey, it works for now.
 #include <stdio.h>
-
-// Here I'm defining the five variables, all as integers.
-int v = 0;
-int w = 0;
-int x = 0;
-int y = 0;
-int z = 0;
-
-// I'm also defining the yes/no variable we'll be using later as a character.
-char q;
+// stdio.h is a header library that lets you perform input / output ooperations.
 
 // Now we're starting the main function.
-int main()
-{
+int main() {
+    // Here I'm defining the five variables, all as integers.
+    int v = 0;
+    int w = 0;
+    int x = 0;
+    int y = 0;
+    int z = 0;
+    
+    // I'm also defining the yes/no variable we'll be using later as a character.
+    char q;
+
+    // Define your variables here. Here is a good read:
+    // http://c2.com/cgi/wiki?GlobalVariablesAreBad
+    
+    // Also, stay away from using go to. Don't start forming bad habits already.
+    // http://stackoverflow.com/questions/18035011/how-to-avoid-goto-in-c
+    
+    
+    
 	// This is here just to restart the application when asked to at the end.
 	beginning:
 	// Firstly, I'm asking what number they're reaching to, and storing that as integer z.
