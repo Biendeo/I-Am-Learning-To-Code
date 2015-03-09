@@ -6,21 +6,18 @@
 // Thy Dungeonman is a free flash parody of old '80s adventure games.
 // http://homestarrunner.com/dungeonman.html
 // This program is an attempt to recreate this entirely in C.
-// Most of this was
-// There's a few things that need to be done to make it perfect.
-// Currently right now the general look and get commands don't work.
-// Also the thing "crashes" when you try to exit it.
-// Finally, scores aren't fully implemented.
-// However, it mostly works right now, so that's good. :)
+// All of this was done by scratch, recreating the game's features.
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 char inputText[] = "0";
+int gotFlask = 0;
 int gotScroll = 0;
 int gotTrinket = 0;
 int currentRoom = 0;
+int currentLook = 0;
 int score = 0;
 
 int main () {
@@ -35,11 +32,16 @@ int main () {
 	printf("\n                oo\n");
 	printf("\nHit Enter to enter yon dungeon.");
 	getchar();
-	
-	printf("\n\n\n\n");
+	debugProgram();
+	printf("\n\n");
 	printf("THY DUNGEONMAN\n\n");
 	printf("YOU ARE THY DUNGEONMAN!\n\n\n");
 	room1();
+	return 0;
+}
+
+int debugProgram() {
+	printf("\n~~~~~\n\nThere are currently a few things that are not implemented.\n - Only use lower-case letters right now.\n - The GO, TALK and GIVE commands don\'t get the item listed yet.\n - The score isn\'t 100 percent perfect.\n - The scroll thinks it has already been picked up.\n - Some of the text needs to be re-aligned.\n - The TRINKET does not disappear.\n\n~~~~~");
 }
 
 int enterString(){
@@ -48,9 +50,9 @@ int enterString(){
 	gets(inputText);
 	
 	// If I want to debug the string, I remove the comment bit here.
-	// debugString();
+	debugString();
 	
-	printf("\n\n\n\n");
+	printf("\n\n~~~~~\n\n");
 	
 	// These are for moving between the rooms.
 	
@@ -75,7 +77,10 @@ int enterString(){
 	
 	// These are for picking up items.
 	
-	else if (strcmp(inputText, "get flask") == 0 && currentRoom == 1){
+	else if (strcmp(inputText, "get dagger") == 0){
+		gettingDagger();
+	}
+	else if (strcmp(inputText, "get flask") == 0 && currentRoom == 1 && gotFlask <= 1){
 		gettingFlask();
 	}
 	else if (strcmp(inputText, "get scroll") == 0 && currentRoom == 1 && gotScroll == 0){
@@ -123,11 +128,14 @@ int enterString(){
 	
 	// These are the ending conditions.
 	
-	else if (strcmp(inputText, "give trinket") == 0 && currentRoom == 4 && gotTrinket == 1){
+	else if ((strcmp(inputText, "give trinket") == 0 || strcmp(inputText, "give trinket to dennis") == 0) && currentRoom == 4 && gotTrinket == 1){
 		endingWin();
 	}
 	else if (strcmp(inputText, "die") == 0){
 		endingDeath();
+	}
+	else if (strcmp(inputText, "get flask") == 0 && currentRoom == 1 && gotFlask == 2){
+		endingFlask();
 	}
 	else if (strcmp(inputText, "get rope") == 0 && currentRoom == 2){
 		endingRope();
@@ -141,6 +149,21 @@ int enterString(){
 	else if (strcmp(inputText, "look") == 0){
 		lookNone();
 	}
+	else if (strcmp(inputText, "dance") == 0){
+		danceNone();
+	}
+	else if (strcmp(inputText, "talk") == 0){
+		talkNone();
+	}
+	else if (strcmp(inputText, "give") == 0){
+		giveNone();
+	}
+	else if (strcmp(inputText, "smell") == 0 || strcmp(inputText, "sniff") == 0){
+		smellNone();
+	}
+	else if (strcmp(inputText, "go") == 0){
+		goNone();
+	}
 	else {
 		printf("That does not computeth. Type HELP is thou needs of it.\n");
 		enterString();
@@ -150,8 +173,13 @@ int enterString(){
 // In case I want to see what the string gets.
 
 int debugString() {
-	printf("\nFor debugging reasons, you entered: ");
+	printf("\n\n~~~~~\n\nFor debugging reasons, you entered: ");
 	puts(inputText);
+	printf("\ngotFlask = %d", gotFlask);
+	printf("\ngotScroll = %d", gotScroll);
+	printf("\ngotTrinket = %d", gotTrinket);
+	printf("\ncurrentRoom = %d", currentRoom);
+	printf("\nscore = %d", score);
 }
 
 int room1() {
@@ -183,7 +211,7 @@ int room3() {
 	
 	currentRoom = 3;
 	
-	printf("You head south to an embankment. Or maybe a chasm. You can't\ndecide which. Anyway, ye spies a TRINKET. Obvious exits are NORTH.\n");
+	printf("You head south to an embankment. Or maybe a chasm. You can\'t\ndecide which. Anyway, ye spies a TRINKET. Obvious exits are NORTH.\n");
 	enterString();
 }
 
@@ -197,12 +225,21 @@ int room4() {
 
 int gettingFlask() {
 	printf("Ye cannot get the FLASK. It is firmly bolted to a wall which is bolted\nto the rest of the dungeon which is probably bolted to a castle.\nNever you mind.\n");
+	gotFlask++;
 	enterString();
 }
 
 int gettingScroll() {
 	printf("Ye takes the SCROLL and reads of it. It doth say:\n\nBEWARE, READER OF YE SCROLL, DANGERS AWAIT TO THE -\n\nThe SCROLL disappears in thy hands with ye olde ZAP!\n");
 	gotScroll = 1;
+	score = score + 2;
+	enterString();
+}
+
+int gettingDagger() {
+	printf("Yeah, okay.\n");
+	score = score + 25;
+	// You are supposed to get this over and over.
 	enterString();
 }
 
@@ -234,17 +271,17 @@ int lookFlask() {
 }
 
 int lookScroll() {
-	printf("Parchment, definitely parchment. I'd recognize it anywhere.\n");
+	printf("Parchment, definitely parchment. I\'d recognize it anywhere.\n");
 	enterString();
 }
 
 int lookRope() {
-	printf("It looks okay. You've seen better.\n");
+	printf("It looks okay. You\'ve seen better.\n");
 	enterString();
 }
 
 int lookParapets() {
-	printf("Well, they're parapets. This much we know for sure.\n");
+	printf("Well, they\'re parapets. This much we know for sure.\n");
 	enterString();
 }
 
@@ -278,14 +315,45 @@ int lookNone() {
 	enterString();
 }
 
+int goNone() {
+	printf("Thou cannotst go there. Who do you think thou art? A magistrate?!\n");
+	enterString();
+}
+
+int talkNone () {
+	printf("Who is <NAME>? Your new boyfriend?\nSomebody from work you don't want me to meeteth?\n");
+	enterString();
+}
+
+int giveNone () {
+	printf("Thou don'tst have a <ITEM> to give.\nGo back to your tiny life.\n");
+	enterString();
+}
+
+int smellNone () {
+	printf("You smell a Wumpus.\n");
+	enterString();
+}
+
+int danceNone () {
+	printf("Thou shaketh it a little, and it feeleth all right.\n");
+	enterString();
+}
+
 int endingDeath() {
 	score = score - 100;
-	printf("\n\nThat wasn't very smart.\nYour score was: %d", score);
+	printf("That wasn\'t very smart.\nYour score was: %d", score);
+	playAgain();
+}
+
+int endingFlask() {
+	score = score - 1000;
+	printf("Okay, okay. You unbolt yon FLASK and hold it aloft. A great\nshaking begins. The dungeon ceiling collapses down on you, crushing you in twain.\nApparently, this was a load-bearing FLASK.\nYour score was: %d", score);
 	playAgain();
 }
 
 int endingRope() {
-	printf("\n\nThat wasn't very smart.\nYour score was: %d", score);
+	printf("\n\nThat wasn\'t very smart.\nYour score was: %d", score);
 	playAgain();
 }
 
@@ -305,7 +373,7 @@ int playAgain(){
 	}
 	else if (exitChar == 'n' || exitChar == 'N'){
 		return 0;
-		exit(0);
+		exit('0');
 	}
 	else {
 		playAgain();
@@ -313,6 +381,7 @@ int playAgain(){
 }
 
 int restartGame(){
+	int gotFlask = 0;
 	int gotScroll = 0;
 	int gotTrinket = 0;
 	int currentRoom = 0;
