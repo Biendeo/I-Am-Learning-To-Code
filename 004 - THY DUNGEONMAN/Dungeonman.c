@@ -17,8 +17,8 @@ int gotFlask = 0;
 int gotScroll = 0;
 int gotTrinket = 0;
 int currentRoom = 0;
-int currentLook = 0;
 int score = 0;
+int debugMode = 0;
 
 int main () {
 	printf("\n    Thy Dungeonman\n");
@@ -32,7 +32,12 @@ int main () {
 	printf("\n                oo\n");
 	printf("\nHit Enter to enter yon dungeon.");
 	getchar();
-	debugProgram();
+	printf("\n~~~~~\n\n");
+	
+	if (debugMode == 1) {
+		debugProgram();
+	}
+	
 	printf("\n\n");
 	printf("THY DUNGEONMAN\n\n");
 	printf("YOU ARE THY DUNGEONMAN!\n\n\n");
@@ -41,7 +46,7 @@ int main () {
 }
 
 int debugProgram() {
-	printf("\n~~~~~\n\nThere are currently a few things that are not implemented.\n - Only use lower-case letters right now.\n - The GO, TALK and GIVE commands don\'t get the item listed yet.\n - The score isn\'t 100 percent perfect.\n - The scroll thinks it has already been picked up.\n - Some of the text needs to be re-aligned.\n - The TRINKET does not disappear.\n\n~~~~~");
+	printf("There are currently a few things that are not implemented.\n - Only use lower-case letters right now.\n - The GO, TALK and GIVE commands don\'t get the item listed yet.\n - The score isn\'t 100 percent perfect.\n - Some of the text needs to be re-aligned.\n - The TRINKET does not disappear.\n - The game crashes if you win and don't want to play again.\n\n~~~~~");
 }
 
 int enterString(){
@@ -49,8 +54,9 @@ int enterString(){
 	inputText[0] = '\0';
 	gets(inputText);
 	
-	// If I want to debug the string, I remove the comment bit here.
-	debugString();
+	if (debugMode == 1) {
+		debugString();	
+	}
 	
 	printf("\n\n~~~~~\n\n");
 	
@@ -125,6 +131,9 @@ int enterString(){
 	else if (strcmp(inputText, "talk dennis") == 0 && currentRoom == 4){
 		talkDennis();
 	}
+	else if ((strcmp(inputText, "give trinket") == 0 || strcmp(inputText, "give trinket to dennis") == 0) && currentRoom == 4 && gotTrinket == 0){
+		givingDennisNot();
+	}
 	
 	// These are the ending conditions.
 	
@@ -164,6 +173,18 @@ int enterString(){
 	else if (strcmp(inputText, "go") == 0){
 		goNone();
 	}
+	
+	// This is for enabling the debug mode.
+	else if (strcmp(inputText, "debug") == 0 && debugMode == 0){
+		debugMode = 1;
+		main();
+	}
+	
+	else if (strcmp(inputText, "debug") == 0 && debugMode == 1){
+		debugMode = 0;
+		main();
+	}
+	
 	else {
 		printf("That does not computeth. Type HELP is thou needs of it.\n");
 		enterString();
@@ -187,12 +208,10 @@ int room1() {
 	currentRoom = 1;
 	
 	printf("Ye find yeself in yon dungeon. ");
-	if (gotScroll = 0)
-	{
+	if (gotScroll == 0) {
 		printf("Ye see a SCROLL. Behind ye SCROLL is a FLASK.\n");
 	}
-	else if (gotScroll = 1)
-	{
+	else if (gotScroll == 1) {
 		printf("Back yonder there is a FLASK.\n");
 	}
 	printf("Obvious exits are NORTH, SOUTH, and DENNIS.\n");
@@ -232,13 +251,13 @@ int gettingFlask() {
 int gettingScroll() {
 	printf("Ye takes the SCROLL and reads of it. It doth say:\n\nBEWARE, READER OF YE SCROLL, DANGERS AWAIT TO THE -\n\nThe SCROLL disappears in thy hands with ye olde ZAP!\n");
 	gotScroll = 1;
-	score = score + 2;
+	score += 2;
 	enterString();
 }
 
 int gettingDagger() {
 	printf("Yeah, okay.\n");
-	score = score + 25;
+	score += 25;
 	// You are supposed to get this over and over.
 	enterString();
 }
@@ -254,14 +273,13 @@ int gettingTrinket() {
 	enterString();
 }
 
-int gettingTrinketLooked() {
-	printf("Ye getsts yon TRINKET and discover it to be a bauble.\nYou rejoice at your good fortune. You shove the TRINKET in your pouchel.\nIt kinda hurts.\n");
-	gotTrinket = 1;
+int alreadyGotTrinket() {
+	printf("Sigh. The trinket is in thou pouchel. Recallest thou?\n");
 	enterString();
 }
 
-int alreadyGotTrinket() {
-	printf("Sigh. The trinket is in thou pouchel. Recallest thou?\n");
+int givingDennisNot() {
+	printf("Thou don'tst have a trinket to give. Go back to your tiny life.\n");
 	enterString();
 }
 
@@ -341,13 +359,13 @@ int danceNone () {
 }
 
 int endingDeath() {
-	score = score - 100;
+	score -= score - 100;
 	printf("That wasn\'t very smart.\nYour score was: %d", score);
 	playAgain();
 }
 
 int endingFlask() {
-	score = score - 1000;
+	score -= 1000;
 	printf("Okay, okay. You unbolt yon FLASK and hold it aloft. A great\nshaking begins. The dungeon ceiling collapses down on you, crushing you in twain.\nApparently, this was a load-bearing FLASK.\nYour score was: %d", score);
 	playAgain();
 }
@@ -373,7 +391,6 @@ int playAgain(){
 	}
 	else if (exitChar == 'n' || exitChar == 'N'){
 		return 0;
-		exit('0');
 	}
 	else {
 		playAgain();
@@ -381,11 +398,11 @@ int playAgain(){
 }
 
 int restartGame(){
-	int gotFlask = 0;
-	int gotScroll = 0;
-	int gotTrinket = 0;
-	int currentRoom = 0;
-	int score = 0;
+	gotFlask = 0;
+	gotScroll = 0;
+	gotTrinket = 0;
+	currentRoom = 0;
+	score = 0;
 	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	main();
 }

@@ -21,6 +21,11 @@ int main() {
 	// Firstly, I'm asking what number they're reaching to, and storing that as integer numberGoal.
 	printf("\nOkay, what number do you want to reach? ");
 	scanf("%d", &numberGoal);
+	
+	// Then I'm checking to see if it actually is an integer.
+	while (numberGoal < 1){
+		printf("I can't add letters! Type a number this time! ");
+		scanf("%d", &numberGoal);
 
 	// Then, I'm asking how much they want to go up by, and storing that in y.
 	printf("What increment do you want to add by to get there? ");
@@ -37,7 +42,6 @@ int main() {
 	if (characterGet == 'y' || characterGet == 'Y')
 	{
 		printf("Okay. Let's do this.\n");
-		getchar();
 		calcOperation(numberIncrement, numberGoal);
 		repeat();
 	}
