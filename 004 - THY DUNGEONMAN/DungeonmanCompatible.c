@@ -20,6 +20,7 @@ int currentRoom = 0;
 int score = 0;
 int debugMode = 0;
 
+int debugProgram();
 int enterString();
 int debugString();
 int room1();
