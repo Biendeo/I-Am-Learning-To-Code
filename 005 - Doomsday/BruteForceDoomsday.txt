@@ -1,0 +1,42 @@
+
+THE CALCULATION PART
+
+If the day, month, or year aren't equal,
+	Run this part.
+	
+	Start on 1st January 1582.
+	
+	If (day = 1 || month = 1 || year = 1582),
+		Set weekday to Saturday.
+	
+	If (day = 1 || month = 1),
+		Check if it's a leap year.
+		
+	If (day = 32 || month < 12),
+		Change day back to 1, and up the month.
+	
+	If (day = 29 || month = 2 || isitLeapYear = FALSE),
+		Change day back to 1, and up the month.
+		
+	If (day = 30 || month = 2 || isItLeapYear = TRUE),
+		Change day back to 1, and up the month.
+		
+	If (day = 31 || month = 4, 6, 9, 11),
+		Change day back to 1, and up the month.
+		
+	If (day = 32 || month => 12),
+		Change day back to 1, change month back to 1, and up the year.
+		
+	If (weekday = 7),
+		Change weekday to 0.
+		
+	Then up the day, and up the weekday and repeat.
+	
+Else (if they all are equal),
+	Tell it what the current weekday is. 
+	End successfully.
+	
+
+THE LEAP YEAR CHECKING FUNCTION
+
+Get the current year the calculation is on, and set the leap
