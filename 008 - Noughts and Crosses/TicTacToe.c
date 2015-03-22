@@ -9,10 +9,15 @@ Each player takes alternating turns to try and get three in a row.
 
 This program firstly asks whether O or X will go first.
 Then, each turn, the board is drawn.
+The player will then be asked what space they want to go in.
+The program checks if they can go there. If they can't, it asks again.
+Then the program checks if anyone has won yet. If not, turns swap.
+If someone has won, the board is drawn once, and the game ends.
 */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
 
 int turnDecide ();
 int gameTime (int);
@@ -62,7 +67,7 @@ int turnDecide () {
 int gameTime (int turnOrder) {
 	
 	// The values of each cell are defined.
-	// They are arranged like a phone keypad.
+	// They are arranged like a keyboard's numpad.
 	int cell1 = 0;
 	int cell2 = 0;
 	int cell3 = 0;
@@ -212,6 +217,10 @@ int gameTime (int turnOrder) {
 
 void boardDraw (int cell1, int cell2, int cell3, int cell4, int cell5, int cell6, int cell7, int cell8, int cell9) {
 	
+	// This is something fancy so that Windows knows to change colours.
+	HANDLE  hConsole;
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	
 	// Some variables are called to monitor where the board drawing is at.
 	int row = 0;
 	int col = 0;
@@ -240,103 +249,157 @@ void boardDraw (int cell1, int cell2, int cell3, int cell4, int cell5, int cell6
 			
 			// This is for drawing the current game layout.
 			if (row == 0 && col == 0) {
-				if (cell1 == 0) {
-					printf(" ");
+				if (cell7 == 0) {
+					SetConsoleTextAttribute(hConsole, 8);
+					printf("7");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
-				else if (cell1 == 1) {
+				else if (cell7 == 1) {
+					SetConsoleTextAttribute(hConsole, 9);
 					printf("O");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
-				else if (cell1 == 2) {
+				else if (cell7 == 2) {
+					SetConsoleTextAttribute(hConsole, 12);
 					printf("X");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
 			}
 			if (row == 0 && col == 2) {
-				if (cell2 == 0) {
-					printf(" ");
+				if (cell8 == 0) {
+					SetConsoleTextAttribute(hConsole, 8);
+					printf("8");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
-				else if (cell2 == 1) {
+				else if (cell8 == 1) {
+					SetConsoleTextAttribute(hConsole, 9);
 					printf("O");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
-				else if (cell2 == 2) {
+				else if (cell8 == 2) {
+					SetConsoleTextAttribute(hConsole, 12);
 					printf("X");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
 			}
 			if (row == 0 && col == 4) {
-				if (cell3 == 0) {
-					printf(" ");
+				if (cell9 == 0) {
+					SetConsoleTextAttribute(hConsole, 8);
+					printf("9");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
-				else if (cell3 == 1) {
+				else if (cell9 == 1) {
+					SetConsoleTextAttribute(hConsole, 9);
 					printf("O");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
-				else if (cell3 == 2) {
+				else if (cell9 == 2) {
+					SetConsoleTextAttribute(hConsole, 12);
 					printf("X");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
 				
 			}
 			if (row == 2 && col == 0) {
 				if (cell4 == 0) {
-					printf(" ");
+					SetConsoleTextAttribute(hConsole, 8);
+					printf("4");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
 				else if (cell4 == 1) {
+					SetConsoleTextAttribute(hConsole, 9);
 					printf("O");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
 				else if (cell4 == 2) {
+					SetConsoleTextAttribute(hConsole, 12);
 					printf("X");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
 			}
 			if (row == 2 && col == 2) {
 				if (cell5 == 0) {
-					printf(" ");
+					SetConsoleTextAttribute(hConsole, 8);
+					printf("5");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
 				else if (cell5 == 1) {
+					SetConsoleTextAttribute(hConsole, 9);
 					printf("O");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
 				else if (cell5 == 2) {
+					SetConsoleTextAttribute(hConsole, 12);
 					printf("X");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
 			}
 			if (row == 2 && col == 4) {
 				if (cell6 == 0) {
-					printf(" ");
+					SetConsoleTextAttribute(hConsole, 8);
+					printf("6");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
 				else if (cell6 == 1) {
+					SetConsoleTextAttribute(hConsole, 9);
 					printf("O");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
 				else if (cell6 == 2) {
+					SetConsoleTextAttribute(hConsole, 12);
 					printf("X");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
 			}
 			if (row == 4 && col == 0) {
-				if (cell7 == 0) {
-					printf(" ");
+				if (cell1 == 0) {
+					SetConsoleTextAttribute(hConsole, 8);
+					printf("1");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
-				else if (cell7 == 1) {
+				else if (cell1 == 1) {
+					SetConsoleTextAttribute(hConsole, 9);
 					printf("O");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
-				else if (cell7 == 2) {
+				else if (cell1 == 2) {
+					SetConsoleTextAttribute(hConsole, 12);
 					printf("X");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
 			}
 			if (row == 4 && col == 2) {
-				if (cell8 == 0) {
-					printf(" ");
+				if (cell2 == 0) {
+					SetConsoleTextAttribute(hConsole, 8);
+					printf("2");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
-				else if (cell8 == 1) {
+				else if (cell2 == 1) {
+					SetConsoleTextAttribute(hConsole, 9);
 					printf("O");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
-				else if (cell8 == 2) {
+				else if (cell2 == 2) {
+					SetConsoleTextAttribute(hConsole, 12);
 					printf("X");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
 			}
 			if (row == 4 && col == 4) {
-				if (cell9 == 0) {
-					printf(" ");
+				if (cell3 == 0) {
+					SetConsoleTextAttribute(hConsole, 8);
+					printf("3");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
-				else if (cell9 == 1) {
+				else if (cell3 == 1) {
+					SetConsoleTextAttribute(hConsole, 9);
 					printf("O");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
-				else if (cell9 == 2) {
+				else if (cell3 == 2) {
+					SetConsoleTextAttribute(hConsole, 12);
 					printf("X");
+					SetConsoleTextAttribute(hConsole, 7);
 				}
 			}
 			
