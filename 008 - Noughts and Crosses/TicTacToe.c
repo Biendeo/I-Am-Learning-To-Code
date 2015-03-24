@@ -257,7 +257,7 @@ void boardDraw (int cell1, int cell2, int cell3, int cell4, int cell5, int cell6
 			
 			if (row == 0 && col == 0) {
 				if (cell7 == 0) {
-					SET_FG_INTENSITY printf("7");
+					SET_FG_DARKGRAY printf("7");
 				}
 				else if (cell7 == 1) {
 					SET_FG_BLUE SET_FG_BLUE printf("O");
@@ -269,7 +269,7 @@ void boardDraw (int cell1, int cell2, int cell3, int cell4, int cell5, int cell6
 			}
 			if (row == 0 && col == 2) {
 				if (cell8 == 0) {
-					SET_FG_INTENSITY printf("8");
+					SET_FG_DARKGRAY printf("8");
 				}
 				else if (cell8 == 1) {
 					SET_FG_BLUE printf("O");
@@ -281,7 +281,7 @@ void boardDraw (int cell1, int cell2, int cell3, int cell4, int cell5, int cell6
 			}
 			if (row == 0 && col == 4) {
 				if (cell9 == 0) {
-					SET_FG_INTENSITY printf("9");
+					SET_FG_DARKGRAY printf("9");
 				}
 				else if (cell9 == 1) {
 					SET_FG_BLUE printf("O");
@@ -294,7 +294,7 @@ void boardDraw (int cell1, int cell2, int cell3, int cell4, int cell5, int cell6
 			}
 			if (row == 2 && col == 0) {
 				if (cell4 == 0) {
-					SET_FG_INTENSITY printf("4");
+					SET_FG_DARKGRAY printf("4");
 				}
 				else if (cell4 == 1) {
 					SET_FG_BLUE printf("O");
@@ -306,7 +306,7 @@ void boardDraw (int cell1, int cell2, int cell3, int cell4, int cell5, int cell6
 			}
 			if (row == 2 && col == 2) {
 				if (cell5 == 0) {
-					SET_FG_INTENSITY printf("5");
+					SET_FG_DARKGRAY printf("5");
 				}
 				else if (cell5 == 1) {
 					SET_FG_BLUE printf("O");
@@ -318,7 +318,7 @@ void boardDraw (int cell1, int cell2, int cell3, int cell4, int cell5, int cell6
 			}
 			if (row == 2 && col == 4) {
 				if (cell6 == 0) {
-					SET_FG_INTENSITY printf("6");
+					SET_FG_DARKGRAY printf("6");
 				}
 				else if (cell6 == 1) {
 					SET_FG_BLUE printf("O");
@@ -330,7 +330,7 @@ void boardDraw (int cell1, int cell2, int cell3, int cell4, int cell5, int cell6
 			}
 			if (row == 4 && col == 0) {
 				if (cell1 == 0) {
-					SET_FG_INTENSITY printf("1");
+					SET_FG_DARKGRAY printf("1");
 				}
 				else if (cell1 == 1) {
 					SET_FG_BLUE printf("O");
@@ -342,7 +342,7 @@ void boardDraw (int cell1, int cell2, int cell3, int cell4, int cell5, int cell6
 			}
 			if (row == 4 && col == 2) {
 				if (cell2 == 0) {
-					SET_FG_INTENSITY printf("2");
+					SET_FG_DARKGRAY printf("2");
 				}
 				else if (cell2 == 1) {
 					SET_FG_BLUE printf("O");
@@ -354,7 +354,7 @@ void boardDraw (int cell1, int cell2, int cell3, int cell4, int cell5, int cell6
 			}
 			if (row == 4 && col == 4) {
 				if (cell3 == 0) {
-					SET_FG_INTENSITY printf("3");
+					SET_FG_DARKGRAY printf("3");
 				}
 				else if (cell3 == 1) {
 					SET_FG_BLUE printf("O");
