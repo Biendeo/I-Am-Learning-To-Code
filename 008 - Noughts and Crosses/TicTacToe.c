@@ -3,6 +3,10 @@
 // 19/03/2015
 // This program plays Tic Tac Toe.
 
+// THIS PROGRAM USES NICK ROBSON'S UNIFIED COLOUR HEADER!
+// BEFORE YOU COMPILE, MAKE SURE THAT colours.h IS IN THE SAME FOLDER!
+// https://gist.githubusercontent.com/nickrobson/ace0f9de4c18c801dc13/raw/d8955c775332ab69245ccdf085f7c92eb19fa557/colours.h
+
 /*
 The goal of Tic Tac Toe is to get three of a similar shape in a row.
 Each player takes alternating turns to try and get three in a row.
@@ -17,7 +21,7 @@ If someone has won, the board is drawn once, and the game ends.
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <windows.h>
+#include "colours.h"
 
 int turnDecide ();
 int gameTime (int);
@@ -216,10 +220,9 @@ int gameTime (int turnOrder) {
 }
 
 void boardDraw (int cell1, int cell2, int cell3, int cell4, int cell5, int cell6, int cell7, int cell8, int cell9) {
-	
-	// This is something fancy so that Windows knows to change colours.
-	HANDLE  hConsole;
-	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	// This tells colours.h to come up.
+	SETUP
 	
 	// Some variables are called to monitor where the board drawing is at.
 	int row = 0;
@@ -246,161 +249,120 @@ void boardDraw (int cell1, int cell2, int cell3, int cell4, int cell5, int cell6
 			else if (row == 1 || row == 3) {
 				printf("-");
 			}
-			
+	
 			// This is for drawing the current game layout.
+			// These are in groups of three for each horizontal row.
+			// The SET_FG things change the colour based on colours.h.
+			// RESET changes it back.
+			
 			if (row == 0 && col == 0) {
 				if (cell7 == 0) {
-					SetConsoleTextAttribute(hConsole, 8);
-					printf("7");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_INTENSITY printf("7");
 				}
 				else if (cell7 == 1) {
-					SetConsoleTextAttribute(hConsole, 9);
-					printf("O");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_BLUE SET_FG_BLUE printf("O");
 				}
 				else if (cell7 == 2) {
-					SetConsoleTextAttribute(hConsole, 12);
-					printf("X");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_RED SET_FG_RED printf("X");
 				}
+				RESET
 			}
 			if (row == 0 && col == 2) {
 				if (cell8 == 0) {
-					SetConsoleTextAttribute(hConsole, 8);
-					printf("8");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_INTENSITY printf("8");
 				}
 				else if (cell8 == 1) {
-					SetConsoleTextAttribute(hConsole, 9);
-					printf("O");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_BLUE printf("O");
 				}
 				else if (cell8 == 2) {
-					SetConsoleTextAttribute(hConsole, 12);
-					printf("X");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_RED printf("X");
 				}
+				RESET
 			}
 			if (row == 0 && col == 4) {
 				if (cell9 == 0) {
-					SetConsoleTextAttribute(hConsole, 8);
-					printf("9");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_INTENSITY printf("9");
 				}
 				else if (cell9 == 1) {
-					SetConsoleTextAttribute(hConsole, 9);
-					printf("O");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_BLUE printf("O");
 				}
 				else if (cell9 == 2) {
-					SetConsoleTextAttribute(hConsole, 12);
-					printf("X");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_RED printf("X");
 				}
+				RESET
 				
 			}
 			if (row == 2 && col == 0) {
 				if (cell4 == 0) {
-					SetConsoleTextAttribute(hConsole, 8);
-					printf("4");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_INTENSITY printf("4");
 				}
 				else if (cell4 == 1) {
-					SetConsoleTextAttribute(hConsole, 9);
-					printf("O");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_BLUE printf("O");
 				}
 				else if (cell4 == 2) {
-					SetConsoleTextAttribute(hConsole, 12);
-					printf("X");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_RED printf("X");
 				}
+				RESET
 			}
 			if (row == 2 && col == 2) {
 				if (cell5 == 0) {
-					SetConsoleTextAttribute(hConsole, 8);
-					printf("5");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_INTENSITY printf("5");
 				}
 				else if (cell5 == 1) {
-					SetConsoleTextAttribute(hConsole, 9);
-					printf("O");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_BLUE printf("O");
 				}
 				else if (cell5 == 2) {
-					SetConsoleTextAttribute(hConsole, 12);
-					printf("X");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_RED printf("X");
 				}
+				RESET
 			}
 			if (row == 2 && col == 4) {
 				if (cell6 == 0) {
-					SetConsoleTextAttribute(hConsole, 8);
-					printf("6");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_INTENSITY printf("6");
 				}
 				else if (cell6 == 1) {
-					SetConsoleTextAttribute(hConsole, 9);
-					printf("O");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_BLUE printf("O");
 				}
 				else if (cell6 == 2) {
-					SetConsoleTextAttribute(hConsole, 12);
-					printf("X");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_RED printf("X");
 				}
+				RESET
 			}
 			if (row == 4 && col == 0) {
 				if (cell1 == 0) {
-					SetConsoleTextAttribute(hConsole, 8);
-					printf("1");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_INTENSITY printf("1");
 				}
 				else if (cell1 == 1) {
-					SetConsoleTextAttribute(hConsole, 9);
-					printf("O");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_BLUE printf("O");
 				}
 				else if (cell1 == 2) {
-					SetConsoleTextAttribute(hConsole, 12);
-					printf("X");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_RED printf("X");
 				}
+				RESET
 			}
 			if (row == 4 && col == 2) {
 				if (cell2 == 0) {
-					SetConsoleTextAttribute(hConsole, 8);
-					printf("2");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_INTENSITY printf("2");
 				}
 				else if (cell2 == 1) {
-					SetConsoleTextAttribute(hConsole, 9);
-					printf("O");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_BLUE printf("O");
 				}
 				else if (cell2 == 2) {
-					SetConsoleTextAttribute(hConsole, 12);
-					printf("X");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_RED printf("X");
 				}
+				RESET
 			}
 			if (row == 4 && col == 4) {
 				if (cell3 == 0) {
-					SetConsoleTextAttribute(hConsole, 8);
-					printf("3");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_INTENSITY printf("3");
 				}
 				else if (cell3 == 1) {
-					SetConsoleTextAttribute(hConsole, 9);
-					printf("O");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_BLUE printf("O");
 				}
 				else if (cell3 == 2) {
-					SetConsoleTextAttribute(hConsole, 12);
-					printf("X");
-					SetConsoleTextAttribute(hConsole, 7);
+					SET_FG_RED printf("X");
 				}
+				RESET
 			}
 			
 			// If it's at the end of a line, it newlines.
