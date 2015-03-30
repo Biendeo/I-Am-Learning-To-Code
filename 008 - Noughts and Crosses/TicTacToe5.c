@@ -31,7 +31,7 @@ int gameWinCheck (int, int, int, int, int, int, int, int, int, int, int, int, in
 int fourInARowCheck (int, int, int, int, int);
 void winningMessage (int);
 
-int main (int argc, char *argv[]){
+int main (int argc, char *argv[]) {
 	
 	// Firstly, turnOrder is defined as 1 if O goes first, or 2 if X.
 	int turnOrder = turnDecide();
@@ -57,7 +57,7 @@ int turnDecide () {
 		scanf("%c", &getChar);
 		
 		// Then, the program figures out what they typed.
-		if (getChar == 'o' || getChar == 'O'){
+		if (getChar == 'o' || getChar == 'O') {
 			return 1;
 		}
 		else if (getChar == 'x' || getChar == 'X') {
@@ -126,8 +126,8 @@ int gameTime (int turnOrder) {
 			// Then a calculation happens to insert the value.
 			// It checks what cell they input, then if it's filled,
 			// it asks agains. If it isn't, then it proceeds.
-			if (inputCell == 1){
-				if (cell1 != 0){
+			if (inputCell == 1) {
+				if (cell1 != 0) {
 					printf("That cell is already filled.\n");
 				}
 				else {
@@ -135,7 +135,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 2){
+			else if (inputCell == 2) {
 				if (cell2 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -144,7 +144,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 3){
+			else if (inputCell == 3) {
 				if (cell3 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -153,8 +153,8 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 4){
-				if (cell4 != 0){
+			else if (inputCell == 4) {
+				if (cell4 != 0) {
 					printf("That cell is already filled.\n");
 				}
 				else {
@@ -162,8 +162,8 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 5){
-				if (cell5 != 0){
+			else if (inputCell == 5) {
+				if (cell5 != 0) {
 					printf("That cell is already filled.\n");
 				}
 				else {
@@ -171,8 +171,8 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 6){
-				if (cell6 != 0){
+			else if (inputCell == 6) {
+				if (cell6 != 0) {
 					printf("That cell is already filled.\n");
 				}
 				else {
@@ -180,8 +180,8 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 7){
-				if (cell7 != 0){
+			else if (inputCell == 7) {
+				if (cell7 != 0) {
 					printf("That cell is already filled.\n");
 				}
 				else {
@@ -189,8 +189,8 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 8){
-				if (cell8 != 0){
+			else if (inputCell == 8) {
+				if (cell8 != 0) {
 					printf("That cell is already filled.\n");
 				}
 				else {
@@ -198,8 +198,8 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 9){
-				if (cell9 != 0){
+			else if (inputCell == 9) {
+				if (cell9 != 0) {
 					printf("That cell is already filled.\n");
 				}
 				else {
@@ -207,7 +207,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 10){
+			else if (inputCell == 10) {
 				if (cell10 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -216,7 +216,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 11){
+			else if (inputCell == 11) {
 				if (cell11 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -225,7 +225,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 12){
+			else if (inputCell == 12) {
 				if (cell12 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -234,7 +234,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 13){
+			else if (inputCell == 13) {
 				if (cell13 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -243,7 +243,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 14){
+			else if (inputCell == 14) {
 				if (cell14 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -252,7 +252,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 15){
+			else if (inputCell == 15) {
 				if (cell15 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -261,7 +261,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 16){
+			else if (inputCell == 16) {
 				if (cell16 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -270,7 +270,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 17){
+			else if (inputCell == 17) {
 				if (cell17 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -279,7 +279,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 18){
+			else if (inputCell == 18) {
 				if (cell18 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -288,7 +288,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 19){
+			else if (inputCell == 19) {
 				if (cell19 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -297,7 +297,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 20){
+			else if (inputCell == 20) {
 				if (cell20 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -306,7 +306,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 21){
+			else if (inputCell == 21) {
 				if (cell21 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -315,7 +315,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 22){
+			else if (inputCell == 22) {
 				if (cell22 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -324,7 +324,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 23){
+			else if (inputCell == 23) {
 				if (cell23 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -333,7 +333,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 24){
+			else if (inputCell == 24) {
 				if (cell24 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -342,7 +342,7 @@ int gameTime (int turnOrder) {
 					validInput = 1;
 				}
 			}
-			else if (inputCell == 25){
+			else if (inputCell == 25) {
 				if (cell25 != 0) {
 					printf("That cell is already filled.\n");
 				}
@@ -746,14 +746,14 @@ int turnInput () {
 	
 	printf("What cell do you want to enter?\n");
 	
-	while (inputCell < 'A' || (inputCell > 'Y' && inputCell < 'a') || inputCell > 'y'){
+	while (inputCell < 'A' || (inputCell > 'Y' && inputCell < 'a') || inputCell > 'y') {
 		printf("(Enter the cell's corresponding letter.) ");
-		scanf("%c", &inputCell);
+		inputCell = getchar();
 		
 		// I Googled this line, it nullifies any extra characters6
 		// that are input. It's not clean, so I'm not encouraging that.
 		// http://stackoverflow.com/questions/21234262/turbo-c-scanf-to-only-accept-one-character
-		while( (extraInput = getchar()) != '\n' && extraInput != '\r' && extraInput != EOF);
+		while( (extraInput = getchar()) != '\n' && extraInput != EOF);
 	}
 	
 	if (inputCell >= 'A' && inputCell <= 'Y') {
