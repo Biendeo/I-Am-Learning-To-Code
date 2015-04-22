@@ -1,0 +1,5 @@
+Firstly, randomise the deck.
+	This can be done by setting a variable that will equal 52 (call it maxRandom).
+	Also, set another variable that will store the number generated. By storing it as an int, it doesn't have the decimal we'll call it randomStore.
+	Then, make a random number between 0 and maxRandom, and store it in randomStore.
+	

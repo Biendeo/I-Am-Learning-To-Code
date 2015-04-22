@@ -1,0 +1,50 @@
+MainGame.c
+	Includes most of the logic that the game uses to compute stuff.
+	
+	That huge game struct
+		Make two smaller structs called playerData (name them p1 and p2). They'll have player-specific data.
+		This will mean calling the data will be, gameData.p1.money, etc.
+		Current turn
+		Unit tracking (an array of struct units (let's say 100)). They'll have unit-specific data.
+		Map data (stored as a 2D array of ints (maybe chars))
+			This should just note what the map layout is.
+		Building data
+			This needs to track what current "health" each building is at, and who owns it. The type of building should be told by the map data.
+			This is probably an array of structs again. Fortunately, buildings are never destroyed, so the list ordering doesn't matter.
+		Cursor position
+			Convenient for when you enter a menu and you want to back out.
+			I think this should be reset between turns.
+			There also needs to be a system that prevents the cursor from moving out of the playing field.
+	
+	Player struct
+		Money
+		Buildings owned
+		Current units
+	
+FileIO.c
+	Loads the map data, and handles save and load data.
+	
+	mapLoad
+		Reads a text file and loads the map data.
+	
+	saveGame
+	
+	
+	loadGame
+		Similar to saveGame but it loads the save file
+	
+GameUI.c
+	A simpler file that calls upon most of the functions.
+	
+GameAI.c
+	An AI that similarly uses the GameUI.c rules but computes some things based on that data. It should have access to the more specific parts.
+	
+drawingUI.c
+	A file that does the screen drawing.
+	It needs to figure out how
+	
+UI design
+	The map should occupy a portion of the screen. Underneath is the menus.
+	The only thing extra that should be drawn on the map is the cursor (and any units).
+	The menus should display what the cursor has highlighted (both unit and tile).
+	When a key is pressed (hopefully arrow keys and space will work), then the cursor will move.
