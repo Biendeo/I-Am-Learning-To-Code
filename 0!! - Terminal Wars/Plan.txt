@@ -58,13 +58,13 @@ D = Actual damage expressed as a percentage
 
 B = Base damage (in damage chart)
 
-ACO = Attacking CO attack value (example:130 for Kanbei)
+ACO = Attacking CO attack value (example:130 for Kanbei) (this will just be 100)
 
 R = Random number 0-9
 
 AHP = HP of attacker
 
-DCO = Defending CO defense value (example:80 for Grimm)
+DCO = Defending CO defense value (example:80 for Grimm) (this will just be 100)
 
 DTR = Defending Terrain Stars (IE plain = 1, wood = 2)
 
