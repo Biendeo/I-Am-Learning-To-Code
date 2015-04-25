@@ -1,25 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
+#include "Defines.h"
 #include "GameUI.h"
 #include "MainGame.h"
 #include "GameAI.h"
 #include "FileIO.h"
 #include "DrawingUI.h"
-#include "Defines.h"
 
 int main (int argc, char *argv[]) {
-	char returnState;
-	game data;
-	game *dataPtr;
-	data.p1.money = 5000;
-	if (initialiseGame (dataPtr) == ALL_GOOD) {
-		returnState = ALL_GOOD;
-	}
-	else {
-		returnState = TEST_FAILED;
-		printf("A test failed in main\n");
-	}
-	printf("data.p1.money = %d", data.p1.money);
-	return returnState;
+	START_GAME;
+	// These lines are just a test to see if the data actually changed.
+	printf("data->p1.money = %d\n", data->p1.money);
+	printf("Program ended in state %d\n", ERROR_CODE);
+	END_GAME;
+	return ERROR_CODE;
 }

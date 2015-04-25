@@ -1,3 +1,5 @@
+// If you're viewing this, it's a bit out of date. The map.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

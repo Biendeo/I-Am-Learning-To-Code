@@ -24,7 +24,7 @@ typedef struct buildingdata {
 typedef struct gamedata {
 	int turnNum;
 	char whoseTurn;
-	unsigned char mapData[20][5];
+	unsigned char mapData[MAP_WIDTH][MAP_HEIGHT];
 	// MAX_UNITS won't be overflowed, set this to a high enough level that people won't reach it.
 	player p1;
 	player p2;
