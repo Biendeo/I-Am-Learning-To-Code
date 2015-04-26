@@ -49,7 +49,50 @@ UI design
 	The menus should display what the cursor has highlighted (both unit and tile).
 	When a key is pressed (hopefully arrow keys and space will work), then the cursor will move.
 	
+1. Plan the files used.
 
+2. Set up the structs used.
+	I can add some properties later, but I should try to get the essentials done.
+
+3. Set up the beginning of the game.
+
+4. Incorporate a map-load function.
+
+5. Finish the initialise data function.
+		Add more things to the struct so that it contains everything.
+
+6. Store each unit's default properties somewhere, and the map tile properties too.
+	When a unit is created, I need to copy some of the default data over (like fuel, weapon types, etc.). One way is to make a new struct that contains all the default data of each unit, and then copy that stuff over to the actual game data. That way, the struct is only there in the creation function. The issue with this is that there will be times where I'll need to keep accessing this data (such as when a unit refuels at a city, and gains more ammo). At the same time, I don't want to store the maximum values for some of these as variables, because they're not. Possibly I could use a const int, but I don't 100% know how to use those, or when to use them.
+
+7. Draw the map.
+	Shouldn't be too tough, but I just need a change mode between drawing units and drawing only the field. Otherwise, just pass through and do that.
+
+8. Move a cursor, and pass the selected info to something (probably the UI next step).
+	This will be a bit tricky.
+
+9. Draw the UI.
+	Again, pretty simple, just know what UI options are available, and print those as strings. Also, add a system where you can move the cursor around. This is the interacting part.
+
+10. Select a unit, tell it to move, and then it moves there.
+	This needs to do a check to see if the move is valid before it does it.
+
+11. Attack other units.
+	This is an extension of that selecting a unit bit. The difference is it needs to see if you've selected a valid target. Then, it does a calculation, and changes the health of the two units.
+
+12. Capture buildings using infantry and mechs.
+	Shouldn't be too hard, but it's not as needed as the other systems (there exist unit-only maps).
+
+13. Build other units.
+	Again, select a thing, and access it from a menu. Initialise the data, and draw a new unit.
+
+14. Program win conditions.
+	Pretty easy, just detect whether the HQ is captured, or the player has run out of units. The latter is being tracked, and will easily be added. The other one can just be a condition when capturing a HQ.
+
+15. String it all together in the main.
+
+16. Save and load game stuff.
+
+17. Bot stuff.
 	
 DAMAGE FORMULA
 D%=[B*ACO/100+R]*(AHP/10)*[(200-(DCO+DTR*DHP))/100]
