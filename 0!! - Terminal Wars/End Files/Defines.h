@@ -49,6 +49,48 @@
 #define MOVE_SHIP     6
 #define MOVE_CARRIER  7
 
+/// Tile movement costs
+// THIS IS INCOMPLETE
+// Setting a value to 0 will mean a unit cannot move onto it.
+#define MOVE_GRASS_INFANTRY 1
+#define MOVE_GRASS_MECH     1
+#define MOVE_GRASS_TIRES    2
+#define MOVE_GRASS_TREAD    1
+#define MOVE_GRASS_AIR      1
+#define MOVE_GRASS_SHIP     0
+#define MOVE_GRASS_CARRIER  0
+
+// All buildings use the same costs as roads.
+#define MOVE_ROAD_INFANTRY 1
+#define MOVE_ROAD_MECH     1
+#define MOVE_ROAD_TIRES    1
+#define MOVE_ROAD_TREAD    1
+#define MOVE_ROAD_AIR      1
+#define MOVE_ROAD_SHIP     0
+#define MOVE_ROAD_CARRIER  0
+
+/// Tile defense ranks
+// THIS IS INCOMPLETE
+#define DEFENSE_GRASS 1
+#define DEFENSE_ROAD  0
+#define DEFENSE_HQ    5
+
+/// Default unit properties
+// THIS IS INCOMPLETE
+// I might need to change the style of these.
+#define COST_INFANTRY      1000
+#define MOVETYPE_INFANTRY  MOVE_INFANTRY
+#define MOVESPEED_INFANTRY 3
+#define MAXAMMO_INFANTRY_1 0
+#define MAXFUEL_INFANTRY   99
+#define VISION_INFANTRY    3
+#define DRAWCHAR_INFANTRY  'I'
+
+/// Base damage values (percentages)
+// Use the style DAMAGE_ATTACKER_DEFENDER
+// THIS IS INCOMPLETE
+#define DAMAGE_INFANTRY_INFANTRY 50
+
 /// Map boundaries
 // These are going to be phased out. The map data will be read to
 // include the size (or maybe a dynamic system to find it).
@@ -140,6 +182,7 @@
 
 /// Some game-specific numbers
 #define STARTING_MONEY 7000
+#define MONEY_PER_BUILDING 1000
 
 /// Error messages
 #define ERROR_CODE data->errorCode
