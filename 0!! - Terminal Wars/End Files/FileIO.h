@@ -1,3 +1,4 @@
-void poop ();
+#include "Defines.h"
+
 void loadMapFileData (game *data, FILE *file);
 void loadMapDefaultData (game *data);

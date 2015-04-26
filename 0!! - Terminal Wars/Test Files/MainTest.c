@@ -13,7 +13,7 @@ typedef struct unitdata {
 typedef struct playerdata {
 	int money;
 	short buildingsOwned;
-	short currentUnits;
+	short unitData;
 } player;
 
 typedef struct buildingdata {
@@ -28,7 +28,7 @@ typedef struct gamedata {
 	// MAX_UNITS won't be overflowed, set this to a high enough level that people won't reach it.
 	player p1;
 	player p2;
-	unit currentUnits[5];
+	unit unitData[5];
 } game;
 
 void doThis (game *data);

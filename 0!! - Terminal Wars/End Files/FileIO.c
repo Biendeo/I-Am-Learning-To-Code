@@ -10,94 +10,94 @@
 #include "DrawingUI.h"
 
 void loadMapFileData (game *data, FILE *file) {
-	int xPos = 0;
-	int yPos = 0;
+	short x = 0;
+	short y = 0;
 	unsigned char bufferChar;
 	
-	while ((yPos < MAP_HEIGHT) || (bufferChar != EOF)) {
-		while ((xPos < MAP_WIDTH) || (bufferChar != EOF)) {
+	while ((y < MAP_HEIGHT) || (bufferChar != EOF)) {
+		while ((x < MAP_WIDTH) || (bufferChar != EOF)) {
 			bufferChar = fgetc(file);
 			if (bufferChar == CHAR_NULL_HQ) {
-				data->mapData[xPos][yPos] = NULL_HQ;
-				xPos++;
+				data->mapData[x][y] = NULL_HQ;
+				x++;
 			} else if (bufferChar == CHAR_NULL_CITY) {
-				data->mapData[xPos][yPos] = NULL_CITY;
-				xPos++;
+				data->mapData[x][y] = NULL_CITY;
+				x++;
 			} else if (bufferChar == CHAR_NULL_BASE) {
-				data->mapData[xPos][yPos] = NULL_BASE;
-				xPos++;
+				data->mapData[x][y] = NULL_BASE;
+				x++;
 			}
 			else if (bufferChar == CHAR_RED_HQ) {
-				data->mapData[xPos][yPos] = RED_HQ;
-				xPos++;
+				data->mapData[x][y] = RED_HQ;
+				x++;
 			} else if (bufferChar == CHAR_RED_CITY) {
-				data->mapData[xPos][yPos] = RED_CITY;
-				xPos++;
+				data->mapData[x][y] = RED_CITY;
+				x++;
 			} else if (bufferChar == CHAR_RED_BASE) {
-				data->mapData[xPos][yPos] = RED_BASE;
-				xPos++;
+				data->mapData[x][y] = RED_BASE;
+				x++;
 			}
 			else if (bufferChar == CHAR_BLUE_HQ) {
-				data->mapData[xPos][yPos] = BLUE_HQ;
-				xPos++;
+				data->mapData[x][y] = BLUE_HQ;
+				x++;
 			} else if (bufferChar == CHAR_BLUE_CITY) {
-				data->mapData[xPos][yPos] = BLUE_CITY;
-				xPos++;
+				data->mapData[x][y] = BLUE_CITY;
+				x++;
 			} else if (bufferChar == CHAR_BLUE_BASE) {
-				data->mapData[xPos][yPos] = BLUE_BASE;
-				xPos++;
+				data->mapData[x][y] = BLUE_BASE;
+				x++;
 			}
 			else if (bufferChar == CHAR_GREEN_HQ) {
-				data->mapData[xPos][yPos] = GREEN_HQ;
-				xPos++;
+				data->mapData[x][y] = GREEN_HQ;
+				x++;
 			} else if (bufferChar == CHAR_GREEN_CITY) {
-				data->mapData[xPos][yPos] = GREEN_CITY;
-				xPos++;
+				data->mapData[x][y] = GREEN_CITY;
+				x++;
 			} else if (bufferChar == CHAR_GREEN_BASE) {
-				data->mapData[xPos][yPos] = GREEN_BASE;
-				xPos++;
+				data->mapData[x][y] = GREEN_BASE;
+				x++;
 			}
 			else if (bufferChar == CHAR_YELLOW_HQ) {
-				data->mapData[xPos][yPos] = YELLOW_HQ;
-				xPos++;
+				data->mapData[x][y] = YELLOW_HQ;
+				x++;
 			} else if (bufferChar == CHAR_YELLOW_CITY) {
-				data->mapData[xPos][yPos] = YELLOW_CITY;
-				xPos++;
+				data->mapData[x][y] = YELLOW_CITY;
+				x++;
 			} else if (bufferChar == CHAR_YELLOW_BASE) {
-				data->mapData[xPos][yPos] = YELLOW_BASE;
-				xPos++;
+				data->mapData[x][y] = YELLOW_BASE;
+				x++;
 			}
 			else if (bufferChar == CHAR_PLAIN) {
-				data->mapData[xPos][yPos] = PLAIN;
-				xPos++;
+				data->mapData[x][y] = PLAIN;
+				x++;
 			} else if (bufferChar == CHAR_ROAD) {
-				data->mapData[xPos][yPos] = ROAD;
-				xPos++;
+				data->mapData[x][y] = ROAD;
+				x++;
 			} else if (bufferChar == CHAR_SEA) {
-				data->mapData[xPos][yPos] = SEA;
-				xPos++;
+				data->mapData[x][y] = SEA;
+				x++;
 			} else if (bufferChar == CHAR_RIVER) {
-				data->mapData[xPos][yPos] = RIVER;
-				xPos++;
+				data->mapData[x][y] = RIVER;
+				x++;
 			} else if (bufferChar == CHAR_WOOD) {
-				data->mapData[xPos][yPos] = WOOD;
-				xPos++;
+				data->mapData[x][y] = WOOD;
+				x++;
 			} else if (bufferChar == CHAR_MOUNTAIN) {
-				data->mapData[xPos][yPos] = MOUNTAIN;
-				xPos++;
+				data->mapData[x][y] = MOUNTAIN;
+				x++;
 			} else if (bufferChar == CHAR_BRIDGE) {
-				data->mapData[xPos][yPos] = BRIDGE;
-				xPos++;
+				data->mapData[x][y] = BRIDGE;
+				x++;
 			} else if (bufferChar == CHAR_SHOAL) {
-				data->mapData[xPos][yPos] = SHOAL;
-				xPos++;
+				data->mapData[x][y] = SHOAL;
+				x++;
 			} else if (bufferChar == CHAR_REEF) {
-				data->mapData[xPos][yPos] = REEF;
-				xPos++;
+				data->mapData[x][y] = REEF;
+				x++;
 			}
 		}
-		yPos++;
-		xPos = 0;
+		y++;
+		x = 0;
 	}
 	
 	if (bufferChar == EOF) {
@@ -123,14 +123,14 @@ void loadMapDefaultData (game *data) {
 		{53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53},
 		{53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53}
 	};
-	int xPos = 0;
-	int yPos = 0;
-	while (yPos < MAP_HEIGHT) {
-		while (xPos < MAP_WIDTH) {
-			data->mapData[xPos][yPos] = mapData[xPos][yPos];
-			xPos++;
+	short x = 0;
+	short y = 0;
+	while (y < MAP_HEIGHT) {
+		while (x < MAP_WIDTH) {
+			data->mapData[x][y] = mapData[x][y];
+			x++;
 		}
-		xPos = 0;
-		yPos++;
+		x = 0;
+		y++;
 	}
 }

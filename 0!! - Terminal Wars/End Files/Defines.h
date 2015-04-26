@@ -2,6 +2,12 @@
 #define START_GAME game *data = buildGame ()
 #define END_GAME freeGame(data)
 
+#define YES 1
+#define NO  0
+
+#define HUMAN 1
+#define BOT   2
+
 /// Team colours
 #define NONE   0
 #define RED    1
@@ -10,6 +16,8 @@
 #define YELLOW 4
 
 /// Unit types
+// The skips are currently for transport units.
+// If I can, I'll try to get those working (but no guarantees).
 #define INFANTRY  1
 #define MECH      2
 #define RECON     3
@@ -17,10 +25,29 @@
 #define MD_TANK   5
 #define NEOTANK   6
 #define MEGATANK  7
-#define APC       8  // SKIP
+#define APC       8  // SKIP FOR NOW
 #define ARTILLERY 9
 #define ROCKETS   10
-#define ANTI_AIR  11 // SKIP
+#define ANTI_AIR  11
+#define BATT_COP  12
+#define TRAN_COP  13 // SKIP FOR NOW
+#define FIGHTER   14
+#define BOMBER    15
+#define STEALTH   16
+#define LANDER    17 // SKIP FOR NOW
+#define CRUISER   18
+#define SUB       19
+#define BATT_SHIP 20
+#define CARRIER   21 // SKIP FOR NOW
+
+/// Vehicle transport types
+#define MOVE_INFANTRY 1
+#define MOVE_MECH     2
+#define MOVE_TIRES    3
+#define MOVE_TREAD    4
+#define MOVE_AIR      5
+#define MOVE_SHIP     6
+#define MOVE_CARRIER  7
 
 /// Map boundaries
 // These are going to be phased out. The map data will be read to
@@ -31,64 +58,88 @@
 /// Map tile types
 /// These are the values stored in memory
 // The ordering needs to be sorted out (and do the same below).
-#define NULL_HQ       1  // This shouldn't be used.
-#define NULL_CITY     2 
-#define NULL_BASE     3 
-#define RED_HQ        11
-#define RED_CITY      12
-#define RED_BASE      13
-#define BLUE_HQ       21
-#define BLUE_CITY     22
-#define BLUE_BASE     23
-#define GREEN_HQ      31
-#define GREEN_CITY    32
-#define GREEN_BASE    33
-#define YELLOW_HQ     41
-#define YELLOW_CITY   42
-#define YELLOW_BASE   43
-#define PLAIN         51
-#define ROAD          52
-#define SEA           53
-#define RIVER         54
-#define WOOD          55
-#define MOUNTAIN      56
-#define BRIDGE        57
-#define SHOAL         58
-#define REEF          59
+#define NULL_HQ        1  // This shouldn't be used.
+#define NULL_CITY      2 
+#define NULL_BASE      3 
+#define NULL_AIRPORT   4
+#define NULL_PORT      5
+#define RED_HQ         11
+#define RED_CITY       12
+#define RED_BASE       13
+#define RED_AIRPORT    14
+#define RED_PORT       15
+#define BLUE_HQ        21
+#define BLUE_CITY      22
+#define BLUE_BASE      23
+#define BLUE_AIRPORT   24
+#define BLUE_PORT      25
+#define GREEN_HQ       31
+#define GREEN_CITY     32
+#define GREEN_BASE     33
+#define GREEN_AIRPORT  34
+#define GREEN_PORT     35
+#define YELLOW_HQ      41
+#define YELLOW_CITY    42
+#define YELLOW_BASE    43
+#define YELLOW_AIRPORT 44
+#define YELLOW_PORT    45
+#define PLAIN          51
+#define ROAD           52
+#define SEA            53
+#define RIVER          54
+#define WOOD           55
+#define MOUNTAIN       56
+#define BRIDGE         57
+#define SHOAL          58
+#define REEF           59
 
 /// Map file characters
 /// These are the values that you type into the file
 // This needs to be a little bit more intuitive.
 // Currently, think of it with a left-to-right style.
 // Different rows and SHIFT combos give different sets of tiles.
-#define CHAR_NULL_HQ       '!'
-#define CHAR_NULL_CITY     '@'
-#define CHAR_NULL_BASE     '#'
-#define CHAR_RED_HQ        'a'
-#define CHAR_RED_CITY      's'
-#define CHAR_RED_BASE      'd'
-#define CHAR_BLUE_HQ       'z'
-#define CHAR_BLUE_CITY     'x'
-#define CHAR_BLUE_BASE     'c'
-#define CHAR_GREEN_HQ      'A'
-#define CHAR_GREEN_CITY    'S'
-#define CHAR_GREEN_BASE    'D'
-#define CHAR_YELLOW_HQ     'Z'
-#define CHAR_YELLOW_CITY   'X'
-#define CHAR_YELLOW_BASE   'C'
-#define CHAR_PLAIN         '1'
-#define CHAR_ROAD          '2'
-#define CHAR_SEA           '3'
-#define CHAR_RIVER         '4'
-#define CHAR_WOOD          '5'
-#define CHAR_MOUNTAIN      '6'
-#define CHAR_BRIDGE        '7'
-#define CHAR_SHOAL         '8'
-#define CHAR_REEF          '9'
+#define CHAR_NULL_HQ        '!'
+#define CHAR_NULL_CITY      '@'
+#define CHAR_NULL_BASE      '#'
+#define CHAR_NULL_AIRPORT   '$'
+#define CHAR_NULL_PORT      '%'
+#define CHAR_RED_HQ         'a'
+#define CHAR_RED_CITY       's'
+#define CHAR_RED_BASE       'd'
+#define CHAR_RED_AIRPORT    'f'
+#define CHAR_RED_PORT       'g'
+#define CHAR_BLUE_HQ        'z'
+#define CHAR_BLUE_CITY      'x'
+#define CHAR_BLUE_BASE      'c'
+#define CHAR_BLUE_AIRPORT   'v'
+#define CHAR_BLUE_PORT      'b'
+#define CHAR_GREEN_HQ       'A'
+#define CHAR_GREEN_CITY     'S'
+#define CHAR_GREEN_BASE     'D'
+#define CHAR_GREEN_AIRPORT  'F'
+#define CHAR_GREEN_PORT     'G'
+#define CHAR_YELLOW_HQ      'Z'
+#define CHAR_YELLOW_CITY    'X'
+#define CHAR_YELLOW_BASE    'C'
+#define CHAR_YELLOW_AIRPORT 'V'
+#define CHAR_YELLOW_PORT    'B'
+#define CHAR_PLAIN          '1'
+#define CHAR_ROAD           '2'
+#define CHAR_SEA            '3'
+#define CHAR_RIVER          '4'
+#define CHAR_WOOD           '5'
+#define CHAR_MOUNTAIN       '6'
+#define CHAR_BRIDGE         '7'
+#define CHAR_SHOAL          '8'
+#define CHAR_REEF           '9'
 
-/// The maximum units in the field
+/// The maximum amounts stored
 // THIS WILL BE TWEAKED
 #define MAX_UNITS 100
+#define MAX_BUILDINGS 100
+
+/// Some game-specific numbers
+#define STARTING_MONEY 7000
 
 /// Error messages
 #define ERROR_CODE data->errorCode
@@ -98,6 +149,7 @@
 #define FILE_NOT_FOUND 3
 #define MAP_INVALID_SIZE 4
 
+// This is just for reference for knowing what the units do.
 /*
 Unit		Type		Cost	Move	Range	Fuel	Vision
 Infantry	Infantry	1,000	3		1		99		3
