@@ -42,7 +42,7 @@ void mapDraw(game *data) {
 				while ((arrayPos < MAX_UNITS) && (didDraw == 0)) {
 					if ((data->unitData[arrayPos].x == x) &&
     					(data->unitData[arrayPos].y == y)) {
-						drawUnit(data, arrayPos);
+						drawUnit(data, x, y, arrayPos);
 						didDraw = 1;
 					}
 					arrayPos++;
@@ -63,13 +63,15 @@ void mapDraw(game *data) {
 	setColor(GREY);
 }
 
-void drawUnit (game *data, short arrayPos) {
-	if (data->unitData[arrayPos].player == TEAM_RED) {
-		setColor(RED);
+void drawUnit (game *data, short x, short y, short arrayPos) {
+	if ((data->cursor.x == x) && (data->cursor.y == y)) {
+		setColor(LIGHTMAGENTA);
+	} else if (data->unitData[arrayPos].player == TEAM_RED) {
+		setColor(LIGHTRED);
 	} else if (data->unitData[arrayPos].player == TEAM_BLUE) {
-		setColor(BLUE);
+		setColor(LIGHTBLUE);
 	} else if (data->unitData[arrayPos].player == TEAM_GREEN) {
-		setColor(GREEN);
+		setColor(LIGHTGREEN);
 	} else if (data->unitData[arrayPos].player == TEAM_YELLOW) {
 		setColor(YELLOW);
 	}
@@ -122,108 +124,148 @@ void drawUnit (game *data, short arrayPos) {
 }
 
 void drawField (game *data, short x, short y) {
-	if (data->mapData[x][y] == NULL_HQ) {
+	
+	if ((data->cursor.x == x) && (data->cursor.y == y)) {
+		setColor(LIGHTMAGENTA);
+	} else if (data->mapData[x][y] == NULL_HQ) {
 		setColor(GREY);
-		printf("%c", CHAR_MAP_HQ);
 	} else if (data->mapData[x][y] == NULL_CITY) {
 		setColor(GREY);
-		printf("%c", CHAR_MAP_CITY);
 	} else if (data->mapData[x][y] == NULL_BASE) {
 		setColor(GREY);
-		printf("%c", CHAR_MAP_BASE);
 	} else if (data->mapData[x][y] == NULL_AIRPORT) {
 		setColor(GREY);
-		printf("%c", CHAR_MAP_AIRPORT);
 	} else if (data->mapData[x][y] == NULL_PORT) {
 		setColor(GREY);
-		printf("%c", CHAR_MAP_PORT);
 	} else if (data->mapData[x][y] == RED_HQ) {
-		setColor(RED);
-		printf("%c", CHAR_MAP_HQ);
+		setColor(LIGHTRED);
 	} else if (data->mapData[x][y] == RED_CITY) {
-		setColor(RED);
-		printf("%c", CHAR_MAP_CITY);
+		setColor(LIGHTRED);
 	} else if (data->mapData[x][y] == RED_BASE) {
-		setColor(RED);
-		printf("%c", CHAR_MAP_BASE);
+		setColor(LIGHTRED);
 	} else if (data->mapData[x][y] == RED_AIRPORT) {
-		setColor(RED);
-		printf("%c", CHAR_MAP_AIRPORT);
+		setColor(LIGHTRED);
 	} else if (data->mapData[x][y] == RED_PORT) {
-		setColor(RED);
-		printf("%c", CHAR_MAP_PORT);
+		setColor(LIGHTRED);
 	} else if (data->mapData[x][y] == BLUE_HQ) {
-		setColor(BLUE);
-		printf("%c", CHAR_MAP_HQ);
+		setColor(LIGHTBLUE);
 	} else if (data->mapData[x][y] == BLUE_CITY) {
-		setColor(BLUE);
-		printf("%c", CHAR_MAP_CITY);
+		setColor(LIGHTBLUE);
 	} else if (data->mapData[x][y] == BLUE_BASE) {
-		setColor(BLUE);
-		printf("%c", CHAR_MAP_BASE);
+		setColor(LIGHTBLUE);
 	} else if (data->mapData[x][y] == BLUE_AIRPORT) {
-		setColor(BLUE);
-		printf("%c", CHAR_MAP_AIRPORT);
+		setColor(LIGHTBLUE);
 	} else if (data->mapData[x][y] == BLUE_PORT) {
-		setColor(BLUE);
-		printf("%c", CHAR_MAP_PORT);
+		setColor(LIGHTBLUE);
 	} else if (data->mapData[x][y] == GREEN_HQ) {
-		setColor(GREEN);
-		printf("%c", CHAR_MAP_HQ);
+		setColor(LIGHTGREEN);
 	} else if (data->mapData[x][y] == GREEN_CITY) {
-		setColor(GREEN);
-		printf("%c", CHAR_MAP_CITY);
+		setColor(LIGHTGREEN);
 	} else if (data->mapData[x][y] == GREEN_BASE) {
-		setColor(GREEN);
-		printf("%c", CHAR_MAP_BASE);
+		setColor(LIGHTGREEN);
 	} else if (data->mapData[x][y] == GREEN_AIRPORT) {
-		setColor(GREEN);
-		printf("%c", CHAR_MAP_AIRPORT);
+		setColor(LIGHTGREEN);
 	} else if (data->mapData[x][y] == GREEN_PORT) {
-		setColor(GREEN);
-		printf("%c", CHAR_MAP_PORT);
+		setColor(LIGHTGREEN);
 	} else if (data->mapData[x][y] == YELLOW_HQ) {
 		setColor(YELLOW);
-		printf("%c", CHAR_MAP_HQ);
 	} else if (data->mapData[x][y] == YELLOW_CITY) {
 		setColor(YELLOW);
-		printf("%c", CHAR_MAP_CITY);
 	} else if (data->mapData[x][y] == YELLOW_BASE) {
 		setColor(YELLOW);
-		printf("%c", CHAR_MAP_BASE);
 	} else if (data->mapData[x][y] == YELLOW_AIRPORT) {
 		setColor(YELLOW);
-		printf("%c", CHAR_MAP_AIRPORT);
 	} else if (data->mapData[x][y] == YELLOW_PORT) {
 		setColor(YELLOW);
-		printf("%c", CHAR_MAP_PORT);
 	}
 	else if (data->mapData[x][y] == PLAIN) {
 		setColor(GREEN);
-		printf("%c", CHAR_MAP_PLAIN);
 	} else if (data->mapData[x][y] == ROAD) {
 		setColor(GREY);
-		printf("%c", CHAR_MAP_ROAD);
 	} else if (data->mapData[x][y] == SEA) {
 		setColor(BLUE);
-		printf("%c", CHAR_MAP_SEA);
 	} else if (data->mapData[x][y] == RIVER) {
 		setColor(BLUE);
-		printf("%c", CHAR_MAP_RIVER);
 	} else if (data->mapData[x][y] == WOOD) {
 		setColor(BROWN);
-		printf("%c", CHAR_MAP_WOOD);
 	} else if (data->mapData[x][y] == MOUNTAIN) {
 		setColor(BROWN);
-		printf("%c", CHAR_MAP_MOUNTAIN);
 	} else if (data->mapData[x][y] == BRIDGE) {
 		setColor(YELLOW);
-		printf("%c", CHAR_MAP_BRIDGE);
 	} else if (data->mapData[x][y] == SHOAL) {
 		setColor(BLUE);
-		printf("%c", CHAR_MAP_SHOAL);
 	} else if (data->mapData[x][y] == REEF) {
 		setColor(BLUE);
+	}
+	
+	if (data->mapData[x][y] == NULL_HQ) {
+		printf("%c", CHAR_MAP_HQ);
+	} else if (data->mapData[x][y] == NULL_CITY) {
+		printf("%c", CHAR_MAP_CITY);
+	} else if (data->mapData[x][y] == NULL_BASE) {
+		printf("%c", CHAR_MAP_BASE);
+	} else if (data->mapData[x][y] == NULL_AIRPORT) {
+		printf("%c", CHAR_MAP_AIRPORT);
+	} else if (data->mapData[x][y] == NULL_PORT) {
+		printf("%c", CHAR_MAP_PORT);
+	} else if (data->mapData[x][y] == RED_HQ) {
+		printf("%c", CHAR_MAP_HQ);
+	} else if (data->mapData[x][y] == RED_CITY) {
+		printf("%c", CHAR_MAP_CITY);
+	} else if (data->mapData[x][y] == RED_BASE) {
+		printf("%c", CHAR_MAP_BASE);
+	} else if (data->mapData[x][y] == RED_AIRPORT) {
+		printf("%c", CHAR_MAP_AIRPORT);
+	} else if (data->mapData[x][y] == RED_PORT) {
+		printf("%c", CHAR_MAP_PORT);
+	} else if (data->mapData[x][y] == BLUE_HQ) {
+		printf("%c", CHAR_MAP_HQ);
+	} else if (data->mapData[x][y] == BLUE_CITY) {
+		printf("%c", CHAR_MAP_CITY);
+	} else if (data->mapData[x][y] == BLUE_BASE) {
+		printf("%c", CHAR_MAP_BASE);
+	} else if (data->mapData[x][y] == BLUE_AIRPORT) {
+		printf("%c", CHAR_MAP_AIRPORT);
+	} else if (data->mapData[x][y] == BLUE_PORT) {
+		printf("%c", CHAR_MAP_PORT);
+	} else if (data->mapData[x][y] == GREEN_HQ) {
+		printf("%c", CHAR_MAP_HQ);
+	} else if (data->mapData[x][y] == GREEN_CITY) {
+		printf("%c", CHAR_MAP_CITY);
+	} else if (data->mapData[x][y] == GREEN_BASE) {
+		printf("%c", CHAR_MAP_BASE);
+	} else if (data->mapData[x][y] == GREEN_AIRPORT) {
+		printf("%c", CHAR_MAP_AIRPORT);
+	} else if (data->mapData[x][y] == GREEN_PORT) {
+		printf("%c", CHAR_MAP_PORT);
+	} else if (data->mapData[x][y] == YELLOW_HQ) {
+		printf("%c", CHAR_MAP_HQ);
+	} else if (data->mapData[x][y] == YELLOW_CITY) {
+		printf("%c", CHAR_MAP_CITY);
+	} else if (data->mapData[x][y] == YELLOW_BASE) {
+		printf("%c", CHAR_MAP_BASE);
+	} else if (data->mapData[x][y] == YELLOW_AIRPORT) {
+		printf("%c", CHAR_MAP_AIRPORT);
+	} else if (data->mapData[x][y] == YELLOW_PORT) {
+		printf("%c", CHAR_MAP_PORT);
+	}
+	else if (data->mapData[x][y] == PLAIN) {
+		printf("%c", CHAR_MAP_PLAIN);
+	} else if (data->mapData[x][y] == ROAD) {
+		printf("%c", CHAR_MAP_ROAD);
+	} else if (data->mapData[x][y] == SEA) {
+		printf("%c", CHAR_MAP_SEA);
+	} else if (data->mapData[x][y] == RIVER) {
+		printf("%c", CHAR_MAP_RIVER);
+	} else if (data->mapData[x][y] == WOOD) {
+		printf("%c", CHAR_MAP_WOOD);
+	} else if (data->mapData[x][y] == MOUNTAIN) {
+		printf("%c", CHAR_MAP_MOUNTAIN);
+	} else if (data->mapData[x][y] == BRIDGE) {
+		printf("%c", CHAR_MAP_BRIDGE);
+	} else if (data->mapData[x][y] == SHOAL) {
+		printf("%c", CHAR_MAP_SHOAL);
+	} else if (data->mapData[x][y] == REEF) {
 		printf("%c", CHAR_MAP_REEF);
 	}
 }
@@ -261,10 +303,29 @@ void testDrawing (game *data) {
 	data->unitData[7].player = TEAM_YELLOW;
 	data->unitData[7].x = 10;
 	data->unitData[7].y = 10;
+	data->cursor.x = 5;
+	data->cursor.y = 4;
 	data->drawMode = DRAWMODE_MAP;
-	mapDraw(data);
-	getkey();
-	data->drawMode = DRAWMODE_UNITS;
-	mapDraw(data);
-	getkey();
+	// Because KEY_ESCAPE = 0, it has to be set to another number.
+	// Try making this an unsigned char, as the numbers don't go higher than 135.
+	int keyPress = 1;
+	while (keyPress != KEY_ESCAPE) {
+		mapDraw(data);
+		keyPress = getkey();
+		if (keyPress == KEY_UP) {
+			data->cursor.y--;
+		} else if (keyPress == KEY_DOWN) {
+			data->cursor.y++;
+		} else if (keyPress == KEY_LEFT) {
+			data->cursor.x--;
+		} else if (keyPress == KEY_RIGHT) {
+			data->cursor.x++;
+		} else if (keyPress == KEY_ENTER) {
+			if (data->drawMode == DRAWMODE_MAP) {
+				data->drawMode = DRAWMODE_UNITS;
+			} else if (data->drawMode == DRAWMODE_UNITS) {
+				data->drawMode = DRAWMODE_MAP;
+			}
+		}
+	}
 }
