@@ -97,6 +97,9 @@ typedef struct gamedata {
 	/// This stores the cursor position.
 	cursor cursor;
 	
+	/// This determines whether to draw the field or the units on top.
+	char drawMode;
+	
 	/// This stores an error code if the program needs to exit.
 	char errorCode;
 } game;

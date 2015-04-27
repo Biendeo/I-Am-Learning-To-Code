@@ -8,12 +8,15 @@
 #define HUMAN 1
 #define BOT   2
 
+#define DRAWMODE_MAP   1
+#define DRAWMODE_UNITS 2
+
 /// Team colours
-#define NONE   0
-#define RED    1
-#define BLUE   2
-#define GREEN  3
-#define YELLOW 4
+#define TEAM_NONE   0
+#define TEAM_RED    1
+#define TEAM_BLUE   2
+#define TEAM_GREEN  3
+#define TEAM_YELLOW 4
 
 /// Unit types
 // The skips are currently for transport units.
@@ -39,6 +42,29 @@
 #define SUB       19
 #define BATT_SHIP 20
 #define CARRIER   21 // SKIP FOR NOW
+
+/// Characters for unit types
+#define CHAR_INFANTRY  'i'
+#define CHAR_MECH      'm'
+#define CHAR_RECON     'r'
+#define CHAR_TANK      't'
+#define CHAR_MD_TANK   'T'
+#define CHAR_NEOTANK   'N'
+#define CHAR_MEGATANK  'M'
+#define CHAR_APC       'a'
+#define CHAR_ARTILLERY 'A'
+#define CHAR_ROCKETS   'R'
+#define CHAR_ANTI_AIR  'I'
+#define CHAR_BATT_COP  'C'
+#define CHAR_TRAN_COP  'c'
+#define CHAR_FIGHTER   'F'
+#define CHAR_BOMBER    'B'
+#define CHAR_STEALTH   'S'
+#define CHAR_LANDER    'L'
+#define CHAR_CRUISER   'u'
+#define CHAR_SUB       's'
+#define CHAR_BATT_SHIP 'b'
+#define CHAR_CARRIER   'E'
 
 /// Vehicle transport types
 #define MOVE_INFANTRY 1
@@ -134,6 +160,26 @@
 #define BRIDGE         57
 #define SHOAL          58
 #define REEF           59
+
+/// Map draw characters
+/// These are the values that are printed when the map is drawn.
+// I think it's a little bit counter-inutitive how the colour is
+// determined in the drawing function, but the character is determined
+// here. Maybe I can merge both.
+#define CHAR_MAP_HQ             '!'
+#define CHAR_MAP_CITY           '#'
+#define CHAR_MAP_BASE           '%'
+#define CHAR_MAP_AIRPORT        '$'
+#define CHAR_MAP_PORT           '&'
+#define CHAR_MAP_PLAIN          '_'
+#define CHAR_MAP_ROAD           '+'
+#define CHAR_MAP_SEA            '~'
+#define CHAR_MAP_RIVER          '_'
+#define CHAR_MAP_WOOD           '#'
+#define CHAR_MAP_MOUNTAIN       '^'
+#define CHAR_MAP_BRIDGE         '+'
+#define CHAR_MAP_SHOAL          ':'
+#define CHAR_MAP_REEF           '.'
 
 /// Map file characters
 /// These are the values that you type into the file

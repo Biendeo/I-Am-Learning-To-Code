@@ -6,5 +6,4 @@ move "%~dp0End Files\TerminalWarsTest.exe" "%~dp0"
 TerminalWarsTest
 pause
 del "%~dp0TerminalWarsTest.exe" /P
-pause
 exit

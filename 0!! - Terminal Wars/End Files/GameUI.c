@@ -10,7 +10,10 @@
 #include "DrawingUI.h"
 
 int main (int argc, char *argv[]) {
+	// This is to test the screenClear function.
+	screenSplash();
 	START_GAME;
+	testDrawing(data);
 	END_GAME;
 	return ERROR_CODE;
 }

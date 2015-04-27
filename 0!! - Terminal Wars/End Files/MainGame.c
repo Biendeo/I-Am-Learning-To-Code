@@ -90,23 +90,24 @@ void initialiseGame (game *data) {
 	data->whoseTurn = 1;
 	data->cursor.x = 0;
 	data->cursor.y = 0;
+	data->drawMode = DRAWMODE_UNITS;
 	
-	data->p1.color = RED;
+	data->p1.color = TEAM_RED;
 	data->p1.money = STARTING_MONEY;
 	data->p1.buildingsOwned = 0;
 	data->p1.unitsOwned = 0;
 	
-	data->p2.color = BLUE;
+	data->p2.color = TEAM_BLUE;
 	data->p2.money = STARTING_MONEY;
 	data->p2.buildingsOwned = 0;
 	data->p2.unitsOwned = 0;
 	
-	data->p3.color = GREEN;
+	data->p3.color = TEAM_GREEN;
 	data->p3.money = STARTING_MONEY;
 	data->p3.buildingsOwned = 0;
 	data->p3.unitsOwned = 0;
 	
-	data->p4.color = YELLOW;
+	data->p4.color = TEAM_YELLOW;
 	data->p4.money = STARTING_MONEY;
 	data->p4.buildingsOwned = 0;
 	data->p4.unitsOwned = 0;
@@ -156,13 +157,13 @@ void scanMap (game *data) {
 				data->buildingData[arrayPos].x = x;
 				data->buildingData[arrayPos].y = y;
 				
-				if (data->buildingData[arrayPos].player == RED) {
+				if (data->buildingData[arrayPos].player == TEAM_RED) {
 					data->p1.buildingsOwned++;
-				} else if (data->buildingData[arrayPos].player == BLUE) {
+				} else if (data->buildingData[arrayPos].player == TEAM_BLUE) {
 					data->p2.buildingsOwned++;
-				} else if (data->buildingData[arrayPos].player == GREEN) {
+				} else if (data->buildingData[arrayPos].player == TEAM_GREEN) {
 					data->p3.buildingsOwned++;
-				} else if (data->buildingData[arrayPos].player == YELLOW) {
+				} else if (data->buildingData[arrayPos].player == TEAM_YELLOW) {
 					data->p4.buildingsOwned++;
 				}
 			}
@@ -176,8 +177,8 @@ void scanMap (game *data) {
 
 void checkInitialiseGame (game *data) {
 	// Develop this fully later.
-	if (data->p1.color != RED) {
-		printf("Error TEST_FAILED data->p1.color != RED (%d)\n", data->p1.color);
+	if (data->p1.color != TEAM_RED) {
+		printf("Error TEST_FAILED data->p1.color != TEAM_RED (%d)\n", data->p1.color);
 		ERROR_CODE = TEST_FAILED;
 	}
 	if (data->p1.money != STARTING_MONEY) {
