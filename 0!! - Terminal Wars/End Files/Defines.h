@@ -120,7 +120,7 @@
 /// Map boundaries
 // These are going to be phased out. The map data will be read to
 // include the size (or maybe a dynamic system to find it).
-#define MAP_WIDTH  16
+#define MAP_WIDTH  14
 #define MAP_HEIGHT 12
 
 /// Map tile types

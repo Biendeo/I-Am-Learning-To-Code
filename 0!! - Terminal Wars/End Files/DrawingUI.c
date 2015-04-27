@@ -15,7 +15,7 @@ void screenSplash() {
 	printf("+------------------------------+\n");
 	printf("|                              |\n");
 	printf("|         ");
-	setColor(RED);
+	setColor(WHITE);
 	printf("TERMINAL WARS");
 	setColor(GREY);
 	printf("        |\n");
@@ -24,31 +24,22 @@ void screenSplash() {
 	printf("\n");
 	printf("An attempt to recreate the game Advance Wars in C.\n");
 	printf("\n");
-	printf("Version \"I haven't got a version yet\"\n");
+	printf("Version \"Stage 8\"\n");
 	getkey();
 }
 
 void mapDraw(game *data) {
 	short x = 0;
 	short y = 0;
-	short arrayPos = 0;
-	char didDraw = 0;
+	short unitPos = 0;
 	cls();
 	while (y < MAP_HEIGHT) {
 		while (x < MAP_WIDTH) {
 			if (data->drawMode == DRAWMODE_UNITS) {
-				arrayPos = 0;
-				didDraw = 0;
-				while ((arrayPos < MAX_UNITS) && (didDraw == 0)) {
-					if ((data->unitData[arrayPos].x == x) &&
-    					(data->unitData[arrayPos].y == y)) {
-						drawUnit(data, x, y, arrayPos);
-						didDraw = 1;
-					}
-					arrayPos++;
-				}
-				
-				if (didDraw == 0) {
+				unitPos = findUnit(data, x, y);
+				if (unitPos < MAX_UNITS) {
+					drawUnit(data, x, y, unitPos);
+				} else {
 					drawField(data, x, y);
 				}
 			} else {
@@ -61,6 +52,27 @@ void mapDraw(game *data) {
 		y++;
 	}
 	setColor(GREY);
+}
+
+int moveCursor (game *data) {
+	int keyPress = getkey();
+	if ((keyPress == KEY_UP) && (data->cursor.y > 0)) {
+		data->cursor.y--;
+	} else if ((keyPress == KEY_DOWN) && (data->cursor.y < MAP_HEIGHT - 1)) {
+		data->cursor.y++;
+	} else if ((keyPress == KEY_LEFT) && (data->cursor.x > 0)) {
+		data->cursor.x--;
+	} else if ((keyPress == KEY_RIGHT) && (data->cursor.x < MAP_WIDTH - 1)) {
+		data->cursor.x++;
+	} else if (keyPress == KEY_ENTER) {
+		if (data->drawMode == DRAWMODE_MAP) {
+			data->drawMode = DRAWMODE_UNITS;
+		} else if (data->drawMode == DRAWMODE_UNITS) {
+			data->drawMode = DRAWMODE_MAP;
+		}
+	}
+	
+	return keyPress;
 }
 
 void drawUnit (game *data, short x, short y, short arrayPos) {
@@ -270,62 +282,73 @@ void drawField (game *data, short x, short y) {
 	}
 }
 
+short findUnit (game *data, short x, short y) {
+	short arrayPos = 0;
+	while (arrayPos < MAX_UNITS) {
+		if (data->unitData[arrayPos].player == TEAM_NONE) {
+			arrayPos = MAX_UNITS;
+			break;
+		} else if ((data->unitData[arrayPos].x == x) &&
+			(data->unitData[arrayPos].y == y)) {
+			break;
+		}
+		arrayPos++;
+	}
+	
+	return arrayPos;
+}
+
 void testDrawing (game *data) {
 	data->unitData[0].unitType = INFANTRY;
 	data->unitData[0].player = TEAM_RED;
 	data->unitData[0].x = 4;
 	data->unitData[0].y = 3;
+	
 	data->unitData[1].unitType = MECH;
 	data->unitData[1].player = TEAM_RED;
 	data->unitData[1].x = 8;
 	data->unitData[1].y = 6;
+	
 	data->unitData[2].unitType = ARTILLERY;
 	data->unitData[2].player = TEAM_BLUE;
 	data->unitData[2].x = 5;
 	data->unitData[2].y = 3;
+	
 	data->unitData[3].unitType = MEGATANK;
 	data->unitData[3].player = TEAM_BLUE;
 	data->unitData[3].x = 13;
 	data->unitData[3].y = 10;
+	
 	data->unitData[4].unitType = TANK;
 	data->unitData[4].player = TEAM_BLUE;
 	data->unitData[4].x = 11;
 	data->unitData[4].y = 3;
+	
 	data->unitData[5].unitType = MECH;
 	data->unitData[5].player = TEAM_GREEN;
 	data->unitData[5].x = 1;
 	data->unitData[5].y = 10;
+	
 	data->unitData[6].unitType = APC;
 	data->unitData[6].player = TEAM_YELLOW;
 	data->unitData[6].x = 12;
 	data->unitData[6].y = 6;
+	
 	data->unitData[7].unitType = NEOTANK;
 	data->unitData[7].player = TEAM_YELLOW;
 	data->unitData[7].x = 10;
 	data->unitData[7].y = 10;
+	
 	data->cursor.x = 5;
 	data->cursor.y = 4;
 	data->drawMode = DRAWMODE_MAP;
+	
 	// Because KEY_ESCAPE = 0, it has to be set to another number.
 	// Try making this an unsigned char, as the numbers don't go higher than 135.
 	int keyPress = 1;
 	while (keyPress != KEY_ESCAPE) {
 		mapDraw(data);
-		keyPress = getkey();
-		if (keyPress == KEY_UP) {
-			data->cursor.y--;
-		} else if (keyPress == KEY_DOWN) {
-			data->cursor.y++;
-		} else if (keyPress == KEY_LEFT) {
-			data->cursor.x--;
-		} else if (keyPress == KEY_RIGHT) {
-			data->cursor.x++;
-		} else if (keyPress == KEY_ENTER) {
-			if (data->drawMode == DRAWMODE_MAP) {
-				data->drawMode = DRAWMODE_UNITS;
-			} else if (data->drawMode == DRAWMODE_UNITS) {
-				data->drawMode = DRAWMODE_MAP;
-			}
-		}
+		printf("Cursor: %d, %d\n", data->cursor.x, data->cursor.y);
+		keyPress = moveCursor(data);
 	}
 }
