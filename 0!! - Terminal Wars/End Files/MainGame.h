@@ -111,12 +111,16 @@ typedef struct gamedata {
 	char errorCode;
 } game;
 
+/// These functions are the main game functions.
 game *buildGame ();
 void initialiseGame (game *data);
-void checkInitialiseGame (game *data);
 void scanMap (game *data);
 void attackUnit (game *data, short attacker, short defender);
+void freeGame (game *data);
+
+/// These functions grab specific data.
 char tileMovementGetter (game *data, short x, short y, char movementType);
 char tileDefenseGetter (game *data, short x, short y);
 unsigned char baseDamageGetter (game *data, short attacker, short defender);
-void freeGame (game *data);
+/// This function tests to see if the game started properly.
+void checkInitialiseGame (game *data);

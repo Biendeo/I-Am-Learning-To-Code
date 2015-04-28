@@ -8,14 +8,13 @@
 #include "MainGame.h"
 #include "FileIO.h"
 
+/// This function
 game *buildGame () {
 	// I might want to separate this into another function, and call it
 	// once I've gotten the map dimensions, as they might be variable
 	// later on.
 	game *data = malloc(sizeof(game));
-	char settings[5];
-	// CURRENTLY UNUSED
-	//char inputChar;
+	char settings[2];
 	char *inputString;
 	FILE *file;
 	printf("Type 0 to play a new game, or 1 to load a game. ");
@@ -70,6 +69,7 @@ game *buildGame () {
 			printf("Error FILE_NOT_FOUND\n");
 			ERROR_CODE = FILE_NOT_FOUND;
 		} else {
+			// When it's ready, uncomment this.
 			//loadGame (data, file);
 		}
 		
@@ -115,6 +115,8 @@ void initialiseGame (game *data) {
 	/// This will scan the map for specific data.
 	scanMap (data);
 	
+	/// This will test to see if everything initialised (also great for
+	/// debugging anything).
 	checkInitialiseGame (data);
 }
 
@@ -420,7 +422,39 @@ char tileMovementGetter (game *data, short x, short y, char movementType) {
 }
 
 char tileDefenseGetter (game *data, short x, short y) {
-	
+	char tileDefense = 0;
+	if (tileType < PLAIN) {
+		if (tileType % 10 == 1) {
+			tileDefense = DEFENSE_HQ;
+		} else if (tileType % 10 == 2) {
+			tileDefense = DEFENSE_CITY;
+		} else if (tileType % 10 == 3) {
+			tileDefense = DEFENSE_BASE;
+		} else if (tileType % 10 == 4) {
+			tileDefense = DEFENSE_AIRPORT;
+		} else if (tileType % 10 == 5) {
+			tileDefense = DEFENSE_PORT;
+		}
+	} else if (tileType == PLAIN) {
+		tileDefense = DEFENSE_PLAIN;
+	} else if (tileType == ROAD) {
+		tileDefense = DEFENSE_ROAD;
+	} else if (tileType == SEA) {
+		tileDefense = DEFENSE_SEA;
+	} else if (tileType == RIVER) {
+		tileDefense = DEFENSE_RIVER;
+	} else if (tileType == WOOD) {
+		tileDefense = DEFENSE_WOOD;
+	} else if (tileType == MOUNTAIN) {
+		tileDefense = DEFENSE_MOUNTAIN;
+	} else if (tileType == BRIDGE) {
+		tileDefense = DEFENSE_BRIDGE;
+	} else if (tileType == SHOAL) {
+		tileDefense = DEFENSE_SHOAL;
+	} else if (tileType == REEF) {
+		tileDefense = DEFENSE_REEF;
+	}
+	return tileDefense;
 }
 
 unsigned char baseDamageGetter (game *data, short attacker, short defender) {
@@ -441,6 +475,7 @@ void checkInitialiseGame (game *data) {
 	}
 	
 	// This is a personal test to see if the data truly is correct.
+	// This works for the default map.
 	// Custom maps will probably fail this right now, but I can't check it.
 	if (data->p1.buildingsOwned != 6) {
 		printf("Error TEST_FAILED data->p1.buidlingsOwned != 6 (%d)\n", data->p1.buildingsOwned);
@@ -452,6 +487,9 @@ void checkInitialiseGame (game *data) {
 		ERROR_CODE = TEST_FAILED;
 		getkey();
 	}
+	
+	if (damage)
+	
 	if (ERROR_CODE == ALL_GOOD) {
 		printf("All tests passed. :)\n");
 	}
