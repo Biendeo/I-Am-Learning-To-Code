@@ -17,82 +17,7 @@ void loadMapFileData (game *data, FILE *file) {
 	while ((y < MAP_HEIGHT) && (bufferChar != EOF)) {
 		while ((x < MAP_WIDTH) && (bufferChar != EOF)) {
 			bufferChar = fgetc(file);
-			if (bufferChar == CHAR_NULL_HQ) {
-				data->mapData[x][y] = NULL_HQ;
-			} else if (bufferChar == CHAR_NULL_CITY) {
-				data->mapData[x][y] = NULL_CITY;
-			} else if (bufferChar == CHAR_NULL_BASE) {
-				data->mapData[x][y] = NULL_BASE;
-			} else if (bufferChar == CHAR_NULL_AIRPORT) {
-				data->mapData[x][y] = NULL_AIRPORT;
-			} else if (bufferChar == CHAR_NULL_PORT) {
-				data->mapData[x][y] = NULL_PORT;
-			}
-			else if (bufferChar == CHAR_RED_HQ) {
-				data->mapData[x][y] = RED_HQ;
-			} else if (bufferChar == CHAR_RED_CITY) {
-				data->mapData[x][y] = RED_CITY;
-			} else if (bufferChar == CHAR_RED_BASE) {
-				data->mapData[x][y] = RED_BASE;
-			} else if (bufferChar == CHAR_RED_AIRPORT) {
-				data->mapData[x][y] = RED_AIRPORT;
-			} else if (bufferChar == CHAR_RED_PORT) {
-				data->mapData[x][y] = RED_PORT;
-			}
-			else if (bufferChar == CHAR_BLUE_HQ) {
-				data->mapData[x][y] = BLUE_HQ;
-			} else if (bufferChar == CHAR_BLUE_CITY) {
-				data->mapData[x][y] = BLUE_CITY;
-			} else if (bufferChar == CHAR_BLUE_BASE) {
-				data->mapData[x][y] = BLUE_BASE;
-			} else if (bufferChar == CHAR_BLUE_AIRPORT) {
-				data->mapData[x][y] = BLUE_AIRPORT;
-			} else if (bufferChar == CHAR_BLUE_PORT) {
-				data->mapData[x][y] = BLUE_PORT;
-			}
-			else if (bufferChar == CHAR_GREEN_HQ) {
-				data->mapData[x][y] = GREEN_HQ;
-			} else if (bufferChar == CHAR_GREEN_CITY) {
-				data->mapData[x][y] = GREEN_CITY;
-			} else if (bufferChar == CHAR_GREEN_BASE) {
-				data->mapData[x][y] = GREEN_BASE;
-			} else if (bufferChar == CHAR_GREEN_AIRPORT) {
-				data->mapData[x][y] = GREEN_AIRPORT;
-			} else if (bufferChar == CHAR_GREEN_PORT) {
-				data->mapData[x][y] = GREEN_PORT;
-			}
-			else if (bufferChar == CHAR_YELLOW_HQ) {
-				data->mapData[x][y] = YELLOW_HQ;
-			} else if (bufferChar == CHAR_YELLOW_CITY) {
-				data->mapData[x][y] = YELLOW_CITY;
-			} else if (bufferChar == CHAR_YELLOW_BASE) {
-				data->mapData[x][y] = YELLOW_BASE;
-			} else if (bufferChar == CHAR_YELLOW_AIRPORT) {
-				data->mapData[x][y] = YELLOW_AIRPORT;
-			} else if (bufferChar == CHAR_YELLOW_PORT) {
-				data->mapData[x][y] = YELLOW_PORT;
-			}
-			else if (bufferChar == CHAR_PLAIN) {
-				data->mapData[x][y] = PLAIN;
-			} else if (bufferChar == CHAR_ROAD) {
-				data->mapData[x][y] = ROAD;
-			} else if (bufferChar == CHAR_SEA) {
-				data->mapData[x][y] = SEA;
-			} else if (bufferChar == CHAR_RIVER) {
-				data->mapData[x][y] = RIVER;
-			} else if (bufferChar == CHAR_WOOD) {
-				data->mapData[x][y] = WOOD;
-			} else if (bufferChar == CHAR_MOUNTAIN) {
-				data->mapData[x][y] = MOUNTAIN;
-			} else if (bufferChar == CHAR_BRIDGE) {
-				data->mapData[x][y] = BRIDGE;
-			} else if (bufferChar == CHAR_SHOAL) {
-				data->mapData[x][y] = SHOAL;
-			} else if (bufferChar == CHAR_REEF) {
-				data->mapData[x][y] = REEF;
-			} else {
-				x--;
-			}
+			translateMapFile(data, bufferChar);
 			x++;
 		}
 		y++;
@@ -128,86 +53,90 @@ void loadMapDefaultData (game *data) {
 	short y = 0;
 	while (y < MAP_HEIGHT) {
 		while (x < MAP_WIDTH) {
-						if (tempData[x][y] == CHAR_NULL_HQ) {
-				data->mapData[x][y] = NULL_HQ;
-				x++;
-			} else if (tempData[x][y] == CHAR_NULL_CITY) {
-				data->mapData[x][y] = NULL_CITY;
-				x++;
-			} else if (tempData[x][y] == CHAR_NULL_BASE) {
-				data->mapData[x][y] = NULL_BASE;
-				x++;
-			}
-			else if (tempData[x][y] == CHAR_RED_HQ) {
-				data->mapData[x][y] = RED_HQ;
-				x++;
-			} else if (tempData[x][y] == CHAR_RED_CITY) {
-				data->mapData[x][y] = RED_CITY;
-				x++;
-			} else if (tempData[x][y] == CHAR_RED_BASE) {
-				data->mapData[x][y] = RED_BASE;
-				x++;
-			}
-			else if (tempData[x][y] == CHAR_BLUE_HQ) {
-				data->mapData[x][y] = BLUE_HQ;
-				x++;
-			} else if (tempData[x][y] == CHAR_BLUE_CITY) {
-				data->mapData[x][y] = BLUE_CITY;
-				x++;
-			} else if (tempData[x][y] == CHAR_BLUE_BASE) {
-				data->mapData[x][y] = BLUE_BASE;
-				x++;
-			}
-			else if (tempData[x][y] == CHAR_GREEN_HQ) {
-				data->mapData[x][y] = GREEN_HQ;
-				x++;
-			} else if (tempData[x][y] == CHAR_GREEN_CITY) {
-				data->mapData[x][y] = GREEN_CITY;
-				x++;
-			} else if (tempData[x][y] == CHAR_GREEN_BASE) {
-				data->mapData[x][y] = GREEN_BASE;
-				x++;
-			}
-			else if (tempData[x][y] == CHAR_YELLOW_HQ) {
-				data->mapData[x][y] = YELLOW_HQ;
-				x++;
-			} else if (tempData[x][y] == CHAR_YELLOW_CITY) {
-				data->mapData[x][y] = YELLOW_CITY;
-				x++;
-			} else if (tempData[x][y] == CHAR_YELLOW_BASE) {
-				data->mapData[x][y] = YELLOW_BASE;
-				x++;
-			}
-			else if (tempData[x][y] == CHAR_PLAIN) {
-				data->mapData[x][y] = PLAIN;
-				x++;
-			} else if (tempData[x][y] == CHAR_ROAD) {
-				data->mapData[x][y] = ROAD;
-				x++;
-			} else if (tempData[x][y] == CHAR_SEA) {
-				data->mapData[x][y] = SEA;
-				x++;
-			} else if (tempData[x][y] == CHAR_RIVER) {
-				data->mapData[x][y] = RIVER;
-				x++;
-			} else if (tempData[x][y] == CHAR_WOOD) {
-				data->mapData[x][y] = WOOD;
-				x++;
-			} else if (tempData[x][y] == CHAR_MOUNTAIN) {
-				data->mapData[x][y] = MOUNTAIN;
-				x++;
-			} else if (tempData[x][y] == CHAR_BRIDGE) {
-				data->mapData[x][y] = BRIDGE;
-				x++;
-			} else if (tempData[x][y] == CHAR_SHOAL) {
-				data->mapData[x][y] = SHOAL;
-				x++;
-			} else if (tempData[x][y] == CHAR_REEF) {
-				data->mapData[x][y] = REEF;
-				x++;
-			}
+			translateMapData(data, tempData[x][y]);
+			x++
 		}
 		y++;
 		x = 0;
+	}
+}
+
+void translateMapData (game *data, unsigned char tile) {
+	if (tile == CHAR_NULL_HQ) {
+		data->mapData[x][y] = NULL_HQ;
+	} else if (tile == CHAR_NULL_CITY) {
+		data->mapData[x][y] = NULL_CITY;
+	} else if (tile == CHAR_NULL_BASE) {
+		data->mapData[x][y] = NULL_BASE;
+	} else if (tile == CHAR_NULL_AIRPORT) {
+		data->mapData[x][y] = NULL_AIRPORT;
+	} else if (tile == CHAR_NULL_PORT) {
+		data->mapData[x][y] = NULL_PORT;
+	}
+	else if (tile == CHAR_RED_HQ) {
+		data->mapData[x][y] = RED_HQ;
+	} else if (tile == CHAR_RED_CITY) {
+		data->mapData[x][y] = RED_CITY;
+	} else if (tile == CHAR_RED_BASE) {
+		data->mapData[x][y] = RED_BASE;
+	} else if (tile == CHAR_RED_AIRPORT) {
+		data->mapData[x][y] = RED_AIRPORT;
+	} else if (tile == CHAR_RED_PORT) {
+		data->mapData[x][y] = RED_PORT;
+	}
+	else if (tile == CHAR_BLUE_HQ) {
+		data->mapData[x][y] = BLUE_HQ;
+	} else if (tile == CHAR_BLUE_CITY) {
+		data->mapData[x][y] = BLUE_CITY;
+	} else if (tile == CHAR_BLUE_BASE) {
+		data->mapData[x][y] = BLUE_BASE;
+	} else if (tile == CHAR_BLUE_AIRPORT) {
+		data->mapData[x][y] = BLUE_AIRPORT;
+	} else if (tile == CHAR_BLUE_PORT) {
+		data->mapData[x][y] = BLUE_PORT;
+	}
+	else if (tile == CHAR_GREEN_HQ) {
+		data->mapData[x][y] = GREEN_HQ;
+	} else if (tile == CHAR_GREEN_CITY) {
+		data->mapData[x][y] = GREEN_CITY;
+	} else if (tile == CHAR_GREEN_BASE) {
+		data->mapData[x][y] = GREEN_BASE;
+	} else if (tile == CHAR_GREEN_AIRPORT) {
+		data->mapData[x][y] = GREEN_AIRPORT;
+	} else if (tile == CHAR_GREEN_PORT) {
+		data->mapData[x][y] = GREEN_PORT;
+	}
+	else if (tile == CHAR_YELLOW_HQ) {
+		data->mapData[x][y] = YELLOW_HQ;
+	} else if (tile == CHAR_YELLOW_CITY) {
+		data->mapData[x][y] = YELLOW_CITY;
+	} else if (tile == CHAR_YELLOW_BASE) {
+		data->mapData[x][y] = YELLOW_BASE;
+	} else if (tile == CHAR_YELLOW_AIRPORT) {
+		data->mapData[x][y] = YELLOW_AIRPORT;
+	} else if (tile == CHAR_YELLOW_PORT) {
+		data->mapData[x][y] = YELLOW_PORT;
+	}
+	else if (tile == CHAR_PLAIN) {
+		data->mapData[x][y] = PLAIN;
+	} else if (tile == CHAR_ROAD) {
+		data->mapData[x][y] = ROAD;
+	} else if (tile == CHAR_SEA) {
+		data->mapData[x][y] = SEA;
+	} else if (tile == CHAR_RIVER) {
+		data->mapData[x][y] = RIVER;
+	} else if (tile == CHAR_WOOD) {
+		data->mapData[x][y] = WOOD;
+	} else if (tile == CHAR_MOUNTAIN) {
+		data->mapData[x][y] = MOUNTAIN;
+	} else if (tile == CHAR_BRIDGE) {
+		data->mapData[x][y] = BRIDGE;
+	} else if (tile == CHAR_SHOAL) {
+		data->mapData[x][y] = SHOAL;
+	} else if (tile == CHAR_REEF) {
+		data->mapData[x][y] = REEF;
+	} else {
+		// For the default map data, don't do this.
+		x--;
 	}
 }
