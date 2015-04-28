@@ -80,6 +80,46 @@
 /// Tile movement costs
 // THIS IS INCOMPLETE (ALL PLACEHOLDER VALUES)
 // Setting a value to 0 will mean a unit cannot move onto it.
+#define MOVE_HQ_INFANTRY 1
+#define MOVE_HQ_MECH     1
+#define MOVE_HQ_TIRES    1
+#define MOVE_HQ_TREAD    1
+#define MOVE_HQ_AIR      1
+#define MOVE_HQ_SHIP     0
+#define MOVE_HQ_CARRIER  0
+
+#define MOVE_CITY_INFANTRY 1
+#define MOVE_CITY_MECH     1
+#define MOVE_CITY_TIRES    1
+#define MOVE_CITY_TREAD    1
+#define MOVE_CITY_AIR      1
+#define MOVE_CITY_SHIP     0
+#define MOVE_CITY_CARRIER  0
+
+#define MOVE_BASE_INFANTRY 1
+#define MOVE_BASE_MECH     1
+#define MOVE_BASE_TIRES    1
+#define MOVE_BASE_TREAD    1
+#define MOVE_BASE_AIR      1
+#define MOVE_BASE_SHIP     0
+#define MOVE_BASE_CARRIER  0
+
+#define MOVE_AIRPORT_INFANTRY 1
+#define MOVE_AIRPORT_MECH     1
+#define MOVE_AIRPORT_TIRES    1
+#define MOVE_AIRPORT_TREAD    1
+#define MOVE_AIRPORT_AIR      1
+#define MOVE_AIRPORT_SHIP     0
+#define MOVE_AIRPORT_CARRIER  0
+
+#define MOVE_PORT_INFANTRY 1
+#define MOVE_PORT_MECH     1
+#define MOVE_PORT_TIRES    1
+#define MOVE_PORT_TREAD    1
+#define MOVE_PORT_AIR      1
+#define MOVE_PORT_SHIP     0
+#define MOVE_PORT_CARRIER  0
+
 #define MOVE_PLAIN_INFANTRY 1
 #define MOVE_PLAIN_MECH     1
 #define MOVE_PLAIN_TIRES    2
@@ -151,46 +191,6 @@
 #define MOVE_REEF_AIR      1
 #define MOVE_REEF_SHIP     0
 #define MOVE_REEF_CARRIER  0
-
-#define MOVE_HQ_INFANTRY 1
-#define MOVE_HQ_MECH     1
-#define MOVE_HQ_TIRES    1
-#define MOVE_HQ_TREAD    1
-#define MOVE_HQ_AIR      1
-#define MOVE_HQ_SHIP     0
-#define MOVE_HQ_CARRIER  0
-
-#define MOVE_CITY_INFANTRY 1
-#define MOVE_CITY_MECH     1
-#define MOVE_CITY_TIRES    1
-#define MOVE_CITY_TREAD    1
-#define MOVE_CITY_AIR      1
-#define MOVE_CITY_SHIP     0
-#define MOVE_CITY_CARRIER  0
-
-#define MOVE_BASE_INFANTRY 1
-#define MOVE_BASE_MECH     1
-#define MOVE_BASE_TIRES    1
-#define MOVE_BASE_TREAD    1
-#define MOVE_BASE_AIR      1
-#define MOVE_BASE_SHIP     0
-#define MOVE_BASE_CARRIER  0
-
-#define MOVE_AIRPORT_INFANTRY 1
-#define MOVE_AIRPORT_MECH     1
-#define MOVE_AIRPORT_TIRES    1
-#define MOVE_AIRPORT_TREAD    1
-#define MOVE_AIRPORT_AIR      1
-#define MOVE_AIRPORT_SHIP     0
-#define MOVE_AIRPORT_CARRIER  0
-
-#define MOVE_PORT_INFANTRY 1
-#define MOVE_PORT_MECH     1
-#define MOVE_PORT_TIRES    1
-#define MOVE_PORT_TREAD    1
-#define MOVE_PORT_AIR      1
-#define MOVE_PORT_SHIP     0
-#define MOVE_PORT_CARRIER  0
 
 /// Tile defense ranks
 #define DEFENSE_HQ       4
@@ -430,7 +430,6 @@
 #define VISION_CARRIER    4
 #define RANGE_MIN_CARRIER 3
 #define RANGE_MAX_CARRIER 8
-
 
 
 /// Base damage values (percentages)
@@ -876,7 +875,7 @@
 /// Map boundaries
 // These are going to be phased out. The map data will be read to
 // include the size (or maybe a dynamic system to find it).
-#define MAP_WIDTH  14
+#define MAP_WIDTH  16
 #define MAP_HEIGHT 12
 
 /// Map tile types
@@ -927,10 +926,10 @@
 #define CHAR_MAP_BASE           '%'
 #define CHAR_MAP_AIRPORT        '$'
 #define CHAR_MAP_PORT           '&'
-#define CHAR_MAP_PLAIN          '_'
+#define CHAR_MAP_PLAIN          '-'
 #define CHAR_MAP_ROAD           '+'
 #define CHAR_MAP_SEA            '~'
-#define CHAR_MAP_RIVER          '_'
+#define CHAR_MAP_RIVER          '-'
 #define CHAR_MAP_WOOD           '#'
 #define CHAR_MAP_MOUNTAIN       '^'
 #define CHAR_MAP_BRIDGE         '+'

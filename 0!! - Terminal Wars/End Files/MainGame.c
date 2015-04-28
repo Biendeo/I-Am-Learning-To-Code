@@ -150,7 +150,7 @@ void scanMap (game *data) {
 	
 	/// Now, the program will scan for buildings and store those.
 	while (y < MAP_HEIGHT) {
-		while (x < MAP_HEIGHT) {
+		while (x < MAP_WIDTH) {
 			if (data->mapData[x][y] < PLAIN) {
 				data->buildingData[arrayPos].buildingType = ((data->mapData[x][y]) % 10);
 				data->buildingData[arrayPos].player = ((data->mapData[x][y]) / 10);
@@ -166,6 +166,7 @@ void scanMap (game *data) {
 				} else if (data->buildingData[arrayPos].player == TEAM_YELLOW) {
 					data->p4.buildingsOwned++;
 				}
+				arrayPos++;
 			}
 			x++;
 		}
@@ -175,28 +176,288 @@ void scanMap (game *data) {
 
 }
 
+void attackUnit (game *data, short attacker, short defender) {
+	
+}
+
+char tileMovementGetter (game *data, short x, short y, char movementType) {
+	char tileType = data->mapData[x][y];
+	char tileMovement = 0;
+	
+	if (movementType == MOVE_INFANTRY) {
+		if (tileType < PLAIN) {
+			if (tileType % 10 == 1) {
+				tileMovement = MOVE_HQ_INFANTRY;
+			} else if (tileType % 10 == 2) {
+				tileMovement = MOVE_CITY_INFANTRY;
+			} else if (tileType % 10 == 3) {
+				tileMovement = MOVE_BASE_INFANTRY;
+			} else if (tileType % 10 == 4) {
+				tileMovement = MOVE_AIRPORT_INFANTRY;
+			} else if (tileType % 10 == 5) {
+				tileMovement = MOVE_PORT_INFANTRY;
+			}
+		} else if (tileType == PLAIN) {
+			tileMovement = MOVE_PLAIN_INFANTRY;
+		} else if (tileType == ROAD) {
+			tileMovement = MOVE_ROAD_INFANTRY;
+		} else if (tileType == SEA) {
+			tileMovement = MOVE_SEA_INFANTRY;
+		} else if (tileType == RIVER) {
+			tileMovement = MOVE_RIVER_INFANTRY;
+		} else if (tileType == WOOD) {
+			tileMovement = MOVE_WOOD_INFANTRY;
+		} else if (tileType == MOUNTAIN) {
+			tileMovement = MOVE_MOUNTAIN_INFANTRY;
+		} else if (tileType == BRIDGE) {
+			tileMovement = MOVE_BRIDGE_INFANTRY;
+		} else if (tileType == SHOAL) {
+			tileMovement = MOVE_SHOAL_INFANTRY;
+		} else if (tileType == REEF) {
+			tileMovement = MOVE_REEF_INFANTRY;
+		}
+	}
+	else if (movementType == MOVE_MECH) {
+		if (tileType < PLAIN) {
+			if (tileType % 10 == 1) {
+				tileMovement = MOVE_HQ_MECH;
+			} else if (tileType % 10 == 2) {
+				tileMovement = MOVE_CITY_MECH;
+			} else if (tileType % 10 == 3) {
+				tileMovement = MOVE_BASE_MECH;
+			} else if (tileType % 10 == 4) {
+				tileMovement = MOVE_AIRPORT_MECH;
+			} else if (tileType % 10 == 5) {
+				tileMovement = MOVE_PORT_MECH;
+			}
+		} else if (tileType == PLAIN) {
+			tileMovement = MOVE_PLAIN_MECH;
+		} else if (tileType == ROAD) {
+			tileMovement = MOVE_ROAD_MECH;
+		} else if (tileType == SEA) {
+			tileMovement = MOVE_SEA_MECH;
+		} else if (tileType == RIVER) {
+			tileMovement = MOVE_RIVER_MECH;
+		} else if (tileType == WOOD) {
+			tileMovement = MOVE_WOOD_MECH;
+		} else if (tileType == MOUNTAIN) {
+			tileMovement = MOVE_MOUNTAIN_MECH;
+		} else if (tileType == BRIDGE) {
+			tileMovement = MOVE_BRIDGE_MECH;
+		} else if (tileType == SHOAL) {
+			tileMovement = MOVE_SHOAL_MECH;
+		} else if (tileType == REEF) {
+			tileMovement = MOVE_REEF_MECH;
+		}
+	}
+	else if (movementType == MOVE_TIRES) {
+		if (tileType < PLAIN) {
+			if (tileType % 10 == 1) {
+				tileMovement = MOVE_HQ_TIRES;
+			} else if (tileType % 10 == 2) {
+				tileMovement = MOVE_CITY_TIRES;
+			} else if (tileType % 10 == 3) {
+				tileMovement = MOVE_BASE_TIRES;
+			} else if (tileType % 10 == 4) {
+				tileMovement = MOVE_AIRPORT_TIRES;
+			} else if (tileType % 10 == 5) {
+				tileMovement = MOVE_PORT_TIRES;
+			}
+		} else if (tileType == PLAIN) {
+			tileMovement = MOVE_PLAIN_TIRES;
+		} else if (tileType == ROAD) {
+			tileMovement = MOVE_ROAD_TIRES;
+		} else if (tileType == SEA) {
+			tileMovement = MOVE_SEA_TIRES;
+		} else if (tileType == RIVER) {
+			tileMovement = MOVE_RIVER_TIRES;
+		} else if (tileType == WOOD) {
+			tileMovement = MOVE_WOOD_TIRES;
+		} else if (tileType == MOUNTAIN) {
+			tileMovement = MOVE_MOUNTAIN_TIRES;
+		} else if (tileType == BRIDGE) {
+			tileMovement = MOVE_BRIDGE_TIRES;
+		} else if (tileType == SHOAL) {
+			tileMovement = MOVE_SHOAL_TIRES;
+		} else if (tileType == REEF) {
+			tileMovement = MOVE_REEF_TIRES;
+		}
+	}
+	else if (movementType == MOVE_TREAD) {
+		if (tileType < PLAIN) {
+			if (tileType % 10 == 1) {
+				tileMovement = MOVE_HQ_TREAD;
+			} else if (tileType % 10 == 2) {
+				tileMovement = MOVE_CITY_TREAD;
+			} else if (tileType % 10 == 3) {
+				tileMovement = MOVE_BASE_TREAD;
+			} else if (tileType % 10 == 4) {
+				tileMovement = MOVE_AIRPORT_TREAD;
+			} else if (tileType % 10 == 5) {
+				tileMovement = MOVE_PORT_TREAD;
+			}
+		} else if (tileType == PLAIN) {
+			tileMovement = MOVE_PLAIN_TREAD;
+		} else if (tileType == ROAD) {
+			tileMovement = MOVE_ROAD_TREAD;
+		} else if (tileType == SEA) {
+			tileMovement = MOVE_SEA_TREAD;
+		} else if (tileType == RIVER) {
+			tileMovement = MOVE_RIVER_TREAD;
+		} else if (tileType == WOOD) {
+			tileMovement = MOVE_WOOD_TREAD;
+		} else if (tileType == MOUNTAIN) {
+			tileMovement = MOVE_MOUNTAIN_TREAD;
+		} else if (tileType == BRIDGE) {
+			tileMovement = MOVE_BRIDGE_TREAD;
+		} else if (tileType == SHOAL) {
+			tileMovement = MOVE_SHOAL_TREAD;
+		} else if (tileType == REEF) {
+			tileMovement = MOVE_REEF_TREAD;
+		}
+	}
+	else if (movementType == MOVE_AIR) {
+		if (tileType < PLAIN) {
+			if (tileType % 10 == 1) {
+				tileMovement = MOVE_HQ_AIR;
+			} else if (tileType % 10 == 2) {
+				tileMovement = MOVE_CITY_AIR;
+			} else if (tileType % 10 == 3) {
+				tileMovement = MOVE_BASE_AIR;
+			} else if (tileType % 10 == 4) {
+				tileMovement = MOVE_AIRPORT_AIR;
+			} else if (tileType % 10 == 5) {
+				tileMovement = MOVE_PORT_AIR;
+			}
+		} else if (tileType == PLAIN) {
+			tileMovement = MOVE_PLAIN_AIR;
+		} else if (tileType == ROAD) {
+			tileMovement = MOVE_ROAD_AIR;
+		} else if (tileType == SEA) {
+			tileMovement = MOVE_SEA_AIR;
+		} else if (tileType == RIVER) {
+			tileMovement = MOVE_RIVER_AIR;
+		} else if (tileType == WOOD) {
+			tileMovement = MOVE_WOOD_AIR;
+		} else if (tileType == MOUNTAIN) {
+			tileMovement = MOVE_MOUNTAIN_AIR;
+		} else if (tileType == BRIDGE) {
+			tileMovement = MOVE_BRIDGE_AIR;
+		} else if (tileType == SHOAL) {
+			tileMovement = MOVE_SHOAL_AIR;
+		} else if (tileType == REEF) {
+			tileMovement = MOVE_REEF_AIR;
+		}
+	}
+	else if (movementType == MOVE_SHIP) {
+		if (tileType < PLAIN) {
+			if (tileType % 10 == 1) {
+				tileMovement = MOVE_HQ_SHIP;
+			} else if (tileType % 10 == 2) {
+				tileMovement = MOVE_CITY_SHIP;
+			} else if (tileType % 10 == 3) {
+				tileMovement = MOVE_BASE_SHIP;
+			} else if (tileType % 10 == 4) {
+				tileMovement = MOVE_AIRPORT_SHIP;
+			} else if (tileType % 10 == 5) {
+				tileMovement = MOVE_PORT_SHIP;
+			}
+		} else if (tileType == PLAIN) {
+			tileMovement = MOVE_PLAIN_SHIP;
+		} else if (tileType == ROAD) {
+			tileMovement = MOVE_ROAD_SHIP;
+		} else if (tileType == SEA) {
+			tileMovement = MOVE_SEA_SHIP;
+		} else if (tileType == RIVER) {
+			tileMovement = MOVE_RIVER_SHIP;
+		} else if (tileType == WOOD) {
+			tileMovement = MOVE_WOOD_SHIP;
+		} else if (tileType == MOUNTAIN) {
+			tileMovement = MOVE_MOUNTAIN_SHIP;
+		} else if (tileType == BRIDGE) {
+			tileMovement = MOVE_BRIDGE_SHIP;
+		} else if (tileType == SHOAL) {
+			tileMovement = MOVE_SHOAL_SHIP;
+		} else if (tileType == REEF) {
+			tileMovement = MOVE_REEF_SHIP;
+		}
+	}
+	else if (movementType == MOVE_CARRIER) {
+		if (tileType < PLAIN) {
+			if (tileType % 10 == 1) {
+				tileMovement = MOVE_HQ_CARRIER;
+			} else if (tileType % 10 == 2) {
+				tileMovement = MOVE_CITY_CARRIER;
+			} else if (tileType % 10 == 3) {
+				tileMovement = MOVE_BASE_CARRIER;
+			} else if (tileType % 10 == 4) {
+				tileMovement = MOVE_AIRPORT_CARRIER;
+			} else if (tileType % 10 == 5) {
+				tileMovement = MOVE_PORT_CARRIER;
+			}
+		} else if (tileType == PLAIN) {
+			tileMovement = MOVE_PLAIN_CARRIER;
+		} else if (tileType == ROAD) {
+			tileMovement = MOVE_ROAD_CARRIER;
+		} else if (tileType == SEA) {
+			tileMovement = MOVE_SEA_CARRIER;
+		} else if (tileType == RIVER) {
+			tileMovement = MOVE_RIVER_CARRIER;
+		} else if (tileType == WOOD) {
+			tileMovement = MOVE_WOOD_CARRIER;
+		} else if (tileType == MOUNTAIN) {
+			tileMovement = MOVE_MOUNTAIN_CARRIER;
+		} else if (tileType == BRIDGE) {
+			tileMovement = MOVE_BRIDGE_CARRIER;
+		} else if (tileType == SHOAL) {
+			tileMovement = MOVE_SHOAL_CARRIER;
+		} else if (tileType == REEF) {
+			tileMovement = MOVE_REEF_CARRIER;
+		}
+	}
+	
+	return tileMovement;
+}
+
+char tileDefenseGetter (game *data, short x, short y) {
+	
+}
+
+unsigned char baseDamageGetter (game *data, short attacker, short defender) {
+	
+}
+
 void checkInitialiseGame (game *data) {
 	// Develop this fully later.
 	if (data->p1.color != TEAM_RED) {
 		printf("Error TEST_FAILED data->p1.color != TEAM_RED (%d)\n", data->p1.color);
 		ERROR_CODE = TEST_FAILED;
+		getkey();
 	}
 	if (data->p1.money != STARTING_MONEY) {
 		printf("Error TEST_FAILED data->p1.money != STARTING_MONEY (%d)\n", data->p1.money);
 		ERROR_CODE = TEST_FAILED;
+		getkey();
 	}
 	
 	// This is a personal test to see if the data truly is correct.
-	// The in-built map gives blue 5 buildings, this checks if it read that.
-	// Custom maps may fail this.
+	// Custom maps will probably fail this right now, but I can't check it.
+	if (data->p1.buildingsOwned != 6) {
+		printf("Error TEST_FAILED data->p1.buidlingsOwned != 6 (%d)\n", data->p1.buildingsOwned);
+		ERROR_CODE = TEST_FAILED;
+		getkey();
+	}
 	if (data->p2.buildingsOwned != 5) {
 		printf("Error TEST_FAILED data->p2.buidlingsOwned != 5 (%d)\n", data->p2.buildingsOwned);
 		ERROR_CODE = TEST_FAILED;
+		getkey();
 	}
 	if (ERROR_CODE == ALL_GOOD) {
 		printf("All tests passed. :)\n");
 	}
 }
+
+
 
 void freeGame (game *data) {
 	printf("Program ended in state %d\n", ERROR_CODE);

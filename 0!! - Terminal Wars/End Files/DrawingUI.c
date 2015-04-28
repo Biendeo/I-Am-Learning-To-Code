@@ -15,7 +15,7 @@ void screenSplash() {
 	printf("+------------------------------+\n");
 	printf("|                              |\n");
 	printf("|         ");
-	setColor(WHITE);
+	setColor(LIGHTGREEN);
 	printf("TERMINAL WARS");
 	setColor(GREY);
 	printf("        |\n");
@@ -110,6 +110,8 @@ void drawUnit (game *data, short x, short y, short arrayPos) {
 		printf("%c", CHAR_ROCKETS);
 	} else if (data->unitData[arrayPos].unitType == ANTI_AIR) {
 		printf("%c", CHAR_ANTI_AIR);
+	} else if (data->unitData[arrayPos].unitType == MISSILES) {
+		printf("%c", CHAR_MISSILES);
 	} else if (data->unitData[arrayPos].unitType == BATT_COP) {
 		printf("%c", CHAR_BATT_COP);
 	} else if (data->unitData[arrayPos].unitType == TRAN_COP) {
@@ -140,15 +142,15 @@ void drawField (game *data, short x, short y) {
 	if ((data->cursor.x == x) && (data->cursor.y == y)) {
 		setColor(LIGHTMAGENTA);
 	} else if (data->mapData[x][y] == NULL_HQ) {
-		setColor(GREY);
+		setColor(WHITE);
 	} else if (data->mapData[x][y] == NULL_CITY) {
-		setColor(GREY);
+		setColor(WHITE);
 	} else if (data->mapData[x][y] == NULL_BASE) {
-		setColor(GREY);
+		setColor(WHITE);
 	} else if (data->mapData[x][y] == NULL_AIRPORT) {
-		setColor(GREY);
+		setColor(WHITE);
 	} else if (data->mapData[x][y] == NULL_PORT) {
-		setColor(GREY);
+		setColor(WHITE);
 	} else if (data->mapData[x][y] == RED_HQ) {
 		setColor(LIGHTRED);
 	} else if (data->mapData[x][y] == RED_CITY) {
@@ -203,7 +205,7 @@ void drawField (game *data, short x, short y) {
 	} else if (data->mapData[x][y] == MOUNTAIN) {
 		setColor(BROWN);
 	} else if (data->mapData[x][y] == BRIDGE) {
-		setColor(YELLOW);
+		setColor(WHITE);
 	} else if (data->mapData[x][y] == SHOAL) {
 		setColor(BLUE);
 	} else if (data->mapData[x][y] == REEF) {
@@ -280,6 +282,14 @@ void drawField (game *data, short x, short y) {
 	} else if (data->mapData[x][y] == REEF) {
 		printf("%c", CHAR_MAP_REEF);
 	}
+}
+
+void drawUnitUI (game *data, short x, short y) {
+	// Before you do this, store all the necessary data at first.
+}
+
+void drawFieldUI (game *data, short x, short y) {
+	
 }
 
 short findUnit (game *data, short x, short y) {

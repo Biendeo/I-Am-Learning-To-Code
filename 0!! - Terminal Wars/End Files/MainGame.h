@@ -14,14 +14,21 @@ typedef struct unitdata {
 	/// An ammo of -1 means infinite ammo.
 	char ammo1;
 	char ammo2;
+	char maxAmmo1;
+	char maxAmmo2;
 	
 	/// This tracks how much fuel a unit has.
 	char fuel;
+	char maxFuel;
 	
 	/// This tracks how far a unit has left to move for that turn.
 	char movement;
+	char maxMovement;
 	
-	// This tracks where the unit is.
+	/// This stores the current vision that a unit has. This will go unused.
+	char vision;
+	
+	/// This tracks where the unit is.
 	short x;
 	short y;
 } unit;
@@ -108,4 +115,8 @@ game *buildGame ();
 void initialiseGame (game *data);
 void checkInitialiseGame (game *data);
 void scanMap (game *data);
+void attackUnit (game *data, short attacker, short defender);
+char tileMovementGetter (game *data, short x, short y, char movementType);
+char tileDefenseGetter (game *data, short x, short y);
+unsigned char baseDamageGetter (game *data, short attacker, short defender);
 void freeGame (game *data);
