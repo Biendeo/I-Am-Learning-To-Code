@@ -8,6 +8,14 @@
 #define HUMAN 1
 #define BOT   2
 
+#define UP    1
+#define RIGHT 2
+#define DOWN  3
+#define LEFT  4
+
+#define PRIMARY  1
+#define SECONARY 2
+
 #define DRAWMODE_MAP   1
 #define DRAWMODE_UNITS 2
 

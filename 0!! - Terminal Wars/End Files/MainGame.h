@@ -25,8 +25,13 @@ typedef struct unitdata {
 	char movement;
 	char maxMovement;
 	
-	/// This stores the current vision that a unit has. This will go unused.
+	/// This stores the current vision that a unit has. This will go
+	/// unusued in the 
 	char vision;
+	
+	/// This stores whether the unit has finished its turn.
+	/// 1 is finished, 0 is not (use YES and NO).
+	char finished;
 	
 	/// This tracks where the unit is.
 	short x;
@@ -111,16 +116,35 @@ typedef struct gamedata {
 	char errorCode;
 } game;
 
-/// These functions are the main game functions.
+/// These functions handle making and ridding the game.
 game *buildGame ();
 void initialiseGame (game *data);
 void scanMap (game *data);
-void attackUnit (game *data, short attacker, short defender);
 void freeGame (game *data);
+
+/// These functions are the various modes the player can be in.
+void modeSelect (game *data);
+void modeMove (game *data);
+void modeAttack (game *data);
+void modeMenuField (game *data);
+void modeMenuUnit (game *data);
+
+/// These functions are the game's action functions.
+/// The shorts used in these refer to a member of the unitData array.
+void moveUnit (game *data, short mover, char direction);
+void attackUnit (game *data, short attacker, short defender);
+void createUnit (game *data, short x, short y, char unitType, char player);
+void deleteUnit (game *data, short unitPos);
 
 /// These functions grab specific data.
 char tileMovementGetter (game *data, short x, short y, char movementType);
 char tileDefenseGetter (game *data, short x, short y);
 unsigned char baseDamageGetter (game *data, short attacker, short defender);
+char minimumRangeGetter (game *data, short unitPos);
+char maximumRangeGetter (game *data, short unitPos);
+char whichWeapon (game *data, short attacker, short defender);
+char canItCounter (game *data, short attacker, short defender);
+
+
 /// This function tests to see if the game started properly.
 void checkInitialiseGame (game *data);

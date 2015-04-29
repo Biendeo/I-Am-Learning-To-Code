@@ -10,6 +10,7 @@
 #include "FileIO.h"
 #include "DrawingUI.h"
 
+/// This is just a splash screen for presentation.
 void screenSplash() {
 	setColor(GREY);
 	printf("+------------------------------+\n");
@@ -24,8 +25,20 @@ void screenSplash() {
 	printf("\n");
 	printf("An attempt to recreate the game Advance Wars in C.\n");
 	printf("\n");
-	printf("Version \"Stage 8\"\n");
-	getkey();
+	printf("Version \"Stage 8\"\n\n");
+	
+	/// This tells the user if their screen is too small.
+	if (trows() < (MAP_HEIGHT + 10)) {
+		printf("Your screen is too short to properly view this.\n");
+		printf("Make your window taller to fit %d rows.\n\n", MAP_HEIGHT + 10);
+	}
+	// This magic number is just how roughly wide the screen needs to be.
+	// I don't kow exactly how wide it should be.
+	if ((tcols() < MAP_WIDTH) || (tcols() < 50)) {
+		printf("Your screen is too thin to properly view this.\n");
+		printf("Make your window wider to fit %d columns.\n\n", MAP_WIDTH + 10);
+	}
+	anykey();
 }
 
 void mapDraw(game *data) {
