@@ -1,4 +1,5 @@
-#include "Defines.h"
+#ifndef MAINGAME_H
+#define MAINGAME_H
 
 typedef struct unitdata {
 	/// This defines what type of unit it is.
@@ -148,3 +149,5 @@ char canItCounter (game *data, short attacker, short defender);
 
 /// This function tests to see if the game started properly.
 void checkInitialiseGame (game *data);
+
+#endif

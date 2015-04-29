@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 
 // These headers are redundant when they're already called. An IFDEF
 // needs to be used.
 #include "Defines.h"
 #include "MainGame.h"
 #include "FileIO.h"
-#include "rlutil.h"
 
 /// This function
 game *buildGame () {
@@ -16,21 +16,24 @@ game *buildGame () {
 	// once I've gotten the map dimensions, as they might be variable
 	// later on.
 	game *data = malloc(sizeof(game));
+	
+	/// CURRENTLY THIS DOESN'T WORK. NO CLUE WHY.
+	/// Right now, it just sticks with the default. It does its job
+	/// for now, but obviously that's not good.
+	/*
 	char settings[2];
-	char *inputString = {0};
+	char *inputString;
 	FILE *file;
 	printf("Type 0 to play a new game, or 1 to load a game. ");
 	settings[0] = getchar();
 	
 	if (settings[0] == '0') {
 		printf("Enter what a map file. (or leave blank for default). ");
-		// I don't know why, it'll automatically ask for the next one
-		// unless I double up on this.
-		gets(inputString);
-		gets(inputString);
+		// The scan stopped working, so currently it defaults to this
+		// map.
 		
-		if (strlen(inputString) >= 2) {
-			file = fopen(inputString, "r");
+		if (NULL == NULL) {
+			file = fopen("Map Files/SpannIsland.txt", "r");
 			if (file == NULL) {
 				printf("Error FILE_NOT_FOUND\n");
 				ERROR_CODE = FILE_NOT_FOUND;
@@ -80,7 +83,9 @@ game *buildGame () {
 	else {
 		printf("Error BAD_SETUP_INPUT\n");
 		ERROR_CODE = BAD_SETUP_INPUT;
-	}
+	}*/
+	loadMapDefaultData(data);
+	initialiseGame(data);
 	return data;
 }
 
@@ -180,18 +185,37 @@ void scanMap (game *data) {
 
 }
 
+void modeSelect (game *data) {
+	
+}
+
+void modeMove (game *data) {
+	
+}
+
+void modeAttack (game *data) {
+	
+}
+
+void modeMenuField (game *data) {
+	
+}
+
+void modeMenuUnit (game *data) {
+	
+}
+
 void freeGame (game *data) {
 	printf("Program ended in state %d\n", ERROR_CODE);
 	free(data);
 }
 
+void moveUnit (game *data, short mover, char direction) {
+	
+}
+
 void attackUnit (game *data, short attacker, short defender) {
-	/// The msleep is so that the random seed is completely random.
-	/// If you use srand twice in the same second, it returns the same
-	/// result. This ensures that it isn't the same.
-	msleep(1000);
-	int attackSeed = srand();
-	char attackRandom = attackSeed % 10;
+	char attackRandom = rand() % 10;
 	
 	/// The base damage and defense are grabbed.
 	// I'll do an additional test for this before this function gets
@@ -202,12 +226,11 @@ void attackUnit (game *data, short attacker, short defender) {
 	/// Now, the damage is calculated. The formula is a bit messy.
 	/// Basically, a number 
 	float endDamage;
-	endDamage = ((baseDamage + attackRandom) / 100) * (data->unitData[attacker].health / 10) * ((100 - (defenseRating * data->unitData[defender].health)) / 100);
+	endDamage = roundf((baseDamage + attackRandom) / 100) * (data->unitData[attacker].health / 10) * ((100 - (defenseRating * data->unitData[defender].health)) / 100);
 	
 	/// The end health is applied, and the value is rounded (as health
 	/// is only one decimal place).
 	data->unitData[defender].health -= endDamage;
-	roundf(data->unitData[defender].health * 10) / 10;
 	
 	/// If the opposing unit is still alive, and it can counter-attack,
 	/// then it does the same calculation but accessing different stuff.
@@ -217,17 +240,15 @@ void attackUnit (game *data, short attacker, short defender) {
 		// When making canItCounter, just get the values from some
 		// functions, so it should be large itself.
 		if (canItCounter(data, attacker, defender) == YES) {
-			msleep(1000);
-			attackSeed = srand();
-			attackRandom = attackSeed % 10;
+			attackRandom = rand() % 10;
 			
 			baseDamage = baseDamageGetter (data, data->unitData[defender].unitType, data->unitData[attacker].unitType);
 			defenseRating = tileDefenseGetter (data, data->unitData[attacker].x, data->unitData[attacker].y);
 			
-			endDamage = ((baseDamage / 100) + attackRandom) * (data->unitData[defender].health / 10) * ((100 - (defenseRating * data->unitData[attacker].health)) / 100);
-			roundf(data->unitData[attacker].health * 10) / 10;
+			endDamage = roundf((baseDamage / 100) + attackRandom) * (data->unitData[defender].health / 10) * ((100 - (defenseRating * data->unitData[attacker].health)) / 100);
+			data->unitData[attacker].health -= endDamage;
 			
-			if (data->unitData[defender].health < 0) {
+			if (data->unitData[attacker].health < 0) {
 				deleteUnit(data, attacker);
 			}
 		}
@@ -237,6 +258,14 @@ void attackUnit (game *data, short attacker, short defender) {
 	
 	/// Attacking is always the last thing a unit does each turn.
 	data->unitData[attacker].finished = YES;
+}
+
+void createUnit (game *data, short x, short y, char unitType, char player) {
+	
+}
+
+void deleteUnit (game *data, short unitPos) {
+	
 }
 
 char tileMovementGetter (game *data, short x, short y, char movementType) {
@@ -479,6 +508,7 @@ char tileMovementGetter (game *data, short x, short y, char movementType) {
 }
 
 char tileDefenseGetter (game *data, short x, short y) {
+	char tileType = data->mapData[x][y];
 	char tileDefense = 0;
 	if (tileType < PLAIN) {
 		if (tileType % 10 == 1) {
@@ -515,7 +545,9 @@ char tileDefenseGetter (game *data, short x, short y) {
 }
 
 unsigned char baseDamageGetter (game *data, short attacker, short defender) {
+	unsigned char baseDamage = 0;
 	
+	return baseDamage;
 }
 
 char minimumRangeGetter (game *data, short unitPos) {
@@ -626,6 +658,13 @@ char maximumRangeGetter (game *data, short unitPos) {
 	return maximumRange;
 }
 
+char whichWeapon (game *data, short attacker, short defender) {
+	/// This will only change if it CAN attack something.
+	char whichWeapon = NO;
+	
+	return whichWeapon;
+}
+
 char canItCounter (game *data, short attacker, short defender) {
 	char canItCounter = NO;
 	if ((minimumRangeGetter(data, defender) == 1) && (maximumRangeGetter(data, defender) == 1)) {
@@ -642,12 +681,12 @@ void checkInitialiseGame (game *data) {
 	if (data->p1.color != TEAM_RED) {
 		printf("Error TEST_FAILED data->p1.color != TEAM_RED (%d)\n", data->p1.color);
 		ERROR_CODE = TEST_FAILED;
-		anykey();
+		getchar();
 	}
 	if (data->p1.money != STARTING_MONEY) {
 		printf("Error TEST_FAILED data->p1.money != STARTING_MONEY (%d)\n", data->p1.money);
 		ERROR_CODE = TEST_FAILED;
-		anykey();
+		getchar();
 	}
 	
 	// This is a personal test to see if the data truly is correct.
@@ -656,15 +695,16 @@ void checkInitialiseGame (game *data) {
 	if (data->p1.buildingsOwned != 6) {
 		printf("Error TEST_FAILED data->p1.buidlingsOwned != 6 (%d)\n", data->p1.buildingsOwned);
 		ERROR_CODE = TEST_FAILED;
-		anykey();
+		getchar();
 	}
 	if (data->p2.buildingsOwned != 5) {
 		printf("Error TEST_FAILED data->p2.buidlingsOwned != 5 (%d)\n", data->p2.buildingsOwned);
 		ERROR_CODE = TEST_FAILED;
-		anykey();
+		getchar();
 	}
 	
 	if (ERROR_CODE == ALL_GOOD) {
 		printf("All tests passed. :)\n");
+		getchar();
 	}
 }

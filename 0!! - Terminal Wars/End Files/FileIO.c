@@ -3,11 +3,8 @@
 #include <string.h>
 
 #include "Defines.h"
-#include "GameUI.h"
 #include "MainGame.h"
-#include "GameAI.h"
 #include "FileIO.h"
-#include "DrawingUI.h"
 
 void loadMapFileData (game *data, FILE *file) {
 	short x = 0;
@@ -17,7 +14,7 @@ void loadMapFileData (game *data, FILE *file) {
 	while ((y < MAP_HEIGHT) && (bufferChar != EOF)) {
 		while ((x < MAP_WIDTH) && (bufferChar != EOF)) {
 			bufferChar = fgetc(file);
-			translateMapFile(data, bufferChar);
+			translateMapData(data, bufferChar, x, y);
 			x++;
 		}
 		y++;
@@ -53,15 +50,15 @@ void loadMapDefaultData (game *data) {
 	short y = 0;
 	while (y < MAP_HEIGHT) {
 		while (x < MAP_WIDTH) {
-			translateMapData(data, tempData[x][y]);
-			x++
+			translateMapData (data, tempData[x][y], x, y);
+			x++;
 		}
 		y++;
 		x = 0;
 	}
 }
 
-void translateMapData (game *data, unsigned char tile) {
+void translateMapData (game *data, unsigned char tile, short x, short y) {
 	if (tile == CHAR_NULL_HQ) {
 		data->mapData[x][y] = NULL_HQ;
 	} else if (tile == CHAR_NULL_CITY) {

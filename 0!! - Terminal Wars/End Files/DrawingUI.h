@@ -1,4 +1,5 @@
-#include "Defines.h"
+#ifndef DRAWINGUI_H
+#define DRAWINGUI_H
 
 void screenSplash();
 void mapDraw (game *data);
@@ -9,3 +10,5 @@ void drawUnitUI (game *data, short x, short y);
 void drawFieldUI (game *data, short x, short y);
 short findUnit (game *data, short x, short y);
 void testDrawing (game *data);
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef DEFINES_H
+#define DEFINES_H
+
 /// End-user defines
 #define START_GAME game *data = buildGame ()
 #define END_GAME freeGame(data)
@@ -1006,3 +1009,5 @@
 #define BAD_SETUP_INPUT 2
 #define FILE_NOT_FOUND 3
 #define MAP_INVALID_SIZE 4
+
+#endif

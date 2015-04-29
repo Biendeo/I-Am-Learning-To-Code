@@ -3,12 +3,12 @@
 #include <string.h>
 
 #include "Defines.h"
-#include "rlutil.h"
 #include "GameUI.h"
 #include "MainGame.h"
 #include "GameAI.h"
 #include "FileIO.h"
 #include "DrawingUI.h"
+#include "rlutil.h"
 
 /// This is just a splash screen for presentation.
 void screenSplash() {
