@@ -273,46 +273,46 @@ const RLUTIL_STRING_T ANSI_WHITE = "\033[01;37m";
  * KEY_NUMPAD8 - Numpad 8
  * KEY_NUMPAD9 - Numpad 9
  */
-#define KEY_ESCAPE  0
-#define KEY_ENTER   1
-#define KEY_SPACE   32
+const int KEY_ESCAPE  = 0;
+const int KEY_ENTER   = 1;
+const int KEY_SPACE   = 32;
 
-#define KEY_INSERT  2
-#define KEY_HOME    3
-#define KEY_PGUP    4
-#define KEY_DELETE  5
-#define KEY_END     6
-#define KEY_PGDOWN  7
+const int KEY_INSERT  = 2;
+const int KEY_HOME    = 3;
+const int KEY_PGUP    = 4;
+const int KEY_DELETE  = 5;
+const int KEY_END     = 6;
+const int KEY_PGDOWN  = 7;
 
-#define KEY_UP      14
-#define KEY_DOWN    15
-#define KEY_LEFT    16
-#define KEY_RIGHT   17
+const int KEY_UP      = 14;
+const int KEY_DOWN    = 15;
+const int KEY_LEFT    = 16;
+const int KEY_RIGHT   = 17;
 
-#define KEY_F1      18
-#define KEY_F2      19
-#define KEY_F3      20
-#define KEY_F4      21
-#define KEY_F5      22
-#define KEY_F6      23
-#define KEY_F7      24
-#define KEY_F8      25
-#define KEY_F9      26
-#define KEY_F10     27
-#define KEY_F11     28
-#define KEY_F12     29
+const int KEY_F1      = 18;
+const int KEY_F2      = 19;
+const int KEY_F3      = 20;
+const int KEY_F4      = 21;
+const int KEY_F5      = 22;
+const int KEY_F6      = 23;
+const int KEY_F7      = 24;
+const int KEY_F8      = 25;
+const int KEY_F9      = 26;
+const int KEY_F10     = 27;
+const int KEY_F11     = 28;
+const int KEY_F12     = 29;
 
-#define KEY_NUMDEL  30
-#define KEY_NUMPAD0 31
-#define KEY_NUMPAD1 127
-#define KEY_NUMPAD2 128
-#define KEY_NUMPAD3 129
-#define KEY_NUMPAD4 130
-#define KEY_NUMPAD5 131
-#define KEY_NUMPAD6 132
-#define KEY_NUMPAD7 133
-#define KEY_NUMPAD8 134
-#define KEY_NUMPAD9 135
+const int KEY_NUMDEL  = 30;
+const int KEY_NUMPAD0 = 31;
+const int KEY_NUMPAD1 = 127;
+const int KEY_NUMPAD2 = 128;
+const int KEY_NUMPAD3 = 129;
+const int KEY_NUMPAD4 = 130;
+const int KEY_NUMPAD5 = 131;
+const int KEY_NUMPAD6 = 132;
+const int KEY_NUMPAD7 = 133;
+const int KEY_NUMPAD8 = 134;
+const int KEY_NUMPAD9 = 135;
 
 /// Function: getkey
 /// Reads a key press (blocking) and returns a key code.
