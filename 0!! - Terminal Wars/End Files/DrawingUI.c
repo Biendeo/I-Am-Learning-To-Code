@@ -114,8 +114,6 @@ void drawUnit (game *data, short x, short y, short arrayPos) {
 		printf("%c", CHAR_BOMBER);
 	} else if (data->unitData[arrayPos].unitType == STEALTH) {
 		printf("%c", CHAR_STEALTH);
-	} else if (data->unitData[arrayPos].unitType == STEALTH) {
-		printf("%c", CHAR_STEALTH);
 	} else if (data->unitData[arrayPos].unitType == LANDER) {
 		printf("%c", CHAR_LANDER);
 	} else if (data->unitData[arrayPos].unitType == CRUISER) {
@@ -277,7 +275,107 @@ void drawField (game *data, short x, short y) {
 }
 
 void drawUnitUI (game *data, short x, short y) {
-	// Before you do this, store all the necessary data at first.
+	short selectedUnit = unitGetter (data, x, y);
+	printf("Cursor is on a ");
+	
+	if (data->unitData[selectedUnit].player == TEAM_RED) {
+		setColor(RED);
+		printf("RED ");
+		setColor(GREY);
+	} else if (data->unitData[selectedUnit].player == TEAM_BLUE) {
+		setColor(BLUE);
+		printf("BLUE ");
+		setColor(GREY);
+	} else if (data->unitData[selectedUnit].player == TEAM_GREEN) {
+		setColor(GREEN);
+		printf("GREEN ");
+		setColor(GREY);
+	} else if (data->unitData[selectedUnit].player == TEAM_YELLOW) {
+		setColor(YELLOW);
+		printf("YELLOW ");
+		setColor(GREY);
+	}
+	
+	if (data->unitData[selectedUnit].unitType == INFANTRY) {
+		printf("INFANTRY.\n");
+	} else if (data->unitData[selectedUnit].unitType == MECH) {
+		printf("MECH.\n");
+	} else if (data->unitData[selectedUnit].unitType == RECON) {
+		printf("RECON.\n");
+	} else if (data->unitData[selectedUnit].unitType == TANK) {
+		printf("TANK.\n");
+	} else if (data->unitData[selectedUnit].unitType == MD_TANK) {
+		printf("MEDIUM TANK.\n");
+	} else if (data->unitData[selectedUnit].unitType == NEOTANK) {
+		printf("NEOTANK.\n");
+	} else if (data->unitData[selectedUnit].unitType == MEGATANK) {
+		printf("MEGATANK.\n");
+	} else if (data->unitData[selectedUnit].unitType == APC) {
+		printf("APC.\n");
+	} else if (data->unitData[selectedUnit].unitType == ARTILLERY) {
+		printf("ARTILLERY.\n");
+	} else if (data->unitData[selectedUnit].unitType == ROCKETS) {
+		printf("ROCKET LAUNCHER.\n");
+	} else if (data->unitData[selectedUnit].unitType == ANTI_AIR) {
+		printf("ANTI-AIR CANNON.\n");
+	} else if (data->unitData[selectedUnit].unitType == MISSILES) {
+		printf("MISSILES.\n");
+	} else if (data->unitData[selectedUnit].unitType == BATT_COP) {
+		printf("BATTLE COPTER.\n");
+	} else if (data->unitData[selectedUnit].unitType == TRAN_COP) {
+		printf("TRANSPORT COPTER.\n");
+	} else if (data->unitData[selectedUnit].unitType == FIGHTER) {
+		printf("FIGHTER.\n");
+	} else if (data->unitData[selectedUnit].unitType == BOMBER) {
+		printf("BOMBER.\n");
+	} else if (data->unitData[selectedUnit].unitType == STEALTH) {
+		printf("STEALTH.\n");
+	} else if (data->unitData[selectedUnit].unitType == LANDER) {
+		printf("LANDER.\n");
+	} else if (data->unitData[selectedUnit].unitType == CRUISER) {
+		printf("CRUISER.\n");
+	} else if (data->unitData[selectedUnit].unitType == SUB) {
+		printf("SUBMARINE.\n");
+	} else if (data->unitData[selectedUnit].unitType == BATT_SHIP) {
+		printf("BATTLESHIP.\n");
+	} else if (data->unitData[selectedUnit].unitType == CARRIER) {
+		printf("CARRIER.\n");
+	}
+	
+	printf("Health: ");
+	if (data->unitData[selectedUnit].health <= 3) {
+		setColor(RED);
+	} else if ((data->unitData[selectedUnit].health > 3) && (data->unitData[selectedUnit].health <= 7)) {
+		setColor(BROWN);
+	} else if (data->unitData[selectedUnit].health > 7) {
+		setColor(GREEN);
+	}
+	printf("%g/10\n", data->unitData[selectedUnit].health);
+	setColor(GREY);
+	
+	printf("Ammo1: ");
+	if (data->unitData[selectedUnit].ammo1 <= 2) {
+		setColor(RED);
+	} else if ((data->unitData[selectedUnit].ammo1 > 2) && (data->unitData[selectedUnit].ammo1 <= 5)) {
+		setColor(BROWN);
+	} else if (data->unitData[selectedUnit].ammo1 > 5) {
+		setColor(GREEN);
+	}
+	printf("%d/%d   ", data->unitData[selectedUnit].ammo1, data->unitData[selectedUnit].maxAmmo1);
+	setColor(GREY);
+	
+	printf("Ammo2: ");
+	if (data->unitData[selectedUnit].ammo2 <= 2) {
+		setColor(RED);
+	} else if ((data->unitData[selectedUnit].ammo2 > 2) && (data->unitData[selectedUnit].ammo2 <= 5)) {
+		setColor(BROWN);
+	} else if (data->unitData[selectedUnit].ammo2 > 5) {
+		setColor(GREEN);
+	}
+	printf("%d/%d\n", data->unitData[selectedUnit].ammo2, data->unitData[selectedUnit].maxAmmo2);
+	setColor(GREY);
+	
+	printf("For debugging: ID = %d, position: %d, %d\n", selectedUnit, data->cursor.x, data->cursor.y);
 }
 
 void drawFieldUI (game *data, short x, short y) {
@@ -310,8 +408,18 @@ void testDrawing (game *data) {
 	while (keyPress != KEY_ESCAPE) {
 		if (data->interfaceMode == INTERFACEMODE_MAP) {
 			mapDraw(data);
-			printf("Moving cursor\n");
-			printf("Cursor: %d, %d\n", data->cursor.x, data->cursor.y);
+			if (data->drawMode == DRAWMODE_MAP) {
+				printf("Moving cursor\n");
+				printf("Cursor: %d, %d\n", data->cursor.x, data->cursor.y);	
+			} else if (data->drawMode == DRAWMODE_UNITS) {
+				selectedUnit = unitGetter(data, data->cursor.x, data->cursor.y);
+				if (selectedUnit != MAX_UNITS) {
+					drawUnitUI(data, data->cursor.x, data->cursor.y);
+				} else {
+					printf("Moving cursor\n");
+					printf("Cursor: %d, %d\n", data->cursor.x, data->cursor.y);	
+				}
+			}
 			keyPress = getkey();
 			if (keyPress == KEY_UP) {
 				moveCursor(data, UP);
@@ -322,17 +430,16 @@ void testDrawing (game *data) {
 			} else if (keyPress == KEY_RIGHT) {
 				moveCursor(data, RIGHT);
 			} else if (keyPress == KEY_SPACE) {
-				selectedUnit = unitGetter(data, data->cursor.x, data->cursor.y);
 				if (selectedUnit != MAX_UNITS) {
 					data->interfaceMode = INTERFACEMODE_MOVE;
 				}
 			}
 		} else if (data->interfaceMode == INTERFACEMODE_MOVE) {
 			mapDraw(data);
-			printf("Moving unit %d\n", selectedUnit);
-			printf("Cursor is at: %d, %d\n", data->cursor.x, data->cursor.y);
-			printf("Unit is team %d, unit %d\n", data->unitData[selectedUnit].player, data->unitData[selectedUnit].unitType);
-			printf("Unit has %g/10 health and %d/%d ammo.\n", data->unitData[selectedUnit].health, data->unitData[selectedUnit].ammo1, data->unitData[selectedUnit].maxAmmo1);
+			// There should be a custom moving UI, but for now just do
+			// the unit.
+			drawUnitUI(data, data->cursor.x, data->cursor.y);
+			
 			keyPress = getkey();
 			if (keyPress == KEY_UP) {
 				moveUnit(data, selectedUnit, UP);
