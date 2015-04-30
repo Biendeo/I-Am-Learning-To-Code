@@ -22,6 +22,15 @@
 #define DRAWMODE_MAP   1
 #define DRAWMODE_UNITS 2
 
+#define INTERFACEMODE_MAP        1
+#define INTERFACEMODE_MOVE       2
+#define INTERFACEMODE_ATTACK     3
+#define INTERFACEMODE_MENU_FIELD 4
+#define INTERFACEMODE_MENU_UNIT  5
+#define INTERFACEMODE_BUY_LAND   6
+#define INTERFACEMODE_BUY_AIR    7
+#define INTERFACEMODE_BUY_SEA    8
+
 /// Team colours
 #define TEAM_NONE   0
 #define TEAM_RED    1

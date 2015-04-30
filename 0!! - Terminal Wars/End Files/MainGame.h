@@ -110,6 +110,9 @@ typedef struct gamedata {
 	/// This stores the cursor position.
 	cursor cursor;
 	
+	/// This stores what move the user is in.
+	char interfaceMode;
+	
 	/// This determines whether to draw the field or the units on top.
 	char drawMode;
 	
@@ -132,12 +135,19 @@ void modeMenuUnit (game *data);
 
 /// These functions are the game's action functions.
 /// The shorts used in these refer to a member of the unitData array.
-void moveUnit (game *data, short mover, char direction);
+void moveCursor (game *data, int keyPress);
+void moveUnit (game *data, short mover, int direction);
 void attackUnit (game *data, short attacker, short defender);
 void createUnit (game *data, short x, short y, char unitType, char player);
 void deleteUnit (game *data, short unitPos);
 
+/// These check if a move/attack are valid.
+char validMoveChecker (game *data, short mover, char direction);
+char validAttackChecker (game *data, short attacker, short defender);
+
 /// These functions grab specific data.
+short unitGetter (game *data, short x, short y);
+char unitMovementTypeGetter(game *data, short unitPos);
 char tileMovementGetter (game *data, short x, short y, char movementType);
 char tileDefenseGetter (game *data, short x, short y);
 unsigned char baseDamageGetter (game *data, short attacker, short defender);

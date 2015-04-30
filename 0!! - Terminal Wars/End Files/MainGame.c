@@ -10,6 +10,52 @@
 #include "MainGame.h"
 #include "FileIO.h"
 
+// THIS BIT IS HERE PURELY BECAUSE I CAN'T GET RLUTIL.H TO BE IN
+// MULTIPLE C FILES AT THE SAME TIME.
+// I'm trying to get it to work, but no luck. This is here in the
+// meantime.
+#define KEY_ESCAPE  0
+#define KEY_ENTER   1
+#define KEY_SPACE   32
+
+#define KEY_INSERT  2
+#define KEY_HOME    3
+#define KEY_PGUP    4
+#define KEY_DELETE  5
+#define KEY_END     6
+#define KEY_PGDOWN  7
+
+#define KEY_UP      14
+#define KEY_DOWN    15
+#define KEY_LEFT    16
+#define KEY_RIGHT   17
+
+#define KEY_F1      18
+#define KEY_F2      19
+#define KEY_F3      20
+#define KEY_F4      21
+#define KEY_F5      22
+#define KEY_F6      23
+#define KEY_F7      24
+#define KEY_F8      25
+#define KEY_F9      26
+#define KEY_F10     27
+#define KEY_F11     28
+#define KEY_F12     29
+
+#define KEY_NUMDEL  30
+#define KEY_NUMPAD0 31
+#define KEY_NUMPAD1 127
+#define KEY_NUMPAD2 128
+#define KEY_NUMPAD3 129
+#define KEY_NUMPAD4 130
+#define KEY_NUMPAD5 131
+#define KEY_NUMPAD6 132
+#define KEY_NUMPAD7 133
+#define KEY_NUMPAD8 134
+#define KEY_NUMPAD9 135
+
+
 /// This function
 game *buildGame () {
 	// I might want to separate this into another function, and call it
@@ -210,8 +256,48 @@ void freeGame (game *data) {
 	free(data);
 }
 
-void moveUnit (game *data, short mover, char direction) {
-	
+void moveCursor (game *data, int keyPress) {
+	if ((keyPress == UP) && (data->cursor.y > 0)) {
+		data->cursor.y--;
+	} else if ((keyPress == DOWN) && (data->cursor.y < MAP_HEIGHT - 1)) {
+		data->cursor.y++;
+	} else if ((keyPress == LEFT) && (data->cursor.x > 0)) {
+		data->cursor.x--;
+	} else if ((keyPress == RIGHT) && (data->cursor.x < MAP_WIDTH - 1)) {
+		data->cursor.x++;
+	}
+}
+
+void moveUnit (game *data, short mover, int keyPress) {
+	// This is a very crude version of this.
+	// To do, detect if it can move to a tile.
+	// Make that another function.
+	// That should check several things.
+	// Is it the edge of the map?
+	// Is there a unit in the way?
+	// Is the movement cost of the tile 0?
+	// Is the movement cost too great for what the unit has left?
+	if (keyPress == UP) {
+		if (validMoveChecker(data, mover, UP) == YES) {
+			data->cursor.y--;
+			data->unitData[mover].y--;
+		}
+	} else if (keyPress == DOWN) {
+		if (validMoveChecker(data, mover, DOWN) == YES) {
+			data->cursor.y++;
+			data->unitData[mover].y++;
+		}
+	} else if (keyPress == LEFT) {
+		if (validMoveChecker(data, mover, LEFT) == YES) {
+			data->cursor.x--;
+			data->unitData[mover].x--;
+		}
+	} else if (keyPress == RIGHT) {
+		if (validMoveChecker(data, mover, RIGHT) == YES) {
+			data->cursor.x++;
+			data->unitData[mover].x++;
+		}
+	}
 }
 
 void attackUnit (game *data, short attacker, short defender) {
@@ -261,11 +347,169 @@ void attackUnit (game *data, short attacker, short defender) {
 }
 
 void createUnit (game *data, short x, short y, char unitType, char player) {
+	short unitPos = 0;
+	/// First, we find where an empty spot in the array is.
+	while (data->unitData[unitPos].player != TEAM_NONE) {
+		unitPos++;
+	}
 	
+	/// Then we add the data we need.
+	data->unitData[unitPos].unitType = unitType;
+	data->unitData[unitPos].player = player;
+	// Implement unitAmmoGetter into this.
+	data->unitData[unitPos].ammo1 = 10;
+	data->unitData[unitPos].ammo2 = 10;
+	data->unitData[unitPos].maxAmmo1 = 10;
+	data->unitData[unitPos].maxAmmo2 = 10;
+	// Implement unitFuelGetter into this
+	data->unitData[unitPos].fuel = 50;
+	data->unitData[unitPos].maxFuel = 50;
+	// When turns are implemented, change this to 0.
+	data->unitData[unitPos].movement = 8;
+	// Implement unitMovementGetter into this.
+	data->unitData[unitPos].maxMovement = 8;
+	data->unitData[unitPos].vision = 10;
+	// This won't be used, but if it is, tie it to unitVisionGetter.
+	data->unitData[unitPos].health = 3;
+	// When turns are implemented, change this to YES.
+	data->unitData[unitPos].finished = NO;
+	data->unitData[unitPos].x = x;
+	data->unitData[unitPos].y = y;
 }
 
 void deleteUnit (game *data, short unitPos) {
+	/// This de-initialises a unit. When a unit needs to be created,
+	/// it'll find the lowest empty spot.
+	// This was originally weighed up between sliding all the values
+	// across (so the empty space is always at the end of the array),
+	// and just straight deleting and finding the empty space when it
+	// needs to. I went with the latter because deleting a unit may take
+	// 99 times as long as before, rather than scanning for units might
+	// take 3 times as long (while a more common process, it's much
+	// shorter too).
+	data->unitData[unitPos].unitType = 0;
+	data->unitData[unitPos].player = 0;
+	data->unitData[unitPos].ammo1 = 0;
+	data->unitData[unitPos].ammo2 = 0;
+	data->unitData[unitPos].maxAmmo1 = 0;
+	data->unitData[unitPos].maxAmmo2 = 0;
+	data->unitData[unitPos].fuel = 0;
+	data->unitData[unitPos].maxFuel = 0;
+	data->unitData[unitPos].movement = 0;
+	data->unitData[unitPos].maxMovement = 0;
+	data->unitData[unitPos].vision = 0;
+	data->unitData[unitPos].health = 0;
+	data->unitData[unitPos].finished = 0;
+	data->unitData[unitPos].x = 0;
+	data->unitData[unitPos].y = 0;
+}
+
+char validMoveChecker(game *data, short mover, char direction) {
+	char validMove = NO;
+	if (direction == UP) {
+		if (data->unitData[mover].y > 0) {
+			if (unitGetter(data, data->unitData[mover].x, data->unitData[mover].y - 1) == MAX_UNITS) {
+				if (data->unitData[mover].movement >= tileMovementGetter(data, data->unitData[mover].x, data->unitData[mover].y - 1, unitMovementTypeGetter(data, mover))) {
+					validMove = YES;
+				}
+			}
+		}
+	} else if (direction == DOWN) {
+		if (data->unitData[mover].y < MAP_HEIGHT - 1) {
+			if (unitGetter(data, data->unitData[mover].x, data->unitData[mover].y + 1) == MAX_UNITS) {
+				if (data->unitData[mover].movement >= tileMovementGetter(data, data->unitData[mover].x, data->unitData[mover].y + 1, unitMovementTypeGetter(data, mover))) {
+					validMove = YES;
+				}
+			}
+		}
+	} else if (direction == LEFT) {
+		if (data->unitData[mover].x > 0) {
+			if (unitGetter(data, data->unitData[mover].x - 1, data->unitData[mover].y) == MAX_UNITS) {
+				if (data->unitData[mover].movement >= tileMovementGetter(data, data->unitData[mover].x - 1, data->unitData[mover].y, unitMovementTypeGetter(data, mover))) {
+					validMove = YES;
+				}
+			}
+		}
+	} else if (direction == RIGHT) {
+		if (data->unitData[mover].y < MAP_WIDTH - 1) {
+			if (unitGetter(data, data->unitData[mover].x + 1, data->unitData[mover].y) == MAX_UNITS) {
+				if (data->unitData[mover].movement >= tileMovementGetter(data, data->unitData[mover].x + 1, data->unitData[mover].y, unitMovementTypeGetter(data, mover))) {
+					validMove = YES;
+				}
+			}
+		}
+	}
 	
+	return validMove;
+}
+
+char validAttackChecker(game *data, short attacker, short defender) {
+	char validAttack = NO;
+	
+	return validAttack;
+}
+
+short unitGetter (game *data, short x, short y) {
+	short unitPos = 0;
+	while (unitPos < MAX_UNITS) {
+		if ((data->unitData[unitPos].x == x) &&
+			(data->unitData[unitPos].y == y)) {
+			break;
+		}
+		unitPos++;
+	}
+	
+	return unitPos;
+}
+
+char unitMovementTypeGetter(game *data, short unitPos) {
+	char unitMovementType = 0;
+	if (data->unitData[unitPos].unitType == INFANTRY) {
+		unitMovementType = MOVETYPE_INFANTRY;
+	} else if (data->unitData[unitPos].unitType == MECH) {
+		unitMovementType = MOVETYPE_MECH;
+	} else if (data->unitData[unitPos].unitType == RECON) {
+		unitMovementType = MOVETYPE_RECON;
+	} else if (data->unitData[unitPos].unitType == TANK) {
+		unitMovementType = MOVETYPE_TANK;
+	} else if (data->unitData[unitPos].unitType == MD_TANK) {
+		unitMovementType = MOVETYPE_MD_TANK;
+	} else if (data->unitData[unitPos].unitType == NEOTANK) {
+		unitMovementType = MOVETYPE_NEOTANK;
+	} else if (data->unitData[unitPos].unitType == MEGATANK) {
+		unitMovementType = MOVETYPE_MEGATANK;
+	} else if (data->unitData[unitPos].unitType == APC) {
+		unitMovementType = MOVETYPE_APC;
+	} else if (data->unitData[unitPos].unitType == ARTILLERY) {
+		unitMovementType = MOVETYPE_ARTILLERY;
+	} else if (data->unitData[unitPos].unitType == ROCKETS) {
+		unitMovementType = MOVETYPE_ROCKETS;
+	} else if (data->unitData[unitPos].unitType == ANTI_AIR) {
+		unitMovementType = MOVETYPE_ANTI_AIR;
+	} else if (data->unitData[unitPos].unitType == MISSILES) {
+		unitMovementType = MOVETYPE_MISSILES;
+	} else if (data->unitData[unitPos].unitType == BATT_COP) {
+		unitMovementType = MOVETYPE_BATT_COP;
+	} else if (data->unitData[unitPos].unitType == TRAN_COP) {
+		unitMovementType = MOVETYPE_TRAN_COP;
+	} else if (data->unitData[unitPos].unitType == FIGHTER) {
+		unitMovementType = MOVETYPE_FIGHTER;
+	} else if (data->unitData[unitPos].unitType == BOMBER) {
+		unitMovementType = MOVETYPE_BOMBER;
+	} else if (data->unitData[unitPos].unitType == STEALTH) {
+		unitMovementType = MOVETYPE_STEALTH;
+	} else if (data->unitData[unitPos].unitType == LANDER) {
+		unitMovementType = MOVETYPE_LANDER;
+	} else if (data->unitData[unitPos].unitType == CRUISER) {
+		unitMovementType = MOVETYPE_CRUISER;
+	} else if (data->unitData[unitPos].unitType == SUB) {
+		unitMovementType = MOVETYPE_SUB;
+	} else if (data->unitData[unitPos].unitType == BATT_SHIP) {
+		unitMovementType = MOVETYPE_BATT_SHIP;
+	} else if (data->unitData[unitPos].unitType == CARRIER) {
+		unitMovementType = MOVETYPE_CARRIER;
+	}
+	return unitMovementType;
 }
 
 char tileMovementGetter (game *data, short x, short y, char movementType) {
@@ -528,7 +772,8 @@ char tileDefenseGetter (game *data, short x, short y) {
 		tileDefense = DEFENSE_ROAD;
 	} else if (tileType == SEA) {
 		tileDefense = DEFENSE_SEA;
-	} else if (tileType == RIVER) {
+	}
+	else if (tileType == RIVER) {
 		tileDefense = DEFENSE_RIVER;
 	} else if (tileType == WOOD) {
 		tileDefense = DEFENSE_WOOD;
