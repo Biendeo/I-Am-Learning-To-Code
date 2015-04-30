@@ -61,6 +61,9 @@ typedef struct buildingdata {
 	/// This determines who owns it.
 	char player;
 	
+	/// This stores how much "health" the building has (when capping).
+	char health;
+	
 	/// This is where it is.
 	short x;
 	short y;

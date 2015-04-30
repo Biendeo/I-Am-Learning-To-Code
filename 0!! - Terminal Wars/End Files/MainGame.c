@@ -196,6 +196,7 @@ void scanMap (game *data) {
 	while (arrayPos < MAX_BUILDINGS) {
 		data->buildingData[arrayPos].buildingType = 0;
 		data->buildingData[arrayPos].player = 0;
+		data->buildingData[arrayPos].health = 0;
 		data->buildingData[arrayPos].x = 0;
 		data->buildingData[arrayPos].y = 0;
 		arrayPos++;
@@ -209,6 +210,7 @@ void scanMap (game *data) {
 			if (data->mapData[x][y] < PLAIN) {
 				data->buildingData[arrayPos].buildingType = ((data->mapData[x][y]) % 10);
 				data->buildingData[arrayPos].player = ((data->mapData[x][y]) / 10);
+				data->buildingData[arrayPos].health = 20;
 				data->buildingData[arrayPos].x = x;
 				data->buildingData[arrayPos].y = y;
 				
@@ -370,7 +372,7 @@ void createUnit (game *data, short x, short y, char unitType, char player) {
 	data->unitData[unitPos].maxMovement = 8;
 	data->unitData[unitPos].vision = 10;
 	// This won't be used, but if it is, tie it to unitVisionGetter.
-	data->unitData[unitPos].health = 3;
+	data->unitData[unitPos].health = 10;
 	// When turns are implemented, change this to YES.
 	data->unitData[unitPos].finished = NO;
 	data->unitData[unitPos].x = x;

@@ -350,36 +350,383 @@ void drawUnitUI (game *data, short x, short y) {
 	} else if (data->unitData[selectedUnit].health > 7) {
 		setColor(GREEN);
 	}
-	printf("%g/10\n", data->unitData[selectedUnit].health);
+	printf("%g/10   ", data->unitData[selectedUnit].health);
 	setColor(GREY);
 	
-	printf("Ammo1: ");
-	if (data->unitData[selectedUnit].ammo1 <= 2) {
+	printf("Fuel: ");
+	if ((float)(data->unitData[selectedUnit].fuel / data->unitData[selectedUnit].maxFuel) <= 0.2) {
 		setColor(RED);
-	} else if ((data->unitData[selectedUnit].ammo1 > 2) && (data->unitData[selectedUnit].ammo1 <= 5)) {
+	} else if (((float)(data->unitData[selectedUnit].fuel / data->unitData[selectedUnit].maxFuel) > 0.2) && ((float)(data->unitData[selectedUnit].fuel / data->unitData[selectedUnit].maxFuel) <= 0.6)) {
 		setColor(BROWN);
-	} else if (data->unitData[selectedUnit].ammo1 > 5) {
+	} else if ((float)(data->unitData[selectedUnit].fuel / data->unitData[selectedUnit].maxFuel) > 0.6) {
 		setColor(GREEN);
 	}
-	printf("%d/%d   ", data->unitData[selectedUnit].ammo1, data->unitData[selectedUnit].maxAmmo1);
+	printf("%d/%d\n", data->unitData[selectedUnit].fuel, data->unitData[selectedUnit].maxFuel);
 	setColor(GREY);
 	
-	printf("Ammo2: ");
-	if (data->unitData[selectedUnit].ammo2 <= 2) {
+	if (data->unitData[selectedUnit].ammo1 == -1) {
+		printf("Ammo1: Infinite   ");
+	} else if (data->unitData[selectedUnit].maxAmmo1 == 0) {
+		// Nothing.
+	} else {
+		printf("Ammo1: ");
+		if (((float)(data->unitData[selectedUnit].ammo1 / data->unitData[selectedUnit].maxAmmo1) <= 0.1) || data->unitData[selectedUnit].ammo1 <= 2) {
+			setColor(RED);
+		} else if (((float)(data->unitData[selectedUnit].ammo1 / data->unitData[selectedUnit].maxAmmo1) >= 0.1) && ((float)(data->unitData[selectedUnit].ammo1 / data->unitData[selectedUnit].maxAmmo1) <= 0.6)) {
+			setColor(BROWN);
+		} else if ((float)(data->unitData[selectedUnit].ammo1 / data->unitData[selectedUnit].maxAmmo1) > 0.6) {
+			setColor(GREEN);
+		}	printf("%d/%d   ", data->unitData[selectedUnit].ammo1, data->unitData[selectedUnit].maxAmmo1);
+		setColor(GREY);
+	}
+	
+	if (data->unitData[selectedUnit].ammo2 == -1) {
+		printf("Ammo2: Infinite\n");
+	} else if (data->unitData[selectedUnit].maxAmmo2 == 0) {
+		printf("\n");
+	} else {
+		printf("Ammo2: ");
+		if (((float)(data->unitData[selectedUnit].ammo2 / data->unitData[selectedUnit].maxAmmo2) <= 0.1) || data->unitData[selectedUnit].ammo2 <= 2) {
+			setColor(RED);
+		} else if (((float)(data->unitData[selectedUnit].ammo2 / data->unitData[selectedUnit].maxAmmo2) >= 0.1) && ((float)(data->unitData[selectedUnit].ammo2 / data->unitData[selectedUnit].maxAmmo2) <= 0.6)) {
+			setColor(BROWN);
+		} else if ((float)(data->unitData[selectedUnit].ammo2 / data->unitData[selectedUnit].maxAmmo2) > 0.6) {
+			setColor(GREEN);
+		}	printf("%d/%d\n", data->unitData[selectedUnit].ammo2, data->unitData[selectedUnit].maxAmmo2);
+		setColor(GREY);
+	}
+	
+	printf("Moved: ");
+	if (data->unitData[selectedUnit].movement <= 0) {
 		setColor(RED);
-	} else if ((data->unitData[selectedUnit].ammo2 > 2) && (data->unitData[selectedUnit].ammo2 <= 5)) {
+	} else if ((data->unitData[selectedUnit].movement > 2) && (data->unitData[selectedUnit].movement <= 0)) {
 		setColor(BROWN);
-	} else if (data->unitData[selectedUnit].ammo2 > 5) {
+	} else if (data->unitData[selectedUnit].movement > 2) {
 		setColor(GREEN);
 	}
-	printf("%d/%d\n", data->unitData[selectedUnit].ammo2, data->unitData[selectedUnit].maxAmmo2);
+	printf("%d/%d\n", data->unitData[selectedUnit].movement, data->unitData[selectedUnit].maxMovement);
 	setColor(GREY);
+	
+	printf("Currently on a: ");
+	char mapTile = data->mapData[x][y];
+	if (mapTile == NULL_HQ) {
+		setColor(WHITE);
+		printf("Unoccupied ");
+		setColor(GREY);
+		printf("HQ\n");
+	} else if (mapTile == NULL_CITY) {
+		setColor(WHITE);
+		printf("Unoccupied ");
+		setColor(GREY);
+		printf("city\n");
+	} else if (mapTile == NULL_BASE) {
+		setColor(WHITE);
+		printf("Unoccupied ");
+		setColor(GREY);
+		printf("base\n");
+	} else if (mapTile == NULL_AIRPORT) {
+		setColor(WHITE);
+		printf("Unoccupied ");
+		setColor(GREY);
+		printf("airport\n");
+	} else if (mapTile == NULL_PORT) {
+		setColor(WHITE);
+		printf("Unoccupied ");
+		setColor(GREY);
+		printf("port\n");
+	}
+	else if (mapTile == RED_HQ) {
+		setColor(RED);
+		printf("RED ");
+		setColor(GREY);
+		printf("HQ\n");
+	} else if (mapTile == RED_CITY) {
+		setColor(RED);
+		printf("RED ");
+		setColor(GREY);
+		printf("city\n");
+	} else if (mapTile == RED_BASE) {
+		setColor(RED);
+		printf("RED ");
+		setColor(GREY);
+		printf("base\n");
+	} else if (mapTile == RED_AIRPORT) {
+		setColor(RED);
+		printf("RED ");
+		setColor(GREY);
+		printf("airport\n");
+	} else if (mapTile == RED_PORT) {
+		setColor(RED);
+		printf("RED ");
+		setColor(GREY);
+		printf("port\n");
+	}
+	else if (mapTile == BLUE_HQ) {
+		setColor(BLUE);
+		printf("BLUE ");
+		setColor(GREY);
+		printf("HQ\n");
+	} else if (mapTile == BLUE_CITY) {
+		setColor(BLUE);
+		printf("BLUE ");
+		setColor(GREY);
+		printf("city\n");
+	} else if (mapTile == BLUE_BASE) {
+		setColor(BLUE);
+		printf("BLUE ");
+		setColor(GREY);
+		printf("base\n");
+	} else if (mapTile == BLUE_AIRPORT) {
+		setColor(BLUE);
+		printf("BLUE ");
+		setColor(GREY);
+		printf("airport\n");
+	} else if (mapTile == BLUE_PORT) {
+		setColor(BLUE);
+		printf("BLUE ");
+		setColor(GREY);
+		printf("port\n");
+	}
+	else if (mapTile == GREEN_HQ) {
+		setColor(GREEN);
+		printf("GREEN ");
+		setColor(GREY);
+		printf("HQ\n");
+	} else if (mapTile == GREEN_CITY) {
+		setColor(GREEN);
+		printf("GREEN ");
+		setColor(GREY);
+		printf("city\n");
+	} else if (mapTile == GREEN_BASE) {
+		setColor(GREEN);
+		printf("GREEN ");
+		setColor(GREY);
+		printf("base\n");
+	} else if (mapTile == GREEN_AIRPORT) {
+		setColor(GREEN);
+		printf("GREEN ");
+		setColor(GREY);
+		printf("airport\n");
+	} else if (mapTile == GREEN_PORT) {
+		setColor(GREEN);
+		printf("GREEN ");
+		setColor(GREY);
+		printf("port\n");
+	}
+	else if (mapTile == YELLOW_HQ) {
+		setColor(YELLOW);
+		printf("YELLOW ");
+		setColor(GREY);
+		printf("HQ\n");
+	} else if (mapTile == YELLOW_CITY) {
+		setColor(YELLOW);
+		printf("YELLOW ");
+		setColor(GREY);
+		printf("city\n");
+	} else if (mapTile == YELLOW_BASE) {
+		setColor(YELLOW);
+		printf("YELLOW ");
+		setColor(GREY);
+		printf("base\n");
+	} else if (mapTile == YELLOW_AIRPORT) {
+		setColor(YELLOW);
+		printf("YELLOW ");
+		setColor(GREY);
+		printf("airport\n");
+	} else if (mapTile == YELLOW_PORT) {
+		setColor(YELLOW);
+		printf("YELLOW ");
+		setColor(GREY);
+		printf("port\n");
+	}
+	else if (mapTile == PLAIN) {
+		printf("Plain\n");
+	} else if (mapTile == ROAD) {
+		printf("Road\n");
+	} else if (mapTile == SEA) {
+		printf("Sea\n");
+	} else if (mapTile == RIVER) {
+		printf("River\n");
+	} else if (mapTile == WOOD) {
+		printf("Wood\n");
+	} else if (mapTile == MOUNTAIN) {
+		printf("Mountain\n");
+	} else if (mapTile == BRIDGE) {
+		printf("Bridge\n");
+	} else if (mapTile == SHOAL) {
+		printf("Shoal\n");
+	} else if (mapTile == REEF) {
+		printf("Reef\n");
+	}
 	
 	printf("For debugging: ID = %d, position: %d, %d\n", selectedUnit, data->cursor.x, data->cursor.y);
 }
 
 void drawFieldUI (game *data, short x, short y) {
+	printf("Currently at %d, %d\n", data->cursor.x, data->cursor.y);
 	
+	char mapTile = data->mapData[x][y];
+	printf("Tile: ");
+	if (mapTile == NULL_HQ) {
+		setColor(WHITE);
+		printf("Unoccupied ");
+		setColor(GREY);
+		printf("HQ\n");
+	} else if (mapTile == NULL_CITY) {
+		setColor(WHITE);
+		printf("Unoccupied ");
+		setColor(GREY);
+		printf("city\n");
+	} else if (mapTile == NULL_BASE) {
+		setColor(WHITE);
+		printf("Unoccupied ");
+		setColor(GREY);
+		printf("base\n");
+	} else if (mapTile == NULL_AIRPORT) {
+		setColor(WHITE);
+		printf("Unoccupied ");
+		setColor(GREY);
+		printf("airport\n");
+	} else if (mapTile == NULL_PORT) {
+		setColor(WHITE);
+		printf("Unoccupied ");
+		setColor(GREY);
+		printf("port\n");
+	}
+	else if (mapTile == RED_HQ) {
+		setColor(RED);
+		printf("RED ");
+		setColor(GREY);
+		printf("HQ\n");
+	} else if (mapTile == RED_CITY) {
+		setColor(RED);
+		printf("RED ");
+		setColor(GREY);
+		printf("city\n");
+	} else if (mapTile == RED_BASE) {
+		setColor(RED);
+		printf("RED ");
+		setColor(GREY);
+		printf("base\n");
+	} else if (mapTile == RED_AIRPORT) {
+		setColor(RED);
+		printf("RED ");
+		setColor(GREY);
+		printf("airport\n");
+	} else if (mapTile == RED_PORT) {
+		setColor(RED);
+		printf("RED ");
+		setColor(GREY);
+		printf("port\n");
+	}
+	else if (mapTile == BLUE_HQ) {
+		setColor(BLUE);
+		printf("BLUE ");
+		setColor(GREY);
+		printf("HQ\n");
+	} else if (mapTile == BLUE_CITY) {
+		setColor(BLUE);
+		printf("BLUE ");
+		setColor(GREY);
+		printf("city\n");
+	} else if (mapTile == BLUE_BASE) {
+		setColor(BLUE);
+		printf("BLUE ");
+		setColor(GREY);
+		printf("base\n");
+	} else if (mapTile == BLUE_AIRPORT) {
+		setColor(BLUE);
+		printf("BLUE ");
+		setColor(GREY);
+		printf("airport\n");
+	} else if (mapTile == BLUE_PORT) {
+		setColor(BLUE);
+		printf("BLUE ");
+		setColor(GREY);
+		printf("port\n");
+	}
+	else if (mapTile == GREEN_HQ) {
+		setColor(GREEN);
+		printf("GREEN ");
+		setColor(GREY);
+		printf("HQ\n");
+	} else if (mapTile == GREEN_CITY) {
+		setColor(GREEN);
+		printf("GREEN ");
+		setColor(GREY);
+		printf("city\n");
+	} else if (mapTile == GREEN_BASE) {
+		setColor(GREEN);
+		printf("GREEN ");
+		setColor(GREY);
+		printf("base\n");
+	} else if (mapTile == GREEN_AIRPORT) {
+		setColor(GREEN);
+		printf("GREEN ");
+		setColor(GREY);
+		printf("airport\n");
+	} else if (mapTile == GREEN_PORT) {
+		setColor(GREEN);
+		printf("GREEN ");
+		setColor(GREY);
+		printf("port\n");
+	}
+	else if (mapTile == YELLOW_HQ) {
+		setColor(YELLOW);
+		printf("YELLOW ");
+		setColor(GREY);
+		printf("HQ\n");
+	} else if (mapTile == YELLOW_CITY) {
+		setColor(YELLOW);
+		printf("YELLOW ");
+		setColor(GREY);
+		printf("city\n");
+	} else if (mapTile == YELLOW_BASE) {
+		setColor(YELLOW);
+		printf("YELLOW ");
+		setColor(GREY);
+		printf("base\n");
+	} else if (mapTile == YELLOW_AIRPORT) {
+		setColor(YELLOW);
+		printf("YELLOW ");
+		setColor(GREY);
+		printf("airport\n");
+	} else if (mapTile == YELLOW_PORT) {
+		setColor(YELLOW);
+		printf("YELLOW ");
+		setColor(GREY);
+		printf("port\n");
+	}
+	else if (mapTile == PLAIN) {
+		printf("Plain\n");
+	} else if (mapTile == ROAD) {
+		printf("Road\n");
+	} else if (mapTile == SEA) {
+		printf("Sea\n");
+	} else if (mapTile == RIVER) {
+		printf("River\n");
+	} else if (mapTile == WOOD) {
+		printf("Wood\n");
+	} else if (mapTile == MOUNTAIN) {
+		printf("Mountain\n");
+	} else if (mapTile == BRIDGE) {
+		printf("Bridge\n");
+	} else if (mapTile == SHOAL) {
+		printf("Shoal\n");
+	} else if (mapTile == REEF) {
+		printf("Reef\n");
+	}
+	
+	char tileDefense = tileDefenseGetter(data, x, y);
+	char iterations = 0;
+	printf("Defense: ");
+	setColor(YELLOW);
+	while (iterations < tileDefense) {
+		printf("*");
+		iterations++;
+	}
+	setColor(GREY);
+	printf("\n");
 }
 
 void testDrawing (game *data) {
@@ -409,15 +756,13 @@ void testDrawing (game *data) {
 		if (data->interfaceMode == INTERFACEMODE_MAP) {
 			mapDraw(data);
 			if (data->drawMode == DRAWMODE_MAP) {
-				printf("Moving cursor\n");
-				printf("Cursor: %d, %d\n", data->cursor.x, data->cursor.y);	
+				drawFieldUI(data, data->cursor.x, data->cursor.y);
 			} else if (data->drawMode == DRAWMODE_UNITS) {
 				selectedUnit = unitGetter(data, data->cursor.x, data->cursor.y);
 				if (selectedUnit != MAX_UNITS) {
 					drawUnitUI(data, data->cursor.x, data->cursor.y);
 				} else {
-					printf("Moving cursor\n");
-					printf("Cursor: %d, %d\n", data->cursor.x, data->cursor.y);	
+					drawFieldUI(data, data->cursor.x, data->cursor.y);
 				}
 			}
 			keyPress = getkey();
