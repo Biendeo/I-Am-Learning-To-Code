@@ -1,6 +1,3 @@
-#ifndef RLUTIL_H
-#define RLUTIL_H
-
 // https://github.com/tapio/rlutil
 
 #pragma once
@@ -589,6 +586,4 @@ struct CursorHider {
 };
 
 } // namespace rlutil
-#endif
-
 #endif

@@ -55,7 +55,6 @@
 #define KEY_NUMPAD8 134
 #define KEY_NUMPAD9 135
 
-
 /// This function
 game *buildGame () {
 	// I might want to separate this into another function, and call it
