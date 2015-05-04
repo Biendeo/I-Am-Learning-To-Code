@@ -323,9 +323,9 @@ void drawUnitUI (game *data, short x, short y) {
 		}
 		
 		if (data->unitData[selectedUnit].ammo2 == -1) {
-			printf("Ammo2: Infinite\n");
+			printf("Ammo2: Infinite   ");
 		} else if (data->unitData[selectedUnit].maxAmmo2 == 0) {
-			printf("\n");
+			// Nothing
 		} else {
 			printf("Ammo2: ");
 			if ((((float)data->unitData[selectedUnit].ammo2 / data->unitData[selectedUnit].maxAmmo2) <= 0.1) || data->unitData[selectedUnit].ammo2 <= 2) {
@@ -334,8 +334,12 @@ void drawUnitUI (game *data, short x, short y) {
 				setColor(YELLOW);
 			} else if (((float)data->unitData[selectedUnit].ammo2 / data->unitData[selectedUnit].maxAmmo2) > 0.6) {
 				setColor(GREEN);
-			}	printf("%d/%d\n", data->unitData[selectedUnit].ammo2, data->unitData[selectedUnit].maxAmmo2);
+			}	printf("%d/%d   ", data->unitData[selectedUnit].ammo2, data->unitData[selectedUnit].maxAmmo2);
 			setColor(GREY);
+		}
+		
+		if (data->unitData[selectedUnit].maxAmmo1 != 0) {
+			printf("(%d~%d)\n", minimumRangeGetter(data, selectedUnit), maximumRangeGetter(data, selectedUnit));
 		}
 		
 		printf("Movement: ");
@@ -346,8 +350,25 @@ void drawUnitUI (game *data, short x, short y) {
 		} else if (data->unitData[selectedUnit].movement > 2) {
 			setColor(GREEN);
 		}
-		printf("%d/%d\n", data->unitData[selectedUnit].movement, data->unitData[selectedUnit].maxMovement);
+		printf("%d/%d   ", data->unitData[selectedUnit].movement, data->unitData[selectedUnit].maxMovement);
 		setColor(GREY);
+		
+		printf("Type: ");
+		if (unitMovementTypeGetter(data, selectedUnit) == MOVE_INFANTRY) {
+			printf("INFANTRY\n");
+		} else if (unitMovementTypeGetter(data, selectedUnit) == MOVE_MECH) {
+			printf("MECH\n");
+		} else if (unitMovementTypeGetter(data, selectedUnit) == MOVE_TIRES) {
+			printf("TIRES\n");
+		} else if (unitMovementTypeGetter(data, selectedUnit) == MOVE_TREAD) {
+			printf("TREAD\n");
+		} else if (unitMovementTypeGetter(data, selectedUnit) == MOVE_AIR) {
+			printf("AIR\n");
+		} else if (unitMovementTypeGetter(data, selectedUnit) == MOVE_SHIP) {
+			printf("SHIP\n");
+		} else if (unitMovementTypeGetter(data, selectedUnit) == MOVE_CARRIER) {
+			printf("CARRIER\n");
+		}
 		
 		printf("Currently on a: ");
 		drawTileName(data, data->cursor.x, data->cursor.y);
@@ -360,15 +381,15 @@ void drawUnitUI (game *data, short x, short y) {
 void drawFieldUI (game *data, short x, short y) {
 	printf("It is turn #%d. It is player ", data->turnNum);
 	if (data->whoseTurn == TEAM_RED) {
-		setColor(RED);
+		setColor(LIGHTRED);
 		printf("RED");
 		setColor(GREY);
 	} else if (data->whoseTurn == TEAM_BLUE) {
-		setColor(BLUE);
+		setColor(LIGHTBLUE);
 		printf("BLUE");
 		setColor(GREY);
 	} else if (data->whoseTurn == TEAM_GREEN) {
-		setColor(GREEN);
+		setColor(LIGHTGREEN);
 		printf("GREEN");
 		setColor(GREY);
 	} else if (data->whoseTurn == TEAM_YELLOW) {
@@ -430,15 +451,15 @@ void drawMoveUI (game *data, short x, short y) {
 
 void drawUnitName (game *data, short selectedUnit) {
 	if (data->unitData[selectedUnit].player == TEAM_RED) {
-		setColor(RED);
+		setColor(LIGHTRED);
 		printf("RED ");
 		setColor(GREY);
 	} else if (data->unitData[selectedUnit].player == TEAM_BLUE) {
-		setColor(BLUE);
+		setColor(LIGHTBLUE);
 		printf("BLUE ");
 		setColor(GREY);
 	} else if (data->unitData[selectedUnit].player == TEAM_GREEN) {
-		setColor(GREEN);
+		setColor(LIGHTGREEN);
 		printf("GREEN ");
 		setColor(GREY);
 	} else if (data->unitData[selectedUnit].player == TEAM_YELLOW) {
@@ -523,79 +544,79 @@ void drawTileName (game *data, short x, short y) {
 		printf("port");
 	}
 	else if (mapTile == RED_HQ) {
-		setColor(RED);
+		setColor(LIGHTRED);
 		printf("RED ");
 		setColor(GREY);
 		printf("HQ");
 	} else if (mapTile == RED_CITY) {
-		setColor(RED);
+		setColor(LIGHTRED);
 		printf("RED ");
 		setColor(GREY);
 		printf("city");
 	} else if (mapTile == RED_BASE) {
-		setColor(RED);
+		setColor(LIGHTRED);
 		printf("RED ");
 		setColor(GREY);
 		printf("base");
 	} else if (mapTile == RED_AIRPORT) {
-		setColor(RED);
+		setColor(LIGHTRED);
 		printf("RED ");
 		setColor(GREY);
 		printf("airport");
 	} else if (mapTile == RED_PORT) {
-		setColor(RED);
+		setColor(LIGHTRED);
 		printf("RED ");
 		setColor(GREY);
 		printf("port");
 	}
 	else if (mapTile == BLUE_HQ) {
-		setColor(BLUE);
+		setColor(LIGHTBLUE);
 		printf("BLUE ");
 		setColor(GREY);
 		printf("HQ");
 	} else if (mapTile == BLUE_CITY) {
-		setColor(BLUE);
+		setColor(LIGHTBLUE);
 		printf("BLUE ");
 		setColor(GREY);
 		printf("city");
 	} else if (mapTile == BLUE_BASE) {
-		setColor(BLUE);
+		setColor(LIGHTBLUE);
 		printf("BLUE ");
 		setColor(GREY);
 		printf("base");
 	} else if (mapTile == BLUE_AIRPORT) {
-		setColor(BLUE);
+		setColor(LIGHTBLUE);
 		printf("BLUE ");
 		setColor(GREY);
 		printf("airport");
 	} else if (mapTile == BLUE_PORT) {
-		setColor(BLUE);
+		setColor(LIGHTBLUE);
 		printf("BLUE ");
 		setColor(GREY);
 		printf("port");
 	}
 	else if (mapTile == GREEN_HQ) {
-		setColor(GREEN);
+		setColor(LIGHTGREEN);
 		printf("GREEN ");
 		setColor(GREY);
 		printf("HQ");
 	} else if (mapTile == GREEN_CITY) {
-		setColor(GREEN);
+		setColor(LIGHTGREEN);
 		printf("GREEN ");
 		setColor(GREY);
 		printf("city");
 	} else if (mapTile == GREEN_BASE) {
-		setColor(GREEN);
+		setColor(LIGHTGREEN);
 		printf("GREEN ");
 		setColor(GREY);
 		printf("base");
 	} else if (mapTile == GREEN_AIRPORT) {
-		setColor(GREEN);
+		setColor(LIGHTGREEN);
 		printf("GREEN ");
 		setColor(GREY);
 		printf("airport");
 	} else if (mapTile == GREEN_PORT) {
-		setColor(GREEN);
+		setColor(LIGHTGREEN);
 		printf("GREEN ");
 		setColor(GREY);
 		printf("port");
