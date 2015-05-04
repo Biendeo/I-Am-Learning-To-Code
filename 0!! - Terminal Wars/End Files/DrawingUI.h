@@ -8,5 +8,6 @@ void drawField (game *data, short x, short y);
 void drawUnitUI (game *data, short x, short y);
 void drawFieldUI (game *data, short x, short y);
 void testDrawing (game *data);
+void drawMenu (game *data);
 
 #endif

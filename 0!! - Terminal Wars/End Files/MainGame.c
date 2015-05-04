@@ -405,6 +405,18 @@ void deleteUnit (game *data, short unitPos) {
 	data->unitData[unitPos].y = 0;
 }
 
+/// This function ends the turn, resets values, and passes control.
+void endTurn(game *data) {
+	/// The game passes whose turn it is to the next player.
+	data->whoseTurn++;
+	/// If it's being passed to one too many players, we move it back
+	/// to the first player, and increment the turn number.
+	if (data->whoseTurn > data->numberOfPlayers) {
+		data->whoseTurn = TEAM_RED;
+		data->turnNum++;
+	}
+}
+
 char validMoveChecker(game *data, short mover, char direction) {
 	char validMove = NO;
 	if (direction == UP) {

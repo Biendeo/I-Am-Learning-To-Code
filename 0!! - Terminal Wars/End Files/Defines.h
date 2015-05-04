@@ -22,6 +22,7 @@
 #define DRAWMODE_MAP   1
 #define DRAWMODE_UNITS 2
 
+#define INTERFACEMODE_QUIT       0
 #define INTERFACEMODE_MAP        1
 #define INTERFACEMODE_MOVE       2
 #define INTERFACEMODE_ATTACK     3

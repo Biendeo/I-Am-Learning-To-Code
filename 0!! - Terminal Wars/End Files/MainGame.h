@@ -143,6 +143,7 @@ void moveUnit (game *data, short mover, int direction);
 void attackUnit (game *data, short attacker, short defender);
 void createUnit (game *data, short x, short y, char unitType, char player);
 void deleteUnit (game *data, short unitPos);
+void endTurn (game *data);
 
 /// These check if a move/attack are valid.
 char validMoveChecker (game *data, short mover, char direction);

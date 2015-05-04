@@ -568,6 +568,26 @@ void drawUnitUI (game *data, short x, short y) {
 }
 
 void drawFieldUI (game *data, short x, short y) {
+	printf("It is turn #%d. It is player ", data->turnNum);
+	if (data->whoseTurn == TEAM_RED) {
+		setColor(RED);
+		printf("RED");
+		setColor(GREY);
+	} else if (data->whoseTurn == TEAM_BLUE) {
+		setColor(BLUE);
+		printf("BLUE");
+		setColor(GREY);
+	} else if (data->whoseTurn == TEAM_GREEN) {
+		setColor(GREEN);
+		printf("GREEN");
+		setColor(GREY);
+	} else if (data->whoseTurn == TEAM_YELLOW) {
+		setColor(YELLOW);
+		printf("YELLOW");
+		setColor(GREY);
+	}
+	printf("'s turn.\n");
+	
 	printf("Currently at %d, %d\n", data->cursor.x, data->cursor.y);
 	
 	char mapTile = data->mapData[x][y];
@@ -735,6 +755,7 @@ void drawFieldUI (game *data, short x, short y) {
 }
 
 void testDrawing (game *data) {
+	// This is just a bit of example setup to get the game started.
 	createUnit(data, 4, 3, INFANTRY, TEAM_RED);
 	createUnit(data, 8, 6, MECH, TEAM_RED);
 	createUnit(data, 5, 3, ARTILLERY, TEAM_BLUE);
@@ -743,9 +764,9 @@ void testDrawing (game *data) {
 	createUnit(data, 1, 10, MECH, TEAM_GREEN);
 	createUnit(data, 12, 6, APC, TEAM_YELLOW);
 	createUnit(data, 10, 10, NEOTANK, TEAM_YELLOW);
-	
+	// This demonstrates how deleting units works.
 	deleteUnit(data, 4);
-	
+	// And creating new units after that.
 	createUnit(data, 2, 2, BATT_COP, TEAM_GREEN);
 	
 	data->cursor.x = 5;
@@ -753,15 +774,28 @@ void testDrawing (game *data) {
 	data->drawMode = DRAWMODE_MAP;
 	data->interfaceMode = INTERFACEMODE_MAP;
 	
+	/// This stores what key was last pressed.
 	// Because KEY_ESCAPE = 0, it has to be set to another number.
 	// Try making this an unsigned char, as the numbers don't go higher than 135.
-	int keyPress = 1;
+	int keyPress = 5001;
+	// keyPress is set to an arbitrary value so that it doesn't trigger
+	// anything.
+	
+	/// This stores what unit is currently under the cursor.
 	short selectedUnit = 0;
-	while (keyPress != KEY_ESCAPE) {
+	
+	/// If the game is told to quit, then it exits this.
+	while (data->interfaceMode != INTERFACEMODE_QUIT) {
+		/// If the game is currently moving around the map...
 		if (data->interfaceMode == INTERFACEMODE_MAP) {
+			/// The map is drawn.
 			mapDraw(data);
+			/// If units are hidden, then the field data is displayed.
 			if (data->drawMode == DRAWMODE_MAP) {
 				drawFieldUI(data, data->cursor.x, data->cursor.y);
+			/// But if the units are shown, then, if there is a unit
+			/// under the cursor, it shows that data. Otherwise, it's
+			/// just the field.
 			} else if (data->drawMode == DRAWMODE_UNITS) {
 				selectedUnit = unitGetter(data, data->cursor.x, data->cursor.y);
 				if (selectedUnit != MAX_UNITS) {
@@ -770,7 +804,9 @@ void testDrawing (game *data) {
 					drawFieldUI(data, data->cursor.x, data->cursor.y);
 				}
 			}
+			/// Then the user input is stored.
 			keyPress = getkey();
+			/// If they just use the arrow keys, we move the cursor.
 			if (keyPress == KEY_UP) {
 				moveCursor(data, UP);
 			} else if (keyPress == KEY_DOWN) {
@@ -779,18 +815,30 @@ void testDrawing (game *data) {
 				moveCursor(data, LEFT);
 			} else if (keyPress == KEY_RIGHT) {
 				moveCursor(data, RIGHT);
+			/// But if they want to access the menu, if they're on top
+			/// of a unit, it goes to the unit menu. Otherwise, it's
+			/// the field menu.
 			} else if (keyPress == KEY_SPACE) {
 				if (selectedUnit != MAX_UNITS) {
-					data->interfaceMode = INTERFACEMODE_MOVE;
+					data->interfaceMode = INTERFACEMODE_MENU_UNIT;
+					drawMenu(data);
+				} else {
+					data->interfaceMode = INTERFACEMODE_MENU_FIELD;
+					drawMenu(data);
 				}
 			}
+		/// If the user is "moving" units, this goes.
 		} else if (data->interfaceMode == INTERFACEMODE_MOVE) {
+			/// The map and UI are drawn specifically for this.
 			mapDraw(data);
 			// There should be a custom moving UI, but for now just do
 			// the unit.
 			drawUnitUI(data, data->cursor.x, data->cursor.y);
 			
+			/// Then the user's input is gotten.
 			keyPress = getkey();
+			/// If they use the arrow keys, we move the unit. There's
+			/// a check inside to see if it's a legal move.
 			if (keyPress == KEY_UP) {
 				moveUnit(data, selectedUnit, UP);
 			} else if (keyPress == KEY_DOWN) {
@@ -799,10 +847,14 @@ void testDrawing (game *data) {
 				moveUnit(data, selectedUnit, LEFT);
 			} else if (keyPress == KEY_RIGHT) {
 				moveUnit(data, selectedUnit, RIGHT);
+			/// They hit SPACE when they stop, and it goes back to the
+			/// map.
 			} else if (keyPress == KEY_SPACE) {
 				data->interfaceMode = INTERFACEMODE_MAP;
 			}
 		}
+		/// If the user ever hits ENTER, the draw mode switches.
+		/// This can be used on any interface mode.
 		if (keyPress == KEY_ENTER) {
 			if (data->drawMode == DRAWMODE_MAP) {
 				data->drawMode = DRAWMODE_UNITS;
@@ -810,5 +862,178 @@ void testDrawing (game *data) {
 				data->drawMode = DRAWMODE_MAP;
 			}
 		}
+	}
+}
+
+void drawMenu(game *data) {
+	/// This variable stores what the keypress is.
+	// keyPress is set to an arbitrary value so that it doesn't trigger
+	// anything.
+	int keyPress = 5001;
+	/// This notes what menu item is selected.
+	short selection = 0;
+	
+	/// If the selection wasn't on a unit, it shows this.
+	if (data->interfaceMode == INTERFACEMODE_MENU_FIELD) {
+		/// This breaks when the user hits either ESCAPE or SPACE.
+		while (keyPress != KEY_ESCAPE && keyPress != KEY_SPACE) {
+			/// Firstly the map is drawn.
+			mapDraw(data);
+			
+			/// Then the menu items are displayed. If they're
+			/// highlighted, they turn yellow.
+			if (selection == 0) {
+				setColor(YELLOW);
+			}
+			printf("END TURN\n");
+			if (selection == 0) {
+				setColor(GREY);
+			}
+			if (selection == 1) {
+				setColor(YELLOW);
+			}
+			printf("INFO (UNFINISHED)\n");
+			if (selection == 1) {
+				setColor(GREY);
+			}
+			if (selection == 2) {
+				setColor(YELLOW);
+			}
+			printf("SAVE (UNFINISHED)\n");
+			if (selection == 2) {
+				setColor(GREY);
+			}
+			if (selection == 3) {
+				setColor(YELLOW);
+			}
+			printf("QUIT\n");
+			if (selection == 3) {
+				setColor(GREY);
+			}
+			
+			/// Then we get user input.
+			keyPress = getkey();
+			
+			/// If they are moving up and down, we shift the selection.
+			if (keyPress == KEY_UP) {
+				if (selection > 0) {
+					selection--;
+				}
+			} else if (keyPress == KEY_DOWN) {
+				if (selection < 3) {
+					selection++;
+				}
+			}
+		}
+	/// Similarly, if a unit is selected, a different menu comes up.
+	} else if (data->interfaceMode == INTERFACEMODE_MENU_UNIT) {
+		/// It breaks if the user hits ESCAPE or SPACE.
+		while (keyPress != KEY_ESCAPE && keyPress != KEY_SPACE) {
+			/// Map is drawn.
+			mapDraw(data);
+			
+			/// Menu items are shown.
+			if (selection == 0) {
+				setColor(YELLOW);
+			}
+			printf("MOVE\n");
+			if (selection == 0) {
+				setColor(GREY);
+			}
+			if (selection == 1) {
+				setColor(YELLOW);
+			}
+			printf("ATTACK (UNFINISHED)\n");
+			if (selection == 1) {
+				setColor(GREY);
+			}
+			if (selection == 2) {
+				setColor(YELLOW);
+			}
+			printf("END TURN\n");
+			if (selection == 2) {
+				setColor(GREY);
+			}
+			if (selection == 3) {
+				setColor(YELLOW);
+			}
+			printf("INFO (UNFINISHED)\n");
+			if (selection == 3) {
+				setColor(GREY);
+			}
+			if (selection == 4) {
+				setColor(YELLOW);
+			}
+			printf("SAVE (UNFINISHED)\n");
+			if (selection == 4) {
+				setColor(GREY);
+			}
+			if (selection == 5) {
+				setColor(YELLOW);
+			}
+			printf("QUIT\n");
+			if (selection == 5) {
+				setColor(GREY);
+			}
+			
+			/// Input is gotten.
+			keyPress = getkey();
+			
+			/// If they move the list up and down, then it does that.
+			if (keyPress == KEY_UP) {
+				if (selection > 0) {
+					selection--;
+				}
+			} else if (keyPress == KEY_DOWN) {
+				if (selection < 5) {
+					selection++;
+				}
+			}
+		}
+	}
+	
+	/// If the user hits SPACE (selecting the option), then we change
+	/// the subsequent mode.
+	if (keyPress == KEY_SPACE) {
+		if (data->interfaceMode == INTERFACEMODE_MENU_FIELD) {
+			if (selection == 0) {
+				// END TURN
+				endTurn(data);
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 1) {
+				// HELP
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 2) {
+				// SAVE
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 3) {
+				// QUIT
+				data->interfaceMode = INTERFACEMODE_QUIT;
+			}
+		} else if (data->interfaceMode == INTERFACEMODE_MENU_UNIT) {
+			if (selection == 0) {
+				// MOVE
+				data->interfaceMode = INTERFACEMODE_MOVE;
+			} else if (selection == 1) {
+				// ATTACK
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 2) {
+				// END TURN
+				endTurn(data);
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 3) {
+				// HELP
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 4) {
+				// SAVE
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 5) {
+				// QUIT
+				data->interfaceMode = INTERFACEMODE_QUIT;
+			}
+		}
+	/// If they hit ESCAPE, just leave the menu.
+	} else if (keyPress == KEY_ESCAPE) {
+		data->interfaceMode = INTERFACEMODE_MAP;
 	}
 }
