@@ -16,7 +16,7 @@ void screenSplash() {
 	printf("+------------------------------+\n");
 	printf("|                              |\n");
 	printf("|         ");
-	setColor(LIGHTGREEN);
+	setColor(LIGHTBLUE);
 	printf("TERMINAL WARS");
 	setColor(GREY);
 	printf("        |\n");
@@ -25,7 +25,7 @@ void screenSplash() {
 	printf("\n");
 	printf("An attempt to recreate the game Advance Wars in C.\n");
 	printf("\n");
-	printf("Version \"Stage 8\"\n\n");
+	printf("Version \"Stage 10\"\n\n");
 	
 	/// This tells the user if their screen is too small.
 	if (trows() < (MAP_HEIGHT + 10)) {
@@ -763,7 +763,8 @@ void drawMenu(game *data) {
 	int keyPress = 5001;
 	/// This notes what menu item is selected.
 	short selection = 0;
-	
+	/// This stores what unit is under the cursor.
+	short selectedUnit = unitGetter (data, data->cursor.x, data->cursor.y);
 	/// If the selection wasn't on a unit, it shows this.
 	if (data->interfaceMode == INTERFACEMODE_MENU_FIELD) {
 		/// This breaks when the user hits either ESCAPE or SPACE.
@@ -777,30 +778,22 @@ void drawMenu(game *data) {
 				setColor(YELLOW);
 			}
 			printf("END TURN\n");
-			if (selection == 0) {
-				setColor(GREY);
-			}
+			setColor(GREY);
 			if (selection == 1) {
 				setColor(YELLOW);
 			}
 			printf("INFO (UNFINISHED)\n");
-			if (selection == 1) {
-				setColor(GREY);
-			}
+			setColor(GREY);
 			if (selection == 2) {
 				setColor(YELLOW);
 			}
 			printf("SAVE (UNFINISHED)\n");
-			if (selection == 2) {
-				setColor(GREY);
-			}
+			setColor(GREY);
 			if (selection == 3) {
 				setColor(YELLOW);
 			}
 			printf("QUIT\n");
-			if (selection == 3) {
-				setColor(GREY);
-			}
+			setColor(GREY);
 			
 			/// Then we get user input.
 			keyPress = getkey();
@@ -824,48 +817,48 @@ void drawMenu(game *data) {
 			mapDraw(data);
 			
 			/// Menu items are shown.
-			if (selection == 0) {
+			if ((selection == 0) && ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].movement == 0) || (data->unitData[selectedUnit].player != data->whoseTurn))) {
+				setColor(BROWN);
+			} else if (selection == 0) {
 				setColor(YELLOW);
+			/// If it's is finished, or can't move, grey this out.
+			/// It's also greyed if it's not the user's unit.
+			} else if ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].movement == 0) || (data->unitData[selectedUnit].player != data->whoseTurn)) {
+				setColor(DARKGREY);
 			}
 			printf("MOVE\n");
-			if (selection == 0) {
-				setColor(GREY);
-			}
-			if (selection == 1) {
+			setColor(GREY);
+			if ((selection == 1) && ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].player != data->whoseTurn))) {
+				setColor(BROWN);
+			} else if (selection == 1) {
 				setColor(YELLOW);
+			/// If it's finished, grey this out. It's also greyed if
+			/// it's not the user's unit.
+			} else if ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].player != data->whoseTurn)) {
+				setColor(DARKGREY);
 			}
 			printf("ATTACK (UNFINISHED)\n");
-			if (selection == 1) {
-				setColor(GREY);
-			}
+			setColor(GREY);
 			if (selection == 2) {
 				setColor(YELLOW);
 			}
 			printf("END TURN\n");
-			if (selection == 2) {
-				setColor(GREY);
-			}
+			setColor(GREY);
 			if (selection == 3) {
 				setColor(YELLOW);
 			}
 			printf("INFO (UNFINISHED)\n");
-			if (selection == 3) {
-				setColor(GREY);
-			}
+			setColor(GREY);
 			if (selection == 4) {
 				setColor(YELLOW);
 			}
 			printf("SAVE (UNFINISHED)\n");
-			if (selection == 4) {
-				setColor(GREY);
-			}
+			setColor(GREY);
 			if (selection == 5) {
 				setColor(YELLOW);
 			}
 			printf("QUIT\n");
-			if (selection == 5) {
-				setColor(GREY);
-			}
+			setColor(GREY);
 			
 			/// Input is gotten.
 			keyPress = getkey();
@@ -904,10 +897,20 @@ void drawMenu(game *data) {
 		} else if (data->interfaceMode == INTERFACEMODE_MENU_UNIT) {
 			if (selection == 0) {
 				// MOVE
-				data->interfaceMode = INTERFACEMODE_MOVE;
+				/// If it was greyed out, it won't move it.
+				if ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].movement == 0) || (data->unitData[selectedUnit].player != data->whoseTurn)) {
+					data->interfaceMode = INTERFACEMODE_MAP;
+				} else {
+					data->interfaceMode = INTERFACEMODE_MOVE;
+				}
 			} else if (selection == 1) {
 				// ATTACK
-				data->interfaceMode = INTERFACEMODE_MAP;
+				/// If it was greyed out, it won't attack.
+				if ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].player != data->whoseTurn)) {
+					data->interfaceMode = INTERFACEMODE_MAP;
+				} else {
+					data->interfaceMode = INTERFACEMODE_MAP;
+				}
 			} else if (selection == 2) {
 				// END TURN
 				endTurn(data);

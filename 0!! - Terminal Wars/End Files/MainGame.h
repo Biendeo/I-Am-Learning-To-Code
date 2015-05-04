@@ -1,7 +1,7 @@
 #ifndef MAINGAME_H
 #define MAINGAME_H
 
-typedef struct unitdata {
+typedef struct _unitdata {
 	/// This defines what type of unit it is.
 	char unitType;
 	
@@ -39,7 +39,7 @@ typedef struct unitdata {
 	short y;
 } unit;
 
-typedef struct playerdata {
+typedef struct _playerdata {
 	/// This determines if the player is a human (1) or a bot (2).
 	char isItHuman;
 	
@@ -54,7 +54,7 @@ typedef struct playerdata {
 	short unitsOwned;
 } player;
 
-typedef struct buildingdata {
+typedef struct _buildingdata {
 	/// This determines what kind of building it is.
 	char buildingType;
 	
@@ -69,13 +69,13 @@ typedef struct buildingdata {
 	short y;
 } building;
 
-typedef struct cursor {
+typedef struct _cursor {
 	/// This is to access the cursor position anywhere in the program.
 	short x;
 	short y;
 } cursor;
 
-typedef struct gamedata {
+typedef struct _gamedata {
 	/// This will count the number turn it is. No effect in game, but
 	/// it's a data point to follow.
 	int turnNum;

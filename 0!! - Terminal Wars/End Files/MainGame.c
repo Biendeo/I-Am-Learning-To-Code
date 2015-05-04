@@ -443,11 +443,16 @@ void endTurn(game *data) {
 /// This checks if an asked move is valid.
 char validMoveChecker(game *data, short mover, char direction) {
 	char validMove = NO;
+	
+	/// If it moves in a certain direction...
 	if (direction == UP) {
+		/// 
 		if (data->unitData[mover].y > 0) {
 			if (unitGetter(data, data->unitData[mover].x, data->unitData[mover].y - 1) == MAX_UNITS) {
 				if (data->unitData[mover].movement >= tileMovementGetter(data, data->unitData[mover].x, data->unitData[mover].y - 1, unitMovementTypeGetter(data, mover))) {
-					validMove = YES;
+					if (tileMovementGetter(data, data->unitData[mover].x, data->unitData[mover].y - 1, unitMovementTypeGetter(data, mover)) != 0) {
+						validMove = YES;
+					}
 				}
 			}
 		}
@@ -455,7 +460,9 @@ char validMoveChecker(game *data, short mover, char direction) {
 		if (data->unitData[mover].y < MAP_HEIGHT - 1) {
 			if (unitGetter(data, data->unitData[mover].x, data->unitData[mover].y + 1) == MAX_UNITS) {
 				if (data->unitData[mover].movement >= tileMovementGetter(data, data->unitData[mover].x, data->unitData[mover].y + 1, unitMovementTypeGetter(data, mover))) {
-					validMove = YES;
+					if (tileMovementGetter(data, data->unitData[mover].x, data->unitData[mover].y + 1, unitMovementTypeGetter(data, mover)) != 0) {
+						validMove = YES;
+					}
 				}
 			}
 		}
@@ -463,7 +470,9 @@ char validMoveChecker(game *data, short mover, char direction) {
 		if (data->unitData[mover].x > 0) {
 			if (unitGetter(data, data->unitData[mover].x - 1, data->unitData[mover].y) == MAX_UNITS) {
 				if (data->unitData[mover].movement >= tileMovementGetter(data, data->unitData[mover].x - 1, data->unitData[mover].y, unitMovementTypeGetter(data, mover))) {
-					validMove = YES;
+					if (tileMovementGetter(data, data->unitData[mover].x - 1, data->unitData[mover].y, unitMovementTypeGetter(data, mover)) != 0) {
+						validMove = YES;
+					}
 				}
 			}
 		}
@@ -471,7 +480,9 @@ char validMoveChecker(game *data, short mover, char direction) {
 		if (data->unitData[mover].y < MAP_WIDTH - 1) {
 			if (unitGetter(data, data->unitData[mover].x + 1, data->unitData[mover].y) == MAX_UNITS) {
 				if (data->unitData[mover].movement >= tileMovementGetter(data, data->unitData[mover].x + 1, data->unitData[mover].y, unitMovementTypeGetter(data, mover))) {
-					validMove = YES;
+					if (tileMovementGetter(data, data->unitData[mover].x + 1, data->unitData[mover].y, unitMovementTypeGetter(data, mover)) != 0) {
+						validMove = YES;
+					}
 				}
 			}
 		}

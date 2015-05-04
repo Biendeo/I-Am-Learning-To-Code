@@ -157,13 +157,13 @@
 #define MOVE_ROAD_SHIP     0
 #define MOVE_ROAD_CARRIER  0
 
-#define MOVE_SEA_INFANTRY 1
-#define MOVE_SEA_MECH     1
-#define MOVE_SEA_TIRES    1
-#define MOVE_SEA_TREAD    1
+#define MOVE_SEA_INFANTRY 0
+#define MOVE_SEA_MECH     0
+#define MOVE_SEA_TIRES    0
+#define MOVE_SEA_TREAD    0
 #define MOVE_SEA_AIR      1
-#define MOVE_SEA_SHIP     0
-#define MOVE_SEA_CARRIER  0
+#define MOVE_SEA_SHIP     1
+#define MOVE_SEA_CARRIER  1
 
 #define MOVE_RIVER_INFANTRY 1
 #define MOVE_RIVER_MECH     1
