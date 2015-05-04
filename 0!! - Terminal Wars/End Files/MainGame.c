@@ -278,25 +278,37 @@ void moveUnit (game *data, short mover, int keyPress) {
 	// Is there a unit in the way?
 	// Is the movement cost of the tile 0?
 	// Is the movement cost too great for what the unit has left?
+	short x = data->cursor.x;
+	short y = data->cursor.y;
+	short movementType = unitMovementTypeGetter(data, mover);
+	
 	if (keyPress == UP) {
 		if (validMoveChecker(data, mover, UP) == YES) {
 			data->cursor.y--;
 			data->unitData[mover].y--;
+			data->unitData[mover].movement -= tileMovementGetter(data, x, y - 1, movementType);
+			data->unitData[mover].fuel -= tileMovementGetter(data, x, y - 1, movementType);
 		}
 	} else if (keyPress == DOWN) {
 		if (validMoveChecker(data, mover, DOWN) == YES) {
 			data->cursor.y++;
 			data->unitData[mover].y++;
+			data->unitData[mover].movement -= tileMovementGetter(data, x, y + 1, movementType);
+			data->unitData[mover].fuel -= tileMovementGetter(data, x, y + 1, movementType);
 		}
 	} else if (keyPress == LEFT) {
 		if (validMoveChecker(data, mover, LEFT) == YES) {
 			data->cursor.x--;
 			data->unitData[mover].x--;
+			data->unitData[mover].movement -= tileMovementGetter(data, x - 1, y, movementType);
+			data->unitData[mover].fuel -= tileMovementGetter(data, x - 1, y, movementType);
 		}
 	} else if (keyPress == RIGHT) {
 		if (validMoveChecker(data, mover, RIGHT) == YES) {
 			data->cursor.x++;
 			data->unitData[mover].x++;
+			data->unitData[mover].movement -= tileMovementGetter(data, x + 1, y, movementType);
+			data->unitData[mover].fuel -= tileMovementGetter(data, x + 1, y, movementType);
 		}
 	}
 }
@@ -407,6 +419,17 @@ void deleteUnit (game *data, short unitPos) {
 
 /// This function ends the turn, resets values, and passes control.
 void endTurn(game *data) {
+	/// This runs through every unit in play, and resets its movement
+	/// amount.
+	short arrayPos = 0;
+	while (arrayPos < MAX_UNITS) {
+		if (data->unitData[arrayPos].player != TEAM_NONE) {
+			data->unitData[arrayPos].movement = data->unitData[arrayPos].maxMovement;
+			data->unitData[arrayPos].finished = NO;
+		}
+		arrayPos++;
+	}
+	
 	/// The game passes whose turn it is to the next player.
 	data->whoseTurn++;
 	/// If it's being passed to one too many players, we move it back
@@ -417,6 +440,7 @@ void endTurn(game *data) {
 	}
 }
 
+/// This checks if an asked move is valid.
 char validMoveChecker(game *data, short mover, char direction) {
 	char validMove = NO;
 	if (direction == UP) {
