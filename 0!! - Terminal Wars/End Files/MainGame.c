@@ -173,6 +173,21 @@ void initialiseGame (game *data) {
 	/// debugging anything).
 	checkInitialiseGame (data);
 	
+	// This is just a bit of example setup to get the game started.
+	// It's purely so that I can debug stuff right now.
+	createUnit(data, 4, 3, INFANTRY, TEAM_RED);
+	createUnit(data, 8, 6, MECH, TEAM_RED);
+	createUnit(data, 5, 3, ARTILLERY, TEAM_BLUE);
+	createUnit(data, 13, 10, MEGATANK, TEAM_BLUE);
+	createUnit(data, 11, 3, TANK, TEAM_BLUE);
+	createUnit(data, 1, 10, MECH, TEAM_GREEN);
+	createUnit(data, 12, 6, APC, TEAM_YELLOW);
+	createUnit(data, 10, 10, NEOTANK, TEAM_YELLOW);
+	// This demonstrates how deleting units works.
+	deleteUnit(data, 4);
+	// And creating new units after that.
+	createUnit(data, 2, 2, BATT_COP, TEAM_GREEN);
+	
 	/// Then, a new turn is performed, which moves to player 1.
 	endTurn(data);
 }

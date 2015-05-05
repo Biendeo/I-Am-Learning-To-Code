@@ -421,7 +421,8 @@ void drawMoveUI (game *data, short x, short y) {
 	short selectedUnit = unitGetter (data, x, y);
 	printf("Currently moving a ");
 	drawUnitName(data, selectedUnit);
-
+	printf("\n");
+	
 	printf("Movement: ");
 	if (data->unitData[selectedUnit].movement <= 0) {
 		setColor(RED);
@@ -467,7 +468,7 @@ void drawAttackUI (game *data, short attacker, short x, short y) {
 	printf(" on a ");
 	drawTileName(data, data->unitData[attacker].x, data->unitData[attacker].y);
 	
-	printf("(");
+	printf(" (");
 	setColor(YELLOW);
 	while (iterations < tileDefense) {
 		printf("*");
@@ -529,7 +530,7 @@ void drawAttackUI (game *data, short attacker, short x, short y) {
 		printf(" on a ");
 		drawTileName(data, data->unitData[defender].x, data->unitData[defender].y);
 		
-		printf("(");
+		printf(" (");
 		setColor(YELLOW);
 		while (iterations < tileDefense) {
 			printf("*");
@@ -834,11 +835,11 @@ void drawBattleResult (game *data, short attacker, short defender, float damage,
 	drawUnitName(data, defender);
 	if (damage <= 0.5) {
 		printf(" was lightly tapped for ");
-	} else if (damage <= 2) {
+	} else if (damage <= 2.5) {
 		printf(" was hit for ");
-	} else if (damage <= 4) {
+	} else if (damage <= 5) {
 		printf(" was hit hard for ");
-	} else if (damage <= 6) {
+	} else if (damage <= 7.5) {
 		printf(" was struck for ");
 	} else if (damage < 10) {
 		printf(" was almost completely destroyed for ");
@@ -850,15 +851,16 @@ void drawBattleResult (game *data, short attacker, short defender, float damage,
 		printf(" didn't even stand a chance, hit for ");
 	}
 	
-	if (damage <= 2) {
+	if (damage <= 3) {
 		setColor(LIGHTGREEN);
 	} else if (damage <= 6) {
 		setColor(YELLOW);
 	} else {
 		setColor(LIGHTRED);
 	}
-	printf("%g.\n", damage);
+	printf("%g", damage);
 	setColor(GREY);
+	printf(".\n");
 	
 	printf("The ");
 	drawUnitName(data, defender);
@@ -868,36 +870,21 @@ void drawBattleResult (game *data, short attacker, short defender, float damage,
 		printf(" only barely held on with ");
 		setColor(LIGHTRED);
 		printf("%g ", data->unitData[defender].health);
-		printf("health.\n");
 	} else if (data->unitData[defender].health <= 6) {
 		printf(" is a bit weakened with ");
-		setColor(LIGHTRED);
+		setColor(YELLOW);
 		printf("%g ", data->unitData[defender].health);
-		printf("health.\n");
 	} else {
 		printf(" still stood strong with ");
 		setColor(LIGHTGREEN);
 		printf("%g ", data->unitData[defender].health);
-		printf("health.\n");
 	}
 	setColor(GREY);
+	printf("health.\n");
 }
 
 void testDrawing (game *data) {
-	// This is just a bit of example setup to get the game started.
-	createUnit(data, 4, 3, INFANTRY, TEAM_RED);
-	createUnit(data, 8, 6, MECH, TEAM_RED);
-	createUnit(data, 5, 3, ARTILLERY, TEAM_BLUE);
-	createUnit(data, 13, 10, MEGATANK, TEAM_BLUE);
-	createUnit(data, 11, 3, TANK, TEAM_BLUE);
-	createUnit(data, 1, 10, MECH, TEAM_GREEN);
-	createUnit(data, 12, 6, APC, TEAM_YELLOW);
-	createUnit(data, 10, 10, NEOTANK, TEAM_YELLOW);
-	// This demonstrates how deleting units works.
-	deleteUnit(data, 4);
-	// And creating new units after that.
-	createUnit(data, 2, 2, BATT_COP, TEAM_GREEN);
-	
+	// This is just a default place to put the cursor.
 	data->cursor.x = 5;
 	data->cursor.y = 4;
 	data->drawMode = DRAWMODE_MAP;
