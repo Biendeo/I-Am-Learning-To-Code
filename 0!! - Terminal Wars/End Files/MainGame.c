@@ -4,11 +4,10 @@
 #include <math.h>
 #include <time.h>
 
-// These headers are redundant when they're already called. An IFDEF
-// needs to be used.
 #include "Defines.h"
 #include "MainGame.h"
 #include "FileIO.h"
+#include "DrawingUI.h"
 
 // THIS BIT IS HERE PURELY BECAUSE I CAN'T GET RLUTIL.H TO BE IN
 // MULTIPLE C FILES AT THE SAME TIME.
@@ -55,7 +54,9 @@
 #define KEY_NUMPAD8 134
 #define KEY_NUMPAD9 135
 
-/// This function
+/// This function creates the game and asks for some settings.
+/// This determines what map to load, how many players are human, or
+/// what save game to load.
 game *buildGame () {
 	// I might want to separate this into another function, and call it
 	// once I've gotten the map dimensions, as they might be variable
@@ -134,6 +135,7 @@ game *buildGame () {
 	return data;
 }
 
+/// This function gives many of the intial game values.
 void initialiseGame (game *data) {
 	/// Most of the default properties are given values.
 	ERROR_CODE = ALL_GOOD;
@@ -172,6 +174,8 @@ void initialiseGame (game *data) {
 	checkInitialiseGame (data);
 }
 
+/// This function cleans some of the memory values and scans the map
+/// for buildings, then assigns them to the player values.
 void scanMap (game *data) {
 	short x = 0;
 	short y = 0;
@@ -232,6 +236,7 @@ void scanMap (game *data) {
 
 }
 
+// Merge the test game into these functions when everything is ready.
 void modeSelect (game *data) {
 	
 }
@@ -252,11 +257,14 @@ void modeMenuUnit (game *data) {
 	
 }
 
+/// This function unallocates the game from memory, and reports an
+/// error if one occurred.
 void freeGame (game *data) {
 	printf("Program ended in state %d\n", ERROR_CODE);
 	free(data);
 }
 
+/// This function moves the cursor based on keypresses.
 void moveCursor (game *data, int keyPress) {
 	if ((keyPress == UP) && (data->cursor.y > 0)) {
 		data->cursor.y--;
@@ -269,15 +277,8 @@ void moveCursor (game *data, int keyPress) {
 	}
 }
 
+/// This function moves a unit when in move mode based on keypresses.
 void moveUnit (game *data, short mover, int keyPress) {
-	// This is a very crude version of this.
-	// To do, detect if it can move to a tile.
-	// Make that another function.
-	// That should check several things.
-	// Is it the edge of the map?
-	// Is there a unit in the way?
-	// Is the movement cost of the tile 0?
-	// Is the movement cost too great for what the unit has left?
 	short x = data->cursor.x;
 	short y = data->cursor.y;
 	short movementType = unitMovementTypeGetter(data, mover);
@@ -313,13 +314,14 @@ void moveUnit (game *data, short mover, int keyPress) {
 	}
 }
 
+/// This function calculates and applies the damage from an attack
+/// between two units.
 void attackUnit (game *data, short attacker, short defender) {
 	char attackRandom = rand() % 10;
 	
 	/// The base damage and defense are grabbed.
-	// I'll do an additional test for this before this function gets
-	// called. If this returns 0, then I won't even enter this function.
-	unsigned char baseDamage = baseDamageGetter (data, data->unitData[attacker].unitType, data->unitData[defender].unitType);
+	unsigned char weapon = whichWeapon(data, attacker, defender);
+	unsigned char baseDamage = baseDamageGetter (data, data->unitData[attacker].unitType, data->unitData[defender].unitType, weapon);
 	unsigned char defenseRating = tileDefenseGetter (data, data->unitData[defender].x, data->unitData[defender].y);
 	
 	/// Now, the damage is calculated. The formula is a bit messy.
@@ -331,6 +333,8 @@ void attackUnit (game *data, short attacker, short defender) {
 	/// is only one decimal place).
 	data->unitData[defender].health -= endDamage;
 	
+	drawBattleResult(data, attacker, defender, endDamage, 0);
+	
 	/// If the opposing unit is still alive, and it can counter-attack,
 	/// then it does the same calculation but accessing different stuff.
 	/// Otherwise, it's dead, and we delete it.
@@ -340,12 +344,14 @@ void attackUnit (game *data, short attacker, short defender) {
 		// functions, so it should be large itself.
 		if (canItCounter(data, attacker, defender) == YES) {
 			attackRandom = rand() % 10;
-			
-			baseDamage = baseDamageGetter (data, data->unitData[defender].unitType, data->unitData[attacker].unitType);
+			weapon = whichWeapon(data, attacker, defender);
+			baseDamage = baseDamageGetter (data, data->unitData[defender].unitType, data->unitData[attacker].unitType, weapon);
 			defenseRating = tileDefenseGetter (data, data->unitData[attacker].x, data->unitData[attacker].y);
 			
 			endDamage = roundf((baseDamage / 100) + attackRandom) * (data->unitData[defender].health / 10) * ((100 - (defenseRating * data->unitData[attacker].health)) / 100);
 			data->unitData[attacker].health -= endDamage;
+			
+			drawBattleResult(data, defender, attacker, endDamage, 1);
 			
 			if (data->unitData[attacker].health < 0) {
 				deleteUnit(data, attacker);
@@ -359,6 +365,9 @@ void attackUnit (game *data, short attacker, short defender) {
 	data->unitData[attacker].finished = YES;
 }
 
+/// This function creates a unit in the game based on who is building
+/// it, what type of unit it is, and where it is going.
+// Almost all the values are dummy values right now.
 void createUnit (game *data, short x, short y, char unitType, char player) {
 	short unitPos = 0;
 	/// First, we find where an empty spot in the array is.
@@ -390,6 +399,7 @@ void createUnit (game *data, short x, short y, char unitType, char player) {
 	data->unitData[unitPos].y = y;
 }
 
+/// This function deletes a unit from the game.
 void deleteUnit (game *data, short unitPos) {
 	/// This de-initialises a unit. When a unit needs to be created,
 	/// it'll find the lowest empty spot.
@@ -446,11 +456,16 @@ char validMoveChecker(game *data, short mover, char direction) {
 	
 	/// If it moves in a certain direction...
 	if (direction == UP) {
-		/// 
+		/// If it isn't hitting the map edge...
 		if (data->unitData[mover].y > 0) {
+			/// If it isn't hitting another unit...
 			if (unitGetter(data, data->unitData[mover].x, data->unitData[mover].y - 1) == MAX_UNITS) {
+				/// If it's still got the movement left to go onto that
+				/// tile...
 				if (data->unitData[mover].movement >= tileMovementGetter(data, data->unitData[mover].x, data->unitData[mover].y - 1, unitMovementTypeGetter(data, mover))) {
+					/// If it even can go on that tile...
 					if (tileMovementGetter(data, data->unitData[mover].x, data->unitData[mover].y - 1, unitMovementTypeGetter(data, mover)) != 0) {
+						/// Then it can move there.
 						validMove = YES;
 					}
 				}
@@ -491,12 +506,38 @@ char validMoveChecker(game *data, short mover, char direction) {
 	return validMove;
 }
 
+/// This function tests to see if a unit can hit another unit.
+/// It returns YES (1) if true and NO (0) if false.
 char validAttackChecker(game *data, short attacker, short defender) {
 	char validAttack = NO;
+	/// These determine how many tiles a unit is away from the attacker.
+	char xDiff = data->unitData[attacker].x - data->unitData[defender].x;
+	char yDiff = data->unitData[attacker].y - data->unitData[defender].y;
+	if (xDiff < 0) {
+		xDiff = xDiff * -1;
+	}
+	if (yDiff < 0) {
+		yDiff = yDiff * -1;
+	}
+	
+	/// If the target isn't on the same team as the attacker...
+	if (data->unitData[attacker].player != data->unitData[defender].player) {
+		/// If the target can even shoot the opponent...
+		/// (this considers the attacker's ammo as well)
+		if (whichWeapon(data, attacker, defender) != NONE) {
+			/// If the unit is within range...
+			if ((xDiff + yDiff) >= minimumRangeGetter(data, attacker)) {
+				if ((xDiff + yDiff) <= maximumRangeGetter(data, attacker)) {
+					validAttack = YES;
+				}
+			}
+		}
+	}
 	
 	return validAttack;
 }
 
+/// This function gets a unit's ID based on a position.
 short unitGetter (game *data, short x, short y) {
 	short unitPos = 0;
 	while (unitPos < MAX_UNITS) {
@@ -510,6 +551,7 @@ short unitGetter (game *data, short x, short y) {
 	return unitPos;
 }
 
+/// This function gets the movement type of a given unit.
 char unitMovementTypeGetter(game *data, short unitPos) {
 	char unitMovementType = 0;
 	if (data->unitData[unitPos].unitType == INFANTRY) {
@@ -560,6 +602,8 @@ char unitMovementTypeGetter(game *data, short unitPos) {
 	return unitMovementType;
 }
 
+/// This function gets the movement cost for a certain tile based on
+/// the movement type provided.
 char tileMovementGetter (game *data, short x, short y, char movementType) {
 	char tileType = data->mapData[x][y];
 	char tileMovement = 0;
@@ -799,6 +843,7 @@ char tileMovementGetter (game *data, short x, short y, char movementType) {
 	return tileMovement;
 }
 
+/// This fuunction gets the defense value of a given co-ordinate.
 char tileDefenseGetter (game *data, short x, short y) {
 	char tileType = data->mapData[x][y];
 	char tileDefense = 0;
@@ -837,12 +882,16 @@ char tileDefenseGetter (game *data, short x, short y) {
 	return tileDefense;
 }
 
-unsigned char baseDamageGetter (game *data, short attacker, short defender) {
-	unsigned char baseDamage = 0;
+/// This function gets the base damage a unit has against another unit.
+// I SHOULD UPDATE THIS TO ACCEPT THE WEAPON TYPE.
+unsigned char baseDamageGetter (game *data, short attacker, short defender, unsigned char weapon) {
+	// Set this to 0 when the whole function is written.
+	unsigned char baseDamage = 50;
 	
 	return baseDamage;
 }
 
+/// This function returns the minimum range a unit can attack.
 char minimumRangeGetter (game *data, short unitPos) {
 	char minimumRange = 0;
 	/// This variable is just so that the subsequent code is a bit more concise.
@@ -897,6 +946,7 @@ char minimumRangeGetter (game *data, short unitPos) {
 	return minimumRange;
 }
 
+/// This function returns the maximum range a unit can attack.
 char maximumRangeGetter (game *data, short unitPos) {
 	char maximumRange = 0;
 	/// This variable is just so that the subsequent code is a bit more concise.
@@ -951,17 +1001,24 @@ char maximumRangeGetter (game *data, short unitPos) {
 	return maximumRange;
 }
 
+/// This function returns what weapon a unit will use to attack an
+/// opponent based on how much ammo it has, and whether that unit can
+/// be damaged with that weapon.
 char whichWeapon (game *data, short attacker, short defender) {
 	/// This will only change if it CAN attack something.
-	char whichWeapon = NO;
+	// Change this back to NO when everything else is implemented.
+	char whichWeapon = PRIMARY;
 	
 	return whichWeapon;
 }
 
+/// This function returns YES (1) if a unit is able to counter an
+/// opponent, or NO (0) if it can't.
+/// This function does not get called if the unit is destroyed.
 char canItCounter (game *data, short attacker, short defender) {
 	char canItCounter = NO;
 	if ((minimumRangeGetter(data, defender) == 1) && (maximumRangeGetter(data, defender) == 1)) {
-		if (baseDamageGetter(data, defender, attacker) != 0) {
+		if (whichWeapon(data, attacker, defender)) != NONE) {
 			canItCounter = YES;
 		}
 	}
@@ -969,6 +1026,7 @@ char canItCounter (game *data, short attacker, short defender) {
 	return canItCounter;
 }
 
+/// This function just double-checks the initialise values.
 void checkInitialiseGame (game *data) {
 	// Develop this fully later.
 	if (data->p1.color != TEAM_RED) {

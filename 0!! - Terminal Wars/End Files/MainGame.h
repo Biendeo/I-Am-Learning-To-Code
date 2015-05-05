@@ -119,6 +119,10 @@ typedef struct _gamedata {
 	/// This determines whether to draw the field or the units on top.
 	char drawMode;
 	
+	/// This stores a unit's array position when attacking. It's easier
+	/// to track it here.
+	short attacker;
+	
 	/// This stores an error code if the program needs to exit.
 	char errorCode;
 } game;
@@ -154,7 +158,7 @@ short unitGetter (game *data, short x, short y);
 char unitMovementTypeGetter(game *data, short unitPos);
 char tileMovementGetter (game *data, short x, short y, char movementType);
 char tileDefenseGetter (game *data, short x, short y);
-unsigned char baseDamageGetter (game *data, short attacker, short defender);
+unsigned char baseDamageGetter (game *data, short attacker, short defender, unsigned char weapon);
 char minimumRangeGetter (game *data, short unitPos);
 char maximumRangeGetter (game *data, short unitPos);
 char whichWeapon (game *data, short attacker, short defender);

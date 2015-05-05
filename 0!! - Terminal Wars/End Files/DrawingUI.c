@@ -425,7 +425,7 @@ void drawMoveUI (game *data, short x, short y) {
 	printf("Movement: ");
 	if (data->unitData[selectedUnit].movement <= 0) {
 		setColor(RED);
-	} else if ((data->unitData[selectedUnit].movement > 2) && (data->unitData[selectedUnit].movement <= 0)) {
+	} else if ((data->unitData[selectedUnit].movement <= 2) && (data->unitData[selectedUnit].movement > 0)) {
 		setColor(YELLOW);
 	} else if (data->unitData[selectedUnit].movement > 2) {
 		setColor(GREEN);
@@ -449,6 +449,150 @@ void drawMoveUI (game *data, short x, short y) {
 	printf(" (%d)\n", tileMovementGetter(data, x + 1, y, movementType));
 }
 
+void drawAttackUI (game *data, short attacker, short x, short y) {
+	// There's a lot of repetition in this function. I might split it up
+	// (but it's ever so slightly different from the unit UI one).
+	short defender = unitGetter(data, data->cursor.x, data->cursor.y);
+	char baseDamage = baseDamageGetter(data, attacker, defender);
+	char tileDefense = tileDefenseGetter(data, data->unitData[attacker].x, data->unitData[attacker].y);
+	char iterations = 0;
+	
+	printf("Attacker: ");
+	drawUnitName(data, attacker);
+	printf(" on a ");
+	drawTileName(data, data->unitData[attacker].x, data->unitData[attacker].y);
+	
+	printf("(");
+	setColor(YELLOW);
+	while (iterations < tileDefense) {
+		printf("*");
+		iterations++;
+	}
+	setColor(GREY);
+	printf(")\n");
+	
+	printf("Health: ");
+	if (data->unitData[attacker].health <= 3) {
+		setColor(RED);
+	} else if ((data->unitData[attacker].health > 3) && (data->unitData[attacker].health <= 7)) {
+		setColor(YELLOW);
+	} else if (data->unitData[attacker].health > 7) {
+		setColor(GREEN);
+	}
+	printf("%g/10   ", data->unitData[attacker].health);
+	setColor(GREY);
+	
+	if (data->unitData[attacker].ammo1 == -1) {
+		printf("Ammo1: Infinite   ");
+	} else if (data->unitData[attacker].maxAmmo1 == 0) {
+		// Nothing.
+	} else {
+		printf("Ammo1: ");
+		if ((((float)data->unitData[attacker].ammo1 / data->unitData[attacker].maxAmmo1) <= 0.1) || data->unitData[attacker].ammo1 <= 2) {
+			setColor(RED);
+		} else if ((((float)data->unitData[attacker].ammo1 / data->unitData[attacker].maxAmmo1) >= 0.1) && (((float)data->unitData[attacker].ammo1 / data->unitData[attacker].maxAmmo1) <= 0.6)) {
+			setColor(YELLOW);
+		} else if (((float)data->unitData[attacker].ammo1 / data->unitData[attacker].maxAmmo1) > 0.6) {
+			setColor(GREEN);
+		}	printf("%d/%d   ", data->unitData[attacker].ammo1, data->unitData[attacker].maxAmmo1);
+		setColor(GREY);
+	}
+	
+	if (data->unitData[attacker].ammo2 == -1) {
+		printf("Ammo2: Infinite   ");
+	} else if (data->unitData[attacker].maxAmmo2 == 0) {
+		// Nothing
+	} else {
+		printf("Ammo2: ");
+		if ((((float)data->unitData[attacker].ammo2 / data->unitData[attacker].maxAmmo2) <= 0.1) || data->unitData[attacker].ammo2 <= 2) {
+			setColor(RED);
+		} else if ((((float)data->unitData[attacker].ammo2 / data->unitData[attacker].maxAmmo2) >= 0.1) && (((float)data->unitData[attacker].ammo2 / data->unitData[attacker].maxAmmo2) <= 0.6)) {
+			setColor(YELLOW);
+		} else if (((float)data->unitData[attacker].ammo2 / data->unitData[attacker].maxAmmo2) > 0.6) {
+			setColor(GREEN);
+		}	printf("%d/%d\n", data->unitData[attacker].ammo2, data->unitData[attacker].maxAmmo2);
+		setColor(GREY);
+	}
+
+	printf("Defender: ");
+	if (defender == MAX_UNITS) {
+		printf("NO TARGET\n");
+	} else {
+		tileDefense = tileDefenseGetter(data, data->cursor.x, data->cursor.y);
+		iterations = 0;
+		drawUnitName(data, defender);
+		printf(" on a ");
+		drawTileName(data, data->unitData[defender].x, data->unitData[defender].y);
+		
+		printf("(");
+		setColor(YELLOW);
+		while (iterations < tileDefense) {
+			printf("*");
+			iterations++;
+		}
+		setColor(GREY);
+		printf(")\n");
+		printf("Health: ");
+		if (data->unitData[defender].health <= 3) {
+			setColor(RED);
+		} else if ((data->unitData[defender].health > 3) && (data->unitData[defender].health <= 7)) {
+			setColor(YELLOW);
+		} else if (data->unitData[defender].health > 7) {
+			setColor(GREEN);
+		}
+		printf("%g/10   ", data->unitData[defender].health);
+		setColor(GREY);
+		
+		if (data->unitData[defender].ammo1 == -1) {
+			printf("Ammo1: Infinite   ");
+		} else if (data->unitData[defender].maxAmmo1 == 0) {
+			// Nothing.
+		} else {
+			printf("Ammo1: ");
+			if ((((float)data->unitData[defender].ammo1 / data->unitData[defender].maxAmmo1) <= 0.1) || data->unitData[defender].ammo1 <= 2) {
+				setColor(RED);
+			} else if ((((float)data->unitData[defender].ammo1 / data->unitData[defender].maxAmmo1) >= 0.1) && (((float)data->unitData[defender].ammo1 / data->unitData[defender].maxAmmo1) <= 0.6)) {
+				setColor(YELLOW);
+			} else if (((float)data->unitData[defender].ammo1 / data->unitData[defender].maxAmmo1) > 0.6) {
+				setColor(GREEN);
+			}	printf("%d/%d   ", data->unitData[defender].ammo1, data->unitData[defender].maxAmmo1);
+			setColor(GREY);
+		}
+		
+		if (data->unitData[defender].ammo2 == -1) {
+			printf("Ammo2: Infinite   ");
+		} else if (data->unitData[defender].maxAmmo2 == 0) {
+			// Nothing
+		} else {
+			printf("Ammo2: ");
+			if ((((float)data->unitData[defender].ammo2 / data->unitData[defender].maxAmmo2) <= 0.1) || data->unitData[defender].ammo2 <= 2) {
+				setColor(RED);
+			} else if ((((float)data->unitData[defender].ammo2 / data->unitData[defender].maxAmmo2) >= 0.1) && (((float)data->unitData[defender].ammo2 / data->unitData[defender].maxAmmo2) <= 0.6)) {
+				setColor(YELLOW);
+			} else if (((float)data->unitData[defender].ammo2 / data->unitData[defender].maxAmmo2) > 0.6) {
+				setColor(GREEN);
+			}	printf("%d/%d\n", data->unitData[defender].ammo2, data->unitData[defender].maxAmmo2);
+			setColor(GREY);
+		}
+		
+		printf("Base damage: ");
+		if (validAttackChecker(data, attacker, defender) == NO) {
+			printf("--%\n");
+		} else {
+			if (baseDamage <= 30) {
+				setColor(GREEN);
+			} else if (baseDamage <= 60) {
+				setColor(YELLOW);
+			} else {
+				setColor(RED);
+			}
+			printf("%d", baseDamage);
+			printf("%\n");
+			setColor(GREY);
+		}
+	}
+}
+
 void drawUnitName (game *data, short selectedUnit) {
 	if (data->unitData[selectedUnit].player == TEAM_RED) {
 		setColor(LIGHTRED);
@@ -469,49 +613,49 @@ void drawUnitName (game *data, short selectedUnit) {
 	}
 	
 	if (data->unitData[selectedUnit].unitType == INFANTRY) {
-		printf("INFANTRY.\n");
+		printf("INFANTRY.");
 	} else if (data->unitData[selectedUnit].unitType == MECH) {
-		printf("MECH.\n");
+		printf("MECH.");
 	} else if (data->unitData[selectedUnit].unitType == RECON) {
-		printf("RECON.\n");
+		printf("RECON.");
 	} else if (data->unitData[selectedUnit].unitType == TANK) {
-		printf("TANK.\n");
+		printf("TANK.");
 	} else if (data->unitData[selectedUnit].unitType == MD_TANK) {
-		printf("MEDIUM TANK.\n");
+		printf("MEDIUM TANK.");
 	} else if (data->unitData[selectedUnit].unitType == NEOTANK) {
-		printf("NEOTANK.\n");
+		printf("NEOTANK.");
 	} else if (data->unitData[selectedUnit].unitType == MEGATANK) {
-		printf("MEGATANK.\n");
+		printf("MEGATANK.");
 	} else if (data->unitData[selectedUnit].unitType == APC) {
-		printf("APC.\n");
+		printf("APC.");
 	} else if (data->unitData[selectedUnit].unitType == ARTILLERY) {
-		printf("ARTILLERY.\n");
+		printf("ARTILLERY.");
 	} else if (data->unitData[selectedUnit].unitType == ROCKETS) {
-		printf("ROCKET LAUNCHER.\n");
+		printf("ROCKET LAUNCHER.");
 	} else if (data->unitData[selectedUnit].unitType == ANTI_AIR) {
-		printf("ANTI-AIR CANNON.\n");
+		printf("ANTI-AIR CANNON.");
 	} else if (data->unitData[selectedUnit].unitType == MISSILES) {
-		printf("MISSILES.\n");
+		printf("MISSILES.");
 	} else if (data->unitData[selectedUnit].unitType == BATT_COP) {
-		printf("BATTLE COPTER.\n");
+		printf("BATTLE COPTER.");
 	} else if (data->unitData[selectedUnit].unitType == TRAN_COP) {
-		printf("TRANSPORT COPTER.\n");
+		printf("TRANSPORT COPTER.");
 	} else if (data->unitData[selectedUnit].unitType == FIGHTER) {
-		printf("FIGHTER.\n");
+		printf("FIGHTER.");
 	} else if (data->unitData[selectedUnit].unitType == BOMBER) {
-		printf("BOMBER.\n");
+		printf("BOMBER.");
 	} else if (data->unitData[selectedUnit].unitType == STEALTH) {
-		printf("STEALTH.\n");
+		printf("STEALTH.");
 	} else if (data->unitData[selectedUnit].unitType == LANDER) {
-		printf("LANDER.\n");
+		printf("LANDER.");
 	} else if (data->unitData[selectedUnit].unitType == CRUISER) {
-		printf("CRUISER.\n");
+		printf("CRUISER.");
 	} else if (data->unitData[selectedUnit].unitType == SUB) {
-		printf("SUBMARINE.\n");
+		printf("SUBMARINE.");
 	} else if (data->unitData[selectedUnit].unitType == BATT_SHIP) {
-		printf("BATTLESHIP.\n");
+		printf("BATTLESHIP.");
 	} else if (data->unitData[selectedUnit].unitType == CARRIER) {
-		printf("CARRIER.\n");
+		printf("CARRIER.");
 	}
 }
 
@@ -668,6 +812,71 @@ void drawTileName (game *data, short x, short y) {
 	}
 }
 
+void drawBattleResult (game *data, short attacker, short defender, float damage, char mode) {
+	if (mode == 0) {
+		printf("The ");
+		drawUnitName(data, attacker);
+		printf(" attacks the ");
+		drawUnitName(data, defender);
+		printf("!\n");
+	} else if (mode == 1) {
+		printf("\nThe ");
+		drawUnitName(data, attacker);
+		printf(" strikes back!\n");
+	}
+	
+	printf("The ");
+	drawUnitName(data, defender);
+	if (damage <= 0.5) {
+		printf(" was lightly tapped for ");
+	} else if (damage <= 2) {
+		printf(" was hit for ");
+	} else if (damage <= 4) {
+		printf(" was hit hard for ");
+	} else if (damage <= 6) {
+		printf(" was struck for ");
+	} else if (damage < 10) {
+		printf(" was almost completely destroyed for ");
+	} else if (damage <= 13) {
+		printf(" was no match for the ");
+		drawUnitName(data, attacker);
+		printf(", hit for ");
+	} else {
+		printf(" didn't even stand a chance, hit for ");
+	}
+	
+	if (damage <= 2) {
+		setColor(LIGHTGREEN);
+	} else if (damage <= 6) {
+		setColor(YELLOW);
+	} else {
+		setColor(LIGHTRED);
+	}
+	printf("%g.\n", damage);
+	setColor(GREY);
+	
+	printf("The ");
+	drawUnitName(data, defender);
+	if (data->unitData[defender].health <= 0) {
+		printf(" was destroyed.\n");
+	} else if (data->unitData[defender].health <= 2) {
+		printf(" only barely held on with ");
+		setColor(LIGHTRED);
+		printf("%g ", data->unitData[defender].health);
+		printf("health.\n");
+	} else if (data->unitData[defender].health <= 6) {
+		printf(" is a bit weakened with ");
+		setColor(LIGHTRED);
+		printf("%g ", data->unitData[defender].health);
+		printf("health.\n");
+	} else {
+		printf(" still stood strong with ");
+		setColor(LIGHTGREEN);
+		printf("%g ", data->unitData[defender].health);
+		printf("health.\n");
+	}
+}
+
 void testDrawing (game *data) {
 	// This is just a bit of example setup to get the game started.
 	createUnit(data, 4, 3, INFANTRY, TEAM_RED);
@@ -696,7 +905,7 @@ void testDrawing (game *data) {
 	// anything.
 	
 	/// This stores what unit is currently under the cursor.
-	short selectedUnit = 0;
+	short selectedUnit = MAX_UNITS;
 	
 	/// If the game is told to quit, then it exits this.
 	while (data->interfaceMode != INTERFACEMODE_QUIT) {
@@ -763,6 +972,32 @@ void testDrawing (game *data) {
 			/// map.
 			} else if (keyPress == KEY_SPACE) {
 				data->interfaceMode = INTERFACEMODE_MAP;
+			}
+		} else if (data->interfaceMode == INTERFACEMODE_ATTACK) {
+			/// The map and UI are drawn specifically for this.
+			mapDraw(data);
+			drawAttackUI(data, data->attacker, data->cursor.x, data->cursor.y);
+			
+			/// Then the user's input is gotten.
+			keyPress = getkey();
+			/// This is just like moving the cursor around, but the UI
+			/// is different.
+			if (keyPress == KEY_UP) {
+				moveCursor(data, UP);
+			} else if (keyPress == KEY_DOWN) {
+				moveCursor(data, DOWN);
+			} else if (keyPress == KEY_LEFT) {
+				moveCursor(data, LEFT);
+			} else if (keyPress == KEY_RIGHT) {
+				moveCursor(data, RIGHT);
+			/// When SPACE is hit, it computes the attack, and exits to
+			/// to the map.
+			} else if (keyPress == KEY_SPACE) {
+				// This needs to check if it's a valid attack. If it is
+				// then attack, if it isn't, return to the map.
+				
+				data->interfaceMode = INTERFACEMODE_MAP;
+				data->attacker = MAX_UNITS;
 			}
 		}
 		/// If the user ever hits ENTER, the draw mode switches.
@@ -930,7 +1165,8 @@ void drawMenu(game *data) {
 				if ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].player != data->whoseTurn)) {
 					data->interfaceMode = INTERFACEMODE_MAP;
 				} else {
-					data->interfaceMode = INTERFACEMODE_MAP;
+					data->attacker = unitGetter(data, data->cursor.x, data->cursor.y);
+					data->interfaceMode = INTERFACEMODE_ATTACK;
 				}
 			} else if (selection == 2) {
 				// END TURN
