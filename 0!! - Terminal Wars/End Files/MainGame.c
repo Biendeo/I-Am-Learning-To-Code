@@ -141,7 +141,7 @@ void initialiseGame (game *data) {
 	ERROR_CODE = ALL_GOOD;
 	data->turnNum = 1;
 	data->numberOfPlayers = 2;
-	data->whoseTurn = 1;
+	data->whoseTurn = 0;
 	data->cursor.x = 0;
 	data->cursor.y = 0;
 	data->drawMode = DRAWMODE_UNITS;
@@ -172,6 +172,9 @@ void initialiseGame (game *data) {
 	/// This will test to see if everything initialised (also great for
 	/// debugging anything).
 	checkInitialiseGame (data);
+	
+	/// Then, a new turn is performed, which moves to player 1.
+	endTurn(data);
 }
 
 /// This function cleans some of the memory values and scans the map
@@ -340,11 +343,9 @@ void attackUnit (game *data, short attacker, short defender) {
 	/// Otherwise, it's dead, and we delete it.
 	
 	if (data->unitData[defender].health > 0) {
-		// When making canItCounter, just get the values from some
-		// functions, so it should be large itself.
 		if (canItCounter(data, attacker, defender) == YES) {
 			attackRandom = rand() % 10;
-			weapon = whichWeapon(data, attacker, defender);
+			weapon = whichWeapon(data, defender, attacker);
 			baseDamage = baseDamageGetter (data, data->unitData[defender].unitType, data->unitData[attacker].unitType, weapon);
 			defenseRating = tileDefenseGetter (data, data->unitData[attacker].x, data->unitData[attacker].y);
 			
@@ -360,7 +361,7 @@ void attackUnit (game *data, short attacker, short defender) {
 	} else {
 		deleteUnit(data, defender);
 	}
-	
+	anykey();
 	/// Attacking is always the last thing a unit does each turn.
 	data->unitData[attacker].finished = YES;
 }
@@ -394,7 +395,7 @@ void createUnit (game *data, short x, short y, char unitType, char player) {
 	// This won't be used, but if it is, tie it to unitVisionGetter.
 	data->unitData[unitPos].health = 10;
 	// When turns are implemented, change this to YES.
-	data->unitData[unitPos].finished = NO;
+	data->unitData[unitPos].finished = YES;
 	data->unitData[unitPos].x = x;
 	data->unitData[unitPos].y = y;
 }
@@ -551,6 +552,13 @@ short unitGetter (game *data, short x, short y) {
 	return unitPos;
 }
 
+/// This function gets a unit's max movement per turn.
+char unitMovementGetter(game *data, short unitPos) {
+	char unitMovement = 0;
+	
+	return unitMovement;
+}
+
 /// This function gets the movement type of a given unit.
 char unitMovementTypeGetter(game *data, short unitPos) {
 	char unitMovementType = 0;
@@ -600,6 +608,20 @@ char unitMovementTypeGetter(game *data, short unitPos) {
 		unitMovementType = MOVETYPE_CARRIER;
 	}
 	return unitMovementType;
+}
+
+/// This function gets a unit's max ammo for a specific weapon.
+char unitAmmoGetter (game *data, short unitPos, char weapon) {
+	char unitAmmo = 0;
+	
+	return unitAmmo;
+}
+
+/// This function gets a unit's max fuel capacity.
+char unitFuelGetter (game *data, short unitPos) {
+	char unitFuel = 0;
+	
+	return unitFuel;
 }
 
 /// This function gets the movement cost for a certain tile based on
@@ -883,8 +905,7 @@ char tileDefenseGetter (game *data, short x, short y) {
 }
 
 /// This function gets the base damage a unit has against another unit.
-// I SHOULD UPDATE THIS TO ACCEPT THE WEAPON TYPE.
-unsigned char baseDamageGetter (game *data, short attacker, short defender, unsigned char weapon) {
+unsigned char baseDamageGetter (game *data, short attacker, short defender, char weapon) {
 	// Set this to 0 when the whole function is written.
 	unsigned char baseDamage = 50;
 	
@@ -1009,6 +1030,8 @@ char whichWeapon (game *data, short attacker, short defender) {
 	// Change this back to NO when everything else is implemented.
 	char whichWeapon = PRIMARY;
 	
+	
+	
 	return whichWeapon;
 }
 
@@ -1018,7 +1041,7 @@ char whichWeapon (game *data, short attacker, short defender) {
 char canItCounter (game *data, short attacker, short defender) {
 	char canItCounter = NO;
 	if ((minimumRangeGetter(data, defender) == 1) && (maximumRangeGetter(data, defender) == 1)) {
-		if (whichWeapon(data, attacker, defender)) != NONE) {
+		if (validAttackChecker(data, attacker, defender) == YES) {
 			canItCounter = YES;
 		}
 	}

@@ -16,8 +16,9 @@
 #define DOWN  3
 #define LEFT  4
 
-#define PRIMARY  1
-#define SECONARY 2
+#define NONE      0
+#define PRIMARY   1
+#define SECONDARY 2
 
 #define DRAWMODE_MAP   1
 #define DRAWMODE_UNITS 2

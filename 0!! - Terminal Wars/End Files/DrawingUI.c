@@ -453,7 +453,12 @@ void drawAttackUI (game *data, short attacker, short x, short y) {
 	// There's a lot of repetition in this function. I might split it up
 	// (but it's ever so slightly different from the unit UI one).
 	short defender = unitGetter(data, data->cursor.x, data->cursor.y);
-	char baseDamage = baseDamageGetter(data, attacker, defender);
+	char baseDamage = 0;
+	if (whichWeapon(data, attacker, defender) == PRIMARY) {
+		baseDamage = baseDamageGetter(data, attacker, defender, PRIMARY);
+	} else if (whichWeapon(data, attacker, defender) == SECONDARY) {
+		baseDamage = baseDamageGetter(data, attacker, defender, SECONDARY);
+	}
 	char tileDefense = tileDefenseGetter(data, data->unitData[attacker].x, data->unitData[attacker].y);
 	char iterations = 0;
 	
@@ -577,7 +582,7 @@ void drawAttackUI (game *data, short attacker, short x, short y) {
 		
 		printf("Base damage: ");
 		if (validAttackChecker(data, attacker, defender) == NO) {
-			printf("--%\n");
+			printf("--\%\n");
 		} else {
 			if (baseDamage <= 30) {
 				setColor(GREEN);
@@ -587,7 +592,7 @@ void drawAttackUI (game *data, short attacker, short x, short y) {
 				setColor(RED);
 			}
 			printf("%d", baseDamage);
-			printf("%\n");
+			printf("\%\n");
 			setColor(GREY);
 		}
 	}
@@ -613,49 +618,49 @@ void drawUnitName (game *data, short selectedUnit) {
 	}
 	
 	if (data->unitData[selectedUnit].unitType == INFANTRY) {
-		printf("INFANTRY.");
+		printf("INFANTRY");
 	} else if (data->unitData[selectedUnit].unitType == MECH) {
-		printf("MECH.");
+		printf("MECH");
 	} else if (data->unitData[selectedUnit].unitType == RECON) {
-		printf("RECON.");
+		printf("RECON");
 	} else if (data->unitData[selectedUnit].unitType == TANK) {
-		printf("TANK.");
+		printf("TANK");
 	} else if (data->unitData[selectedUnit].unitType == MD_TANK) {
-		printf("MEDIUM TANK.");
+		printf("MEDIUM TANK");
 	} else if (data->unitData[selectedUnit].unitType == NEOTANK) {
-		printf("NEOTANK.");
+		printf("NEOTANK");
 	} else if (data->unitData[selectedUnit].unitType == MEGATANK) {
-		printf("MEGATANK.");
+		printf("MEGATANK");
 	} else if (data->unitData[selectedUnit].unitType == APC) {
-		printf("APC.");
+		printf("APC");
 	} else if (data->unitData[selectedUnit].unitType == ARTILLERY) {
-		printf("ARTILLERY.");
+		printf("ARTILLERY");
 	} else if (data->unitData[selectedUnit].unitType == ROCKETS) {
-		printf("ROCKET LAUNCHER.");
+		printf("ROCKET LAUNCHER");
 	} else if (data->unitData[selectedUnit].unitType == ANTI_AIR) {
-		printf("ANTI-AIR CANNON.");
+		printf("ANTI-AIR CANNON");
 	} else if (data->unitData[selectedUnit].unitType == MISSILES) {
-		printf("MISSILES.");
+		printf("MISSILES");
 	} else if (data->unitData[selectedUnit].unitType == BATT_COP) {
-		printf("BATTLE COPTER.");
+		printf("BATTLE COPTER");
 	} else if (data->unitData[selectedUnit].unitType == TRAN_COP) {
-		printf("TRANSPORT COPTER.");
+		printf("TRANSPORT COPTER");
 	} else if (data->unitData[selectedUnit].unitType == FIGHTER) {
-		printf("FIGHTER.");
+		printf("FIGHTER");
 	} else if (data->unitData[selectedUnit].unitType == BOMBER) {
-		printf("BOMBER.");
+		printf("BOMBER");
 	} else if (data->unitData[selectedUnit].unitType == STEALTH) {
-		printf("STEALTH.");
+		printf("STEALTH");
 	} else if (data->unitData[selectedUnit].unitType == LANDER) {
-		printf("LANDER.");
+		printf("LANDER");
 	} else if (data->unitData[selectedUnit].unitType == CRUISER) {
-		printf("CRUISER.");
+		printf("CRUISER");
 	} else if (data->unitData[selectedUnit].unitType == SUB) {
-		printf("SUBMARINE.");
+		printf("SUBMARINE");
 	} else if (data->unitData[selectedUnit].unitType == BATT_SHIP) {
-		printf("BATTLESHIP.");
+		printf("BATTLESHIP");
 	} else if (data->unitData[selectedUnit].unitType == CARRIER) {
-		printf("CARRIER.");
+		printf("CARRIER");
 	}
 }
 
@@ -875,6 +880,7 @@ void drawBattleResult (game *data, short attacker, short defender, float damage,
 		printf("%g ", data->unitData[defender].health);
 		printf("health.\n");
 	}
+	setColor(GREY);
 }
 
 void testDrawing (game *data) {
@@ -909,6 +915,7 @@ void testDrawing (game *data) {
 	
 	/// If the game is told to quit, then it exits this.
 	while (data->interfaceMode != INTERFACEMODE_QUIT) {
+		selectedUnit = unitGetter(data, data->cursor.x, data->cursor.y);
 		/// If the game is currently moving around the map...
 		if (data->interfaceMode == INTERFACEMODE_MAP) {
 			/// The map is drawn.
@@ -993,8 +1000,9 @@ void testDrawing (game *data) {
 			/// When SPACE is hit, it computes the attack, and exits to
 			/// to the map.
 			} else if (keyPress == KEY_SPACE) {
-				// This needs to check if it's a valid attack. If it is
-				// then attack, if it isn't, return to the map.
+				if (validAttackChecker(data, data->attacker, selectedUnit) == YES) {
+					attackUnit(data, data->attacker, selectedUnit);
+				}
 				
 				data->interfaceMode = INTERFACEMODE_MAP;
 				data->attacker = MAX_UNITS;
