@@ -583,7 +583,7 @@ void drawAttackUI (game *data, short attacker, short x, short y) {
 		
 		printf("Base damage: ");
 		if (validAttackChecker(data, attacker, defender) == NO) {
-			printf("--\%\n");
+			printf("--%%\n");
 		} else {
 			if (baseDamage <= 30) {
 				setColor(GREEN);
@@ -593,7 +593,7 @@ void drawAttackUI (game *data, short attacker, short x, short y) {
 				setColor(RED);
 			}
 			printf("%d", baseDamage);
-			printf("\%\n");
+			printf("%%\n");
 			setColor(GREY);
 		}
 	}
@@ -866,28 +866,30 @@ void drawBattleResult (game *data, short attacker, short defender, float damage,
 	drawUnitName(data, defender);
 	if (data->unitData[defender].health <= 0) {
 		printf(" was destroyed.\n");
-	} else if (data->unitData[defender].health <= 2) {
-		printf(" only barely held on with ");
-		setColor(LIGHTRED);
-		printf("%g ", data->unitData[defender].health);
-	} else if (data->unitData[defender].health <= 6) {
-		printf(" is a bit weakened with ");
-		setColor(YELLOW);
-		printf("%g ", data->unitData[defender].health);
 	} else {
-		printf(" still stood strong with ");
-		setColor(LIGHTGREEN);
-		printf("%g ", data->unitData[defender].health);
+		if (data->unitData[defender].health <= 2) {
+			printf(" only barely held on with ");
+			setColor(LIGHTRED);
+			printf("%g ", data->unitData[defender].health);
+		} else if (data->unitData[defender].health <= 6) {
+			printf(" is a bit weakened with ");
+			setColor(YELLOW);
+			printf("%g ", data->unitData[defender].health);
+		} else {
+			printf(" still stood strong with ");
+			setColor(LIGHTGREEN);
+			printf("%g ", data->unitData[defender].health);
+		}
+		setColor(GREY);
+		printf("health.\n");
 	}
-	setColor(GREY);
-	printf("health.\n");
 }
 
 void testDrawing (game *data) {
 	// This is just a default place to put the cursor.
 	data->cursor.x = 5;
 	data->cursor.y = 4;
-	data->drawMode = DRAWMODE_MAP;
+	data->drawMode = DRAWMODE_UNITS;
 	data->interfaceMode = INTERFACEMODE_MAP;
 	
 	/// This stores what key was last pressed.
@@ -989,6 +991,7 @@ void testDrawing (game *data) {
 			} else if (keyPress == KEY_SPACE) {
 				if (validAttackChecker(data, data->attacker, selectedUnit) == YES) {
 					attackUnit(data, data->attacker, selectedUnit);
+					anykey();
 				}
 				
 				data->interfaceMode = INTERFACEMODE_MAP;

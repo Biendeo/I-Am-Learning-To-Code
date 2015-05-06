@@ -338,14 +338,14 @@ void attackUnit (game *data, short attacker, short defender) {
 	char attackRandom = rand() % 10;
 	
 	/// The base damage and defense are grabbed.
-	unsigned char weapon = whichWeapon(data, attacker, defender);
+	char weapon = whichWeapon(data, attacker, defender);
 	unsigned char baseDamage = baseDamageGetter (data, data->unitData[attacker].unitType, data->unitData[defender].unitType, weapon);
 	unsigned char defenseRating = tileDefenseGetter (data, data->unitData[defender].x, data->unitData[defender].y);
 	
 	/// Now, the damage is calculated. The formula is a bit messy.
 	/// Basically, a number 
 	float endDamage;
-	endDamage = roundf((baseDamage + attackRandom) / 100) * (data->unitData[attacker].health / 10) * ((100 - (defenseRating * data->unitData[defender].health)) / 100);
+	endDamage = roundf(((baseDamage + attackRandom) / 100) * (data->unitData[attacker].health / 10) * ((100 - (defenseRating * data->unitData[defender].health)) / 100) * 10) / 10;
 	
 	/// The end health is applied, and the value is rounded (as health
 	/// is only one decimal place).
@@ -364,7 +364,7 @@ void attackUnit (game *data, short attacker, short defender) {
 			baseDamage = baseDamageGetter (data, data->unitData[defender].unitType, data->unitData[attacker].unitType, weapon);
 			defenseRating = tileDefenseGetter (data, data->unitData[attacker].x, data->unitData[attacker].y);
 			
-			endDamage = roundf((baseDamage / 100) + attackRandom) * (data->unitData[defender].health / 10) * ((100 - (defenseRating * data->unitData[attacker].health)) / 100);
+			endDamage = roundf(((baseDamage / 100) + attackRandom) * (data->unitData[defender].health / 10) * ((100 - (defenseRating * data->unitData[attacker].health)) / 100) * 10) / 10;
 			data->unitData[attacker].health -= endDamage;
 			
 			drawBattleResult(data, defender, attacker, endDamage, 1);
@@ -376,7 +376,6 @@ void attackUnit (game *data, short attacker, short defender) {
 	} else {
 		deleteUnit(data, defender);
 	}
-	anykey();
 	/// Attacking is always the last thing a unit does each turn.
 	data->unitData[attacker].finished = YES;
 }
@@ -1056,7 +1055,7 @@ char whichWeapon (game *data, short attacker, short defender) {
 char canItCounter (game *data, short attacker, short defender) {
 	char canItCounter = NO;
 	if ((minimumRangeGetter(data, defender) == 1) && (maximumRangeGetter(data, defender) == 1)) {
-		if (validAttackChecker(data, attacker, defender) == YES) {
+		if (validAttackChecker(data, defender, attacker) == YES) {
 			canItCounter = YES;
 		}
 	}
