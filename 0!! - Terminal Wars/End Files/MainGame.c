@@ -352,7 +352,18 @@ void attackUnit (game *data, short attacker, short defender) {
 	/// The end health is applied, and the value is rounded (as health
 	/// is only one decimal place).
 	data->unitData[defender].health -= endDamage;
-	
+
+	/// Ammo is reduced for the attacker.
+	if (weapon == PRIMARY) {
+		if (data->unitData[attacker].ammo1 != -1) {
+			data->unitData[attacker].ammo1--;
+		}
+	} else if (weapon == SECONDARY) {
+		if (data->unitData[attacker].ammo2 != -1) {
+			data->unitData[attacker].ammo2--;
+		}
+	}
+			
 	drawBattleResult(data, attacker, defender, endDamage, 0);
 	
 	/// If the opposing unit is still alive, and it can counter-attack,
@@ -371,6 +382,16 @@ void attackUnit (game *data, short attacker, short defender) {
 			//printf("((%d + %d) / 100) * (%g / 10) * ((100 - (%d * %g)) / 100) = %g\n", baseDamage, attackRandom, data->unitData[defender].health, defenseRating, data->unitData[attacker].health, endDamage);
 			
 			data->unitData[attacker].health -= endDamage;
+			
+			if (weapon == PRIMARY) {
+				if (data->unitData[defender].ammo1 != -1) {
+					data->unitData[defender].ammo1--;
+				}
+			} else if (weapon == SECONDARY) {
+				if (data->unitData[defender].ammo2 != -1) {
+					data->unitData[defender].ammo2--;
+				}
+			}
 			
 			drawBattleResult(data, defender, attacker, endDamage, 1);
 			
