@@ -343,9 +343,11 @@ void attackUnit (game *data, short attacker, short defender) {
 	unsigned char defenseRating = tileDefenseGetter (data, data->unitData[defender].x, data->unitData[defender].y);
 	
 	/// Now, the damage is calculated. The formula is a bit messy.
-	/// Basically, a number 
+	/// Basically, a number is calculated after passing through this.
 	float endDamage;
-	endDamage = roundf(((baseDamage + attackRandom) / 100) * (data->unitData[attacker].health / 10) * ((100 - (defenseRating * data->unitData[defender].health)) / 100) * 10) / 10;
+	endDamage = roundf(((baseDamage + attackRandom) / 100.0) * (data->unitData[attacker].health / 10.0) * ((100.0 - (defenseRating * data->unitData[defender].health)) / 100.0) * 100.0) / 10.0;
+	
+	//printf("((%d + %d) / 100) * (%g / 10) * ((100 - (%d * %g)) / 100) = %g\n", baseDamage, attackRandom, data->unitData[attacker].health, defenseRating, data->unitData[defender].health, endDamage);
 	
 	/// The end health is applied, and the value is rounded (as health
 	/// is only one decimal place).
@@ -364,7 +366,10 @@ void attackUnit (game *data, short attacker, short defender) {
 			baseDamage = baseDamageGetter (data, data->unitData[defender].unitType, data->unitData[attacker].unitType, weapon);
 			defenseRating = tileDefenseGetter (data, data->unitData[attacker].x, data->unitData[attacker].y);
 			
-			endDamage = roundf(((baseDamage / 100) + attackRandom) * (data->unitData[defender].health / 10) * ((100 - (defenseRating * data->unitData[attacker].health)) / 100) * 10) / 10;
+			endDamage = roundf(((baseDamage + attackRandom) / 100.0) * (data->unitData[defender].health / 10.0) * ((100.0 - (defenseRating * data->unitData[attacker].health)) / 100.0) * 100.0) / 10.0;
+	
+			//printf("((%d + %d) / 100) * (%g / 10) * ((100 - (%d * %g)) / 100) = %g\n", baseDamage, attackRandom, data->unitData[defender].health, defenseRating, data->unitData[attacker].health, endDamage);
+			
 			data->unitData[attacker].health -= endDamage;
 			
 			drawBattleResult(data, defender, attacker, endDamage, 1);
