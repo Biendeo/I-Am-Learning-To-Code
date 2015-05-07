@@ -159,6 +159,7 @@ char unitMovementGetter(game *data, short unitPos);
 char unitMovementTypeGetter(game *data, short unitPos);
 char unitAmmoGetter (game *data, short unitPos, char weapon);
 char unitFuelGetter (game *data, short unitPos);
+char unitVisionGetter (game *data, short unitPos);
 char tileMovementGetter (game *data, short x, short y, char movementType);
 char tileDefenseGetter (game *data, short x, short y);
 unsigned char baseDamageGetter (game *data, short attacker, short defender, char weapon);

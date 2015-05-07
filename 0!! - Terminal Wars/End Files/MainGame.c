@@ -427,8 +427,7 @@ void createUnit (game *data, short x, short y, char unitType, char player) {
 	data->unitData[unitPos].maxFuel = unitFuelGetter(data, unitPos);
 	data->unitData[unitPos].movement = unitMovementGetter(data, unitPos);
 	data->unitData[unitPos].maxMovement = unitMovementGetter(data, unitPos);
-	data->unitData[unitPos].vision = 10;
-	// This won't be used, but if it is, tie it to unitVisionGetter.
+	data->unitData[unitPos].vision = unitVisionGetter(data, unitPos);
 	data->unitData[unitPos].health = 10;
 	data->unitData[unitPos].finished = YES;
 	data->unitData[unitPos].x = x;
@@ -844,6 +843,60 @@ char unitFuelGetter (game *data, short unitPos) {
 	}
 	
 	return unitFuel;
+}
+
+/// This function gets a unit's vision.
+char unitVisionGetter (game *data, short unitPos) {
+	char unitVision = 0;
+	char unitType = data->unitData[unitPos].unitType;
+	
+	if (unitType == INFANTRY) {
+		unitVision = VISION_INFANTRY;
+	} else if (unitType == MECH) {
+		unitVision = VISION_MECH;
+	} else if (unitType == RECON) {
+		unitVision = VISION_RECON;
+	} else if (unitType == TANK) {
+		unitVision = VISION_TANK;
+	} else if (unitType == MD_TANK) {
+		unitVision = VISION_MD_TANK;
+	} else if (unitType == NEOTANK) {
+		unitVision = VISION_NEOTANK;
+	} else if (unitType == MEGATANK) {
+		unitVision = VISION_MEGATANK;
+	} else if (unitType == APC) {
+		unitVision = VISION_APC;
+	} else if (unitType == ARTILLERY) {
+		unitVision = VISION_ARTILLERY;
+	} else if (unitType == ROCKETS) {
+		unitVision = VISION_ROCKETS;
+	} else if (unitType == ANTI_AIR) {
+		unitVision = VISION_ANTI_AIR;
+	} else if (unitType == MISSILES) {
+		unitVision = VISION_MISSILES;
+	} else if (unitType == BATT_COP) {
+		unitVision = VISION_BATT_COP;
+	} else if (unitType == TRAN_COP) {
+		unitVision = VISION_TRAN_COP;
+	} else if (unitType == FIGHTER) {
+		unitVision = VISION_FIGHTER;
+	} else if (unitType == BOMBER) {
+		unitVision = VISION_BOMBER;
+	} else if (unitType == STEALTH) {
+		unitVision = VISION_STEALTH;
+	} else if (unitType == LANDER) {
+		unitVision = VISION_LANDER;
+	} else if (unitType == CRUISER) {
+		unitVision = VISION_CRUISER;
+	} else if (unitType == SUB) {
+		unitVision = VISION_SUB;
+	} else if (unitType == BATT_SHIP) {
+		unitVision = VISION_BATT_SHIP;
+	} else if (unitType == CARRIER) {
+		unitVision = VISION_CARRIER;
+	}
+	
+	return unitVision;
 }
 
 /// This function gets the movement cost for a certain tile based on
