@@ -419,22 +419,17 @@ void createUnit (game *data, short x, short y, char unitType, char player) {
 	/// Then we add the data we need.
 	data->unitData[unitPos].unitType = unitType;
 	data->unitData[unitPos].player = player;
-	// Implement unitAmmoGetter into this.
-	data->unitData[unitPos].ammo1 = 10;
-	data->unitData[unitPos].ammo2 = 10;
-	data->unitData[unitPos].maxAmmo1 = 10;
-	data->unitData[unitPos].maxAmmo2 = 10;
-	// Implement unitFuelGetter into this
-	data->unitData[unitPos].fuel = 50;
-	data->unitData[unitPos].maxFuel = 50;
-	// When turns are implemented, change this to 0.
-	data->unitData[unitPos].movement = 8;
-	// Implement unitMovementGetter into this.
-	data->unitData[unitPos].maxMovement = 8;
+	data->unitData[unitPos].ammo1 = unitAmmoGetter(data, unitPos, PRIMARY);
+	data->unitData[unitPos].ammo2 =  unitAmmoGetter(data, unitPos, SECONDARY);
+	data->unitData[unitPos].maxAmmo1 =  unitAmmoGetter(data, unitPos, PRIMARY);
+	data->unitData[unitPos].maxAmmo2 =  unitAmmoGetter(data, unitPos, SECONDARY);
+	data->unitData[unitPos].fuel = unitFuelGetter(data, unitPos);
+	data->unitData[unitPos].maxFuel = unitFuelGetter(data, unitPos);
+	data->unitData[unitPos].movement = unitMovementGetter(data, unitPos);
+	data->unitData[unitPos].maxMovement = unitMovementGetter(data, unitPos);
 	data->unitData[unitPos].vision = 10;
 	// This won't be used, but if it is, tie it to unitVisionGetter.
 	data->unitData[unitPos].health = 10;
-	// When turns are implemented, change this to YES.
 	data->unitData[unitPos].finished = YES;
 	data->unitData[unitPos].x = x;
 	data->unitData[unitPos].y = y;
@@ -595,7 +590,53 @@ short unitGetter (game *data, short x, short y) {
 /// This function gets a unit's max movement per turn.
 char unitMovementGetter(game *data, short unitPos) {
 	char unitMovement = 0;
+	char unitType = data->unitData[unitPos].unitType;
 	
+	if (unitType == INFANTRY) {
+		unitMovement = MOVESPEED_INFANTRY;
+	} else if (unitType == MECH) {
+		unitMovement = MOVESPEED_MECH;
+	} else if (unitType == RECON) {
+		unitMovement = MOVESPEED_RECON;
+	} else if (unitType == TANK) {
+		unitMovement = MOVESPEED_TANK;
+	} else if (unitType == MD_TANK) {
+		unitMovement = MOVESPEED_MD_TANK;
+	} else if (unitType == NEOTANK) {
+		unitMovement = MOVESPEED_NEOTANK;
+	} else if (unitType == MEGATANK) {
+		unitMovement = MOVESPEED_MEGATANK;
+	} else if (unitType == APC) {
+		unitMovement = MOVESPEED_APC;
+	} else if (unitType == ARTILLERY) {
+		unitMovement = MOVESPEED_ARTILLERY;
+	} else if (unitType == ROCKETS) {
+		unitMovement = MOVESPEED_ROCKETS;
+	} else if (unitType == ANTI_AIR) {
+		unitMovement = MOVESPEED_ANTI_AIR;
+	} else if (unitType == MISSILES) {
+		unitMovement = MOVESPEED_MISSILES;
+	} else if (unitType == BATT_COP) {
+		unitMovement = MOVESPEED_BATT_COP;
+	} else if (unitType == TRAN_COP) {
+		unitMovement = MOVESPEED_TRAN_COP;
+	} else if (unitType == FIGHTER) {
+		unitMovement = MOVESPEED_FIGHTER;
+	} else if (unitType == BOMBER) {
+		unitMovement = MOVESPEED_BOMBER;
+	} else if (unitType == STEALTH) {
+		unitMovement = MOVESPEED_STEALTH;
+	} else if (unitType == LANDER) {
+		unitMovement = MOVESPEED_LANDER;
+	} else if (unitType == CRUISER) {
+		unitMovement = MOVESPEED_CRUISER;
+	} else if (unitType == SUB) {
+		unitMovement = MOVESPEED_SUB;
+	} else if (unitType == BATT_SHIP) {
+		unitMovement = MOVESPEED_BATT_SHIP;
+	} else if (unitType == CARRIER) {
+		unitMovement = MOVESPEED_CARRIER;
+	}
 	return unitMovement;
 }
 
@@ -653,13 +694,154 @@ char unitMovementTypeGetter(game *data, short unitPos) {
 /// This function gets a unit's max ammo for a specific weapon.
 char unitAmmoGetter (game *data, short unitPos, char weapon) {
 	char unitAmmo = 0;
+	char unitType = data->unitData[unitPos].unitType;
 	
+	if (weapon == PRIMARY) {
+		if (unitType == INFANTRY) {
+			unitAmmo = MAXAMMO_INFANTRY_1;
+		} else if (unitType == MECH) {
+			unitAmmo = MAXAMMO_MECH_1;
+		} else if (unitType == RECON) {
+			unitAmmo = MAXAMMO_RECON_1;
+		} else if (unitType == TANK) {
+			unitAmmo = MAXAMMO_TANK_1;
+		} else if (unitType == MD_TANK) {
+			unitAmmo = MAXAMMO_MD_TANK_1;
+		} else if (unitType == NEOTANK) {
+			unitAmmo = MAXAMMO_NEOTANK_1;
+		} else if (unitType == MEGATANK) {
+			unitAmmo = MAXAMMO_MEGATANK_1;
+		} else if (unitType == APC) {
+			unitAmmo = MAXAMMO_APC_1;
+		} else if (unitType == ARTILLERY) {
+			unitAmmo = MAXAMMO_ARTILLERY_1;
+		} else if (unitType == ROCKETS) {
+			unitAmmo = MAXAMMO_ROCKETS_1;
+		} else if (unitType == ANTI_AIR) {
+			unitAmmo = MAXAMMO_ANTI_AIR_1;
+		} else if (unitType == MISSILES) {
+			unitAmmo = MAXAMMO_MISSILES_1;
+		} else if (unitType == BATT_COP) {
+			unitAmmo = MAXAMMO_BATT_COP_1;
+		} else if (unitType == TRAN_COP) {
+			unitAmmo = MAXAMMO_TRAN_COP_1;
+		} else if (unitType == FIGHTER) {
+			unitAmmo = MAXAMMO_FIGHTER_1;
+		} else if (unitType == BOMBER) {
+			unitAmmo = MAXAMMO_BOMBER_1;
+		} else if (unitType == STEALTH) {
+			unitAmmo = MAXAMMO_STEALTH_1;
+		} else if (unitType == LANDER) {
+			unitAmmo = MAXAMMO_LANDER_1;
+		} else if (unitType == CRUISER) {
+			unitAmmo = MAXAMMO_CRUISER_1;
+		} else if (unitType == SUB) {
+			unitAmmo = MAXAMMO_SUB_1;
+		} else if (unitType == BATT_SHIP) {
+			unitAmmo = MAXAMMO_BATT_SHIP_1;
+		} else if (unitType == CARRIER) {
+			unitAmmo = MAXAMMO_CARRIER_1;
+		}
+	} else if (weapon == SECONDARY) {
+		if (unitType == INFANTRY) {
+			unitAmmo = MAXAMMO_INFANTRY_2;
+		} else if (unitType == MECH) {
+			unitAmmo = MAXAMMO_MECH_2;
+		} else if (unitType == RECON) {
+			unitAmmo = MAXAMMO_RECON_2;
+		} else if (unitType == TANK) {
+			unitAmmo = MAXAMMO_TANK_2;
+		} else if (unitType == MD_TANK) {
+			unitAmmo = MAXAMMO_MD_TANK_2;
+		} else if (unitType == NEOTANK) {
+			unitAmmo = MAXAMMO_NEOTANK_2;
+		} else if (unitType == MEGATANK) {
+			unitAmmo = MAXAMMO_MEGATANK_2;
+		} else if (unitType == APC) {
+			unitAmmo = MAXAMMO_APC_2;
+		} else if (unitType == ARTILLERY) {
+			unitAmmo = MAXAMMO_ARTILLERY_2;
+		} else if (unitType == ROCKETS) {
+			unitAmmo = MAXAMMO_ROCKETS_2;
+		} else if (unitType == ANTI_AIR) {
+			unitAmmo = MAXAMMO_ANTI_AIR_2;
+		} else if (unitType == MISSILES) {
+			unitAmmo = MAXAMMO_MISSILES_2;
+		} else if (unitType == BATT_COP) {
+			unitAmmo = MAXAMMO_BATT_COP_2;
+		} else if (unitType == TRAN_COP) {
+			unitAmmo = MAXAMMO_TRAN_COP_2;
+		} else if (unitType == FIGHTER) {
+			unitAmmo = MAXAMMO_FIGHTER_2;
+		} else if (unitType == BOMBER) {
+			unitAmmo = MAXAMMO_BOMBER_2;
+		} else if (unitType == STEALTH) {
+			unitAmmo = MAXAMMO_STEALTH_2;
+		} else if (unitType == LANDER) {
+			unitAmmo = MAXAMMO_LANDER_2;
+		} else if (unitType == CRUISER) {
+			unitAmmo = MAXAMMO_CRUISER_2;
+		} else if (unitType == SUB) {
+			unitAmmo = MAXAMMO_SUB_2;
+		} else if (unitType == BATT_SHIP) {
+			unitAmmo = MAXAMMO_BATT_SHIP_2;
+		} else if (unitType == CARRIER) {
+			unitAmmo = MAXAMMO_CARRIER_2;
+		}
+	}
 	return unitAmmo;
 }
 
 /// This function gets a unit's max fuel capacity.
 char unitFuelGetter (game *data, short unitPos) {
 	char unitFuel = 0;
+	char unitType = data->unitData[unitPos].unitType;
+	
+	if (unitType == INFANTRY) {
+		unitFuel = MAXFUEL_INFANTRY;
+	} else if (unitType == MECH) {
+		unitFuel = MAXFUEL_MECH;
+	} else if (unitType == RECON) {
+		unitFuel = MAXFUEL_RECON;
+	} else if (unitType == TANK) {
+		unitFuel = MAXFUEL_TANK;
+	} else if (unitType == MD_TANK) {
+		unitFuel = MAXFUEL_MD_TANK;
+	} else if (unitType == NEOTANK) {
+		unitFuel = MAXFUEL_NEOTANK;
+	} else if (unitType == MEGATANK) {
+		unitFuel = MAXFUEL_MEGATANK;
+	} else if (unitType == APC) {
+		unitFuel = MAXFUEL_APC;
+	} else if (unitType == ARTILLERY) {
+		unitFuel = MAXFUEL_ARTILLERY;
+	} else if (unitType == ROCKETS) {
+		unitFuel = MAXFUEL_ROCKETS;
+	} else if (unitType == ANTI_AIR) {
+		unitFuel = MAXFUEL_ANTI_AIR;
+	} else if (unitType == MISSILES) {
+		unitFuel = MAXFUEL_MISSILES;
+	} else if (unitType == BATT_COP) {
+		unitFuel = MAXFUEL_BATT_COP;
+	} else if (unitType == TRAN_COP) {
+		unitFuel = MAXFUEL_TRAN_COP;
+	} else if (unitType == FIGHTER) {
+		unitFuel = MAXFUEL_FIGHTER;
+	} else if (unitType == BOMBER) {
+		unitFuel = MAXFUEL_BOMBER;
+	} else if (unitType == STEALTH) {
+		unitFuel = MAXFUEL_STEALTH;
+	} else if (unitType == LANDER) {
+		unitFuel = MAXFUEL_LANDER;
+	} else if (unitType == CRUISER) {
+		unitFuel = MAXFUEL_CRUISER;
+	} else if (unitType == SUB) {
+		unitFuel = MAXFUEL_SUB;
+	} else if (unitType == BATT_SHIP) {
+		unitFuel = MAXFUEL_BATT_SHIP;
+	} else if (unitType == CARRIER) {
+		unitFuel = MAXFUEL_CARRIER;
+	}
 	
 	return unitFuel;
 }

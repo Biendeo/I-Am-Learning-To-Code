@@ -505,7 +505,7 @@ void drawAttackUI (game *data, short attacker, short x, short y) {
 	}
 	
 	if (data->unitData[attacker].ammo2 == -1) {
-		printf("Ammo2: Infinite   ");
+		printf("Ammo2: Infinite");
 	} else if (data->unitData[attacker].maxAmmo2 == 0) {
 		// Nothing
 	} else {
@@ -516,9 +516,10 @@ void drawAttackUI (game *data, short attacker, short x, short y) {
 			setColor(YELLOW);
 		} else if (((float)data->unitData[attacker].ammo2 / data->unitData[attacker].maxAmmo2) > 0.6) {
 			setColor(GREEN);
-		}	printf("%d/%d\n", data->unitData[attacker].ammo2, data->unitData[attacker].maxAmmo2);
+		}	printf("%d/%d", data->unitData[attacker].ammo2, data->unitData[attacker].maxAmmo2);
 		setColor(GREY);
 	}
+	printf("\n");
 
 	printf("Defender: ");
 	if (defender == MAX_UNITS) {
@@ -566,7 +567,7 @@ void drawAttackUI (game *data, short attacker, short x, short y) {
 		}
 		
 		if (data->unitData[defender].ammo2 == -1) {
-			printf("Ammo2: Infinite   ");
+			printf("Ammo2: Infinite");
 		} else if (data->unitData[defender].maxAmmo2 == 0) {
 			// Nothing
 		} else {
@@ -577,9 +578,10 @@ void drawAttackUI (game *data, short attacker, short x, short y) {
 				setColor(YELLOW);
 			} else if (((float)data->unitData[defender].ammo2 / data->unitData[defender].maxAmmo2) > 0.6) {
 				setColor(GREEN);
-			}	printf("%d/%d\n", data->unitData[defender].ammo2, data->unitData[defender].maxAmmo2);
+			}	printf("%d/%d", data->unitData[defender].ammo2, data->unitData[defender].maxAmmo2);
 			setColor(GREY);
 		}
+		printf("\n");
 		
 		printf("Base damage: ");
 		if (validAttackChecker(data, attacker, defender) == NO) {
