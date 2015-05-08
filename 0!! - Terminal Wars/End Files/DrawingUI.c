@@ -455,6 +455,7 @@ void drawAttackUI (game *data, short attacker, short x, short y) {
 	// (but it's ever so slightly different from the unit UI one).
 	short defender = unitGetter(data, data->cursor.x, data->cursor.y);
 	char baseDamage = 0;
+	printf("%d\n", whichWeapon(data, attacker, defender));
 	if (whichWeapon(data, attacker, defender) == PRIMARY) {
 		baseDamage = baseDamageGetter(data, attacker, defender, PRIMARY);
 	} else if (whichWeapon(data, attacker, defender) == SECONDARY) {

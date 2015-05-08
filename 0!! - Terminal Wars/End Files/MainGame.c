@@ -178,7 +178,7 @@ void initialiseGame (game *data) {
 	createUnit(data, 4, 3, INFANTRY, TEAM_RED);
 	createUnit(data, 8, 6, MECH, TEAM_RED);
 	createUnit(data, 5, 3, ARTILLERY, TEAM_BLUE);
-	createUnit(data, 13, 10, MEGATANK, TEAM_BLUE);
+	createUnit(data, 9, 6, MEGATANK, TEAM_BLUE);
 	createUnit(data, 11, 3, TANK, TEAM_BLUE);
 	createUnit(data, 1, 10, MECH, TEAM_GREEN);
 	createUnit(data, 12, 6, APC, TEAM_YELLOW);
@@ -347,7 +347,7 @@ void attackUnit (game *data, short attacker, short defender) {
 	float endDamage;
 	endDamage = roundf(((baseDamage + attackRandom) / 100.0) * (data->unitData[attacker].health / 10.0) * ((100.0 - (defenseRating * data->unitData[defender].health)) / 100.0) * 100.0) / 10.0;
 	
-	//printf("((%d + %d) / 100) * (%g / 10) * ((100 - (%d * %g)) / 100) = %g\n", baseDamage, attackRandom, data->unitData[attacker].health, defenseRating, data->unitData[defender].health, endDamage);
+	printf("((%d + %d) / 100) * (%g / 10) * ((100 - (%d * %g)) / 100) = %g\n", baseDamage, attackRandom, data->unitData[attacker].health, defenseRating, data->unitData[defender].health, endDamage);
 	
 	/// The end health is applied, and the value is rounded (as health
 	/// is only one decimal place).
@@ -379,7 +379,7 @@ void attackUnit (game *data, short attacker, short defender) {
 			
 			endDamage = roundf(((baseDamage + attackRandom) / 100.0) * (data->unitData[defender].health / 10.0) * ((100.0 - (defenseRating * data->unitData[attacker].health)) / 100.0) * 100.0) / 10.0;
 	
-			//printf("((%d + %d) / 100) * (%g / 10) * ((100 - (%d * %g)) / 100) = %g\n", baseDamage, attackRandom, data->unitData[defender].health, defenseRating, data->unitData[attacker].health, endDamage);
+			printf("((%d + %d) / 100) * (%g / 10) * ((100 - (%d * %g)) / 100) = %g\n", baseDamage, attackRandom, data->unitData[defender].health, defenseRating, data->unitData[attacker].health, endDamage);
 			
 			data->unitData[attacker].health -= endDamage;
 			
@@ -1181,8 +1181,1119 @@ char tileDefenseGetter (game *data, short x, short y) {
 
 /// This function gets the base damage a unit has against another unit.
 unsigned char baseDamageGetter (game *data, short attacker, short defender, char weapon) {
-	// Set this to 0 when the whole function is written.
-	unsigned char baseDamage = 50;
+	unsigned char baseDamage = 0;
+	char unitTypeAttacker = data->unitData[attacker].unitType;
+	char unitTypeDefender = data->unitData[defender].unitType;
+	
+	if (weapon == PRIMARY) {
+		if (unitTypeAttacker == INFANTRY) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_INFANTRY_INFANTRY;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_INFANTRY_MECH;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_INFANTRY_RECON;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_INFANTRY_TANK;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_INFANTRY_MD_TANK;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_INFANTRY_NEOTANK;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_INFANTRY_MEGATANK;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_INFANTRY_APC;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_INFANTRY_ARTILLERY;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_INFANTRY_ROCKETS;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_INFANTRY_ANTI_AIR;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_INFANTRY_MISSILES;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_INFANTRY_BATT_COP;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_INFANTRY_TRAN_COP;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_INFANTRY_FIGHTER;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_INFANTRY_BOMBER;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_INFANTRY_STEALTH;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_INFANTRY_LANDER;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_INFANTRY_CRUISER;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_INFANTRY_SUB;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_INFANTRY_BATT_SHIP;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_INFANTRY_CARRIER;
+			}
+		} else if (unitTypeAttacker == MECH) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_MECH_INFANTRY_1;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_MECH_MECH_1;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_MECH_RECON_1;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_MECH_TANK_1;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_MECH_MD_TANK_1;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_MECH_NEOTANK_1;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_MECH_MEGATANK_1;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_MECH_APC_1;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_MECH_ARTILLERY_1;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_MECH_ROCKETS_1;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_MECH_ANTI_AIR_1;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_MECH_MISSILES_1;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_MECH_BATT_COP_1;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_MECH_TRAN_COP_1;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_MECH_FIGHTER_1;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_MECH_BOMBER_1;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_MECH_STEALTH_1;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_MECH_LANDER_1;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_MECH_CRUISER_1;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_MECH_SUB_1;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_MECH_BATT_SHIP_1;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_MECH_CARRIER_1;
+			}
+		} else if (unitTypeAttacker == RECON) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_RECON_INFANTRY;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_RECON_MECH;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_RECON_RECON;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_RECON_TANK;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_RECON_MD_TANK;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_RECON_NEOTANK;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_RECON_MEGATANK;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_RECON_APC;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_RECON_ARTILLERY;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_RECON_ROCKETS;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_RECON_ANTI_AIR;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_RECON_MISSILES;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_RECON_BATT_COP;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_RECON_TRAN_COP;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_RECON_FIGHTER;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_RECON_BOMBER;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_RECON_STEALTH;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_RECON_LANDER;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_RECON_CRUISER;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_RECON_SUB;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_RECON_BATT_SHIP;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_RECON_CARRIER;
+			}
+		} else if (unitTypeAttacker == TANK) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_TANK_INFANTRY_1;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_TANK_MECH_1;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_TANK_RECON_1;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_TANK_TANK_1;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_TANK_MD_TANK_1;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_TANK_NEOTANK_1;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_TANK_MEGATANK_1;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_TANK_APC_1;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_TANK_ARTILLERY_1;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_TANK_ROCKETS_1;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_TANK_ANTI_AIR_1;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_TANK_MISSILES_1;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_TANK_BATT_COP_1;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_TANK_TRAN_COP_1;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_TANK_FIGHTER_1;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_TANK_BOMBER_1;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_TANK_STEALTH_1;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_TANK_LANDER_1;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_TANK_CRUISER_1;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_TANK_SUB_1;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_TANK_BATT_SHIP_1;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_TANK_CARRIER_1;
+			}
+		} else if (unitTypeAttacker == MD_TANK) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_MD_TANK_INFANTRY_1;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_MD_TANK_MECH_1;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_MD_TANK_RECON_1;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_MD_TANK_TANK_1;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_MD_TANK_MD_TANK_1;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_MD_TANK_NEOTANK_1;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_MD_TANK_MEGATANK_1;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_MD_TANK_APC_1;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_MD_TANK_ARTILLERY_1;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_MD_TANK_ROCKETS_1;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_MD_TANK_ANTI_AIR_1;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_MD_TANK_MISSILES_1;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_MD_TANK_BATT_COP_1;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_MD_TANK_TRAN_COP_1;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_MD_TANK_FIGHTER_1;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_MD_TANK_BOMBER_1;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_MD_TANK_STEALTH_1;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_MD_TANK_LANDER_1;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_MD_TANK_CRUISER_1;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_MD_TANK_SUB_1;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_MD_TANK_BATT_SHIP_1;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_MD_TANK_CARRIER_1;
+			}
+		} else if (unitTypeAttacker == NEOTANK) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_NEOTANK_INFANTRY_1;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_NEOTANK_MECH_1;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_NEOTANK_RECON_1;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_NEOTANK_TANK_1;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_NEOTANK_MD_TANK_1;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_NEOTANK_NEOTANK_1;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_NEOTANK_MEGATANK_1;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_NEOTANK_APC_1;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_NEOTANK_ARTILLERY_1;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_NEOTANK_ROCKETS_1;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_NEOTANK_ANTI_AIR_1;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_NEOTANK_MISSILES_1;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_NEOTANK_BATT_COP_1;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_NEOTANK_TRAN_COP_1;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_NEOTANK_FIGHTER_1;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_NEOTANK_BOMBER_1;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_NEOTANK_STEALTH_1;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_NEOTANK_LANDER_1;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_NEOTANK_CRUISER_1;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_NEOTANK_SUB_1;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_NEOTANK_BATT_SHIP_1;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_NEOTANK_CARRIER_1;
+			}
+		} else if (unitTypeAttacker == MEGATANK) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_MEGATANK_INFANTRY_1;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_MEGATANK_MECH_1;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_MEGATANK_RECON_1;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_MEGATANK_TANK_1;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_MEGATANK_MD_TANK_1;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_MEGATANK_NEOTANK_1;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_MEGATANK_MEGATANK_1;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_MEGATANK_APC_1;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_MEGATANK_ARTILLERY_1;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_MEGATANK_ROCKETS_1;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_MEGATANK_ANTI_AIR_1;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_MEGATANK_MISSILES_1;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_MEGATANK_BATT_COP_1;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_MEGATANK_TRAN_COP_1;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_MEGATANK_FIGHTER_1;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_MEGATANK_BOMBER_1;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_MEGATANK_STEALTH_1;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_MEGATANK_LANDER_1;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_MEGATANK_CRUISER_1;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_MEGATANK_SUB_1;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_MEGATANK_BATT_SHIP_1;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_MEGATANK_CARRIER_1;
+			}
+		} else if (unitTypeAttacker == ARTILLERY) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_ARTILLERY_INFANTRY;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_ARTILLERY_MECH;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_ARTILLERY_RECON;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_ARTILLERY_TANK;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_ARTILLERY_MD_TANK;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_ARTILLERY_NEOTANK;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_ARTILLERY_MEGATANK;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_ARTILLERY_APC;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_ARTILLERY_ARTILLERY;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_ARTILLERY_ROCKETS;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_ARTILLERY_ANTI_AIR;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_ARTILLERY_MISSILES;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_ARTILLERY_BATT_COP;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_ARTILLERY_TRAN_COP;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_ARTILLERY_FIGHTER;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_ARTILLERY_BOMBER;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_ARTILLERY_STEALTH;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_ARTILLERY_LANDER;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_ARTILLERY_CRUISER;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_ARTILLERY_SUB;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_ARTILLERY_BATT_SHIP;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_ARTILLERY_CARRIER;
+			}
+		} else if (unitTypeAttacker == ROCKETS) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_ROCKETS_INFANTRY;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_ROCKETS_MECH;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_ROCKETS_RECON;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_ROCKETS_TANK;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_ROCKETS_MD_TANK;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_ROCKETS_NEOTANK;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_ROCKETS_MEGATANK;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_ROCKETS_APC;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_ROCKETS_ARTILLERY;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_ROCKETS_ROCKETS;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_ROCKETS_ANTI_AIR;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_ROCKETS_MISSILES;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_ROCKETS_BATT_COP;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_ROCKETS_TRAN_COP;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_ROCKETS_FIGHTER;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_ROCKETS_BOMBER;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_ROCKETS_STEALTH;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_ROCKETS_LANDER;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_ROCKETS_CRUISER;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_ROCKETS_SUB;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_ROCKETS_BATT_SHIP;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_ROCKETS_CARRIER;
+			}
+		} else if (unitTypeAttacker == ANTI_AIR) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_ANTI_AIR_INFANTRY;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_ANTI_AIR_MECH;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_ANTI_AIR_RECON;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_ANTI_AIR_TANK;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_ANTI_AIR_MD_TANK;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_ANTI_AIR_NEOTANK;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_ANTI_AIR_MEGATANK;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_ANTI_AIR_APC;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_ANTI_AIR_ARTILLERY;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_ANTI_AIR_ROCKETS;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_ANTI_AIR_ANTI_AIR;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_ANTI_AIR_MISSILES;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_ANTI_AIR_BATT_COP;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_ANTI_AIR_TRAN_COP;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_ANTI_AIR_FIGHTER;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_ANTI_AIR_BOMBER;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_ANTI_AIR_STEALTH;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_ANTI_AIR_LANDER;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_ANTI_AIR_CRUISER;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_ANTI_AIR_SUB;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_ANTI_AIR_BATT_SHIP;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_ANTI_AIR_CARRIER;
+			}
+		} else if (unitTypeAttacker == MISSILES) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_MISSILES_INFANTRY;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_MISSILES_MECH;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_MISSILES_RECON;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_MISSILES_TANK;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_MISSILES_MD_TANK;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_MISSILES_NEOTANK;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_MISSILES_MEGATANK;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_MISSILES_APC;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_MISSILES_ARTILLERY;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_MISSILES_ROCKETS;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_MISSILES_ANTI_AIR;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_MISSILES_MISSILES;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_MISSILES_BATT_COP;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_MISSILES_TRAN_COP;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_MISSILES_FIGHTER;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_MISSILES_BOMBER;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_MISSILES_STEALTH;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_MISSILES_LANDER;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_MISSILES_CRUISER;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_MISSILES_SUB;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_MISSILES_BATT_SHIP;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_MISSILES_CARRIER;
+			}
+		} else if (unitTypeAttacker == BATT_COP) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_BATT_COP_INFANTRY;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_BATT_COP_MECH;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_BATT_COP_RECON;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_BATT_COP_TANK;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_BATT_COP_MD_TANK;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_BATT_COP_NEOTANK;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_BATT_COP_MEGATANK;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_BATT_COP_APC;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_BATT_COP_ARTILLERY;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_BATT_COP_ROCKETS;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_BATT_COP_ANTI_AIR;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_BATT_COP_MISSILES;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_BATT_COP_BATT_COP;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_BATT_COP_TRAN_COP;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_BATT_COP_FIGHTER;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_BATT_COP_BOMBER;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_BATT_COP_STEALTH;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_BATT_COP_LANDER;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_BATT_COP_CRUISER;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_BATT_COP_SUB;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_BATT_COP_BATT_SHIP;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_BATT_COP_CARRIER;
+			}
+		} else if (unitTypeAttacker == FIGHTER) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_FIGHTER_INFANTRY;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_FIGHTER_MECH;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_FIGHTER_RECON;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_FIGHTER_TANK;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_FIGHTER_MD_TANK;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_FIGHTER_NEOTANK;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_FIGHTER_MEGATANK;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_FIGHTER_APC;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_FIGHTER_ARTILLERY;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_FIGHTER_ROCKETS;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_FIGHTER_ANTI_AIR;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_FIGHTER_MISSILES;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_FIGHTER_BATT_COP;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_FIGHTER_TRAN_COP;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_FIGHTER_FIGHTER;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_FIGHTER_BOMBER;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_FIGHTER_STEALTH;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_FIGHTER_LANDER;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_FIGHTER_CRUISER;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_FIGHTER_SUB;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_FIGHTER_BATT_SHIP;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_FIGHTER_CARRIER;
+			}
+		} else if (unitTypeAttacker == BOMBER) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_BOMBER_INFANTRY;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_BOMBER_MECH;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_BOMBER_RECON;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_BOMBER_TANK;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_BOMBER_MD_TANK;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_BOMBER_NEOTANK;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_BOMBER_MEGATANK;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_BOMBER_APC;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_BOMBER_ARTILLERY;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_BOMBER_ROCKETS;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_BOMBER_ANTI_AIR;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_BOMBER_MISSILES;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_BOMBER_BATT_COP;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_BOMBER_TRAN_COP;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_BOMBER_FIGHTER;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_BOMBER_BOMBER;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_BOMBER_STEALTH;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_BOMBER_LANDER;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_BOMBER_CRUISER;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_BOMBER_SUB;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_BOMBER_BATT_SHIP;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_BOMBER_CARRIER;
+			}
+		} else if (unitTypeAttacker == STEALTH) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_STEALTH_INFANTRY;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_STEALTH_MECH;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_STEALTH_RECON;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_STEALTH_TANK;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_STEALTH_MD_TANK;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_STEALTH_NEOTANK;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_STEALTH_MEGATANK;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_STEALTH_APC;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_STEALTH_ARTILLERY;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_STEALTH_ROCKETS;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_STEALTH_ANTI_AIR;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_STEALTH_MISSILES;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_STEALTH_BATT_COP;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_STEALTH_TRAN_COP;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_STEALTH_FIGHTER;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_STEALTH_BOMBER;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_STEALTH_STEALTH;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_STEALTH_LANDER;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_STEALTH_CRUISER;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_STEALTH_SUB;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_STEALTH_BATT_SHIP;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_STEALTH_CARRIER;
+			}
+		} else if (unitTypeAttacker == CRUISER) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_CRUISER_INFANTRY;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_CRUISER_MECH;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_CRUISER_RECON;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_CRUISER_TANK;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_CRUISER_MD_TANK;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_CRUISER_NEOTANK;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_CRUISER_MEGATANK;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_CRUISER_APC;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_CRUISER_ARTILLERY;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_CRUISER_ROCKETS;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_CRUISER_ANTI_AIR;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_CRUISER_MISSILES;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_CRUISER_BATT_COP;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_CRUISER_TRAN_COP;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_CRUISER_FIGHTER;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_CRUISER_BOMBER;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_CRUISER_STEALTH;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_CRUISER_LANDER;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_CRUISER_CRUISER;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_CRUISER_SUB;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_CRUISER_BATT_SHIP;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_CRUISER_CARRIER;
+			}
+		} else if (unitTypeAttacker == SUB) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_SUB_INFANTRY;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_SUB_MECH;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_SUB_RECON;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_SUB_TANK;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_SUB_MD_TANK;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_SUB_NEOTANK;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_SUB_MEGATANK;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_SUB_APC;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_SUB_ARTILLERY;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_SUB_ROCKETS;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_SUB_ANTI_AIR;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_SUB_MISSILES;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_SUB_BATT_COP;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_SUB_TRAN_COP;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_SUB_FIGHTER;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_SUB_BOMBER;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_SUB_STEALTH;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_SUB_LANDER;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_SUB_CRUISER;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_SUB_SUB;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_SUB_BATT_SHIP;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_SUB_CARRIER;
+			}
+		} else if (unitTypeAttacker == BATT_SHIP) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_BATT_SHIP_INFANTRY;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_BATT_SHIP_MECH;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_BATT_SHIP_RECON;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_BATT_SHIP_TANK;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_BATT_SHIP_MD_TANK;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_BATT_SHIP_NEOTANK;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_BATT_SHIP_MEGATANK;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_BATT_SHIP_APC;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_BATT_SHIP_ARTILLERY;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_BATT_SHIP_ROCKETS;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_BATT_SHIP_ANTI_AIR;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_BATT_SHIP_MISSILES;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_BATT_SHIP_BATT_COP;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_BATT_SHIP_TRAN_COP;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_BATT_SHIP_FIGHTER;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_BATT_SHIP_BOMBER;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_BATT_SHIP_STEALTH;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_BATT_SHIP_LANDER;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_BATT_SHIP_CRUISER;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_BATT_SHIP_SUB;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_BATT_SHIP_BATT_SHIP;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_BATT_SHIP_CARRIER;
+			}
+		} else if (unitTypeAttacker == CARRIER) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_CARRIER_INFANTRY;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_CARRIER_MECH;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_CARRIER_RECON;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_CARRIER_TANK;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_CARRIER_MD_TANK;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_CARRIER_NEOTANK;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_CARRIER_MEGATANK;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_CARRIER_APC;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_CARRIER_ARTILLERY;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_CARRIER_ROCKETS;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_CARRIER_ANTI_AIR;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_CARRIER_MISSILES;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_CARRIER_BATT_COP;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_CARRIER_TRAN_COP;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_CARRIER_FIGHTER;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_CARRIER_BOMBER;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_CARRIER_STEALTH;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_CARRIER_LANDER;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_CARRIER_CRUISER;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_CARRIER_SUB;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_CARRIER_BATT_SHIP;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_CARRIER_CARRIER;
+			}
+		}
+	} else if (weapon == SECONDARY) {
+		if (unitTypeAttacker == MECH) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_MECH_INFANTRY_2;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_MECH_MECH_2;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_MECH_RECON_2;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_MECH_TANK_2;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_MECH_MD_TANK_2;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_MECH_NEOTANK_2;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_MECH_MEGATANK_2;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_MECH_APC_2;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_MECH_ARTILLERY_2;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_MECH_ROCKETS_2;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_MECH_ANTI_AIR_2;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_MECH_MISSILES_2;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_MECH_BATT_COP_2;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_MECH_TRAN_COP_2;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_MECH_FIGHTER_2;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_MECH_BOMBER_2;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_MECH_STEALTH_2;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_MECH_LANDER_2;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_MECH_CRUISER_2;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_MECH_SUB_2;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_MECH_BATT_SHIP_2;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_MECH_CARRIER_2;
+			}
+		} else if (unitTypeAttacker == TANK) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_TANK_INFANTRY_2;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_TANK_MECH_2;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_TANK_RECON_2;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_TANK_TANK_2;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_TANK_MD_TANK_2;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_TANK_NEOTANK_2;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_TANK_MEGATANK_2;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_TANK_APC_2;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_TANK_ARTILLERY_2;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_TANK_ROCKETS_2;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_TANK_ANTI_AIR_2;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_TANK_MISSILES_2;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_TANK_BATT_COP_2;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_TANK_TRAN_COP_2;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_TANK_FIGHTER_2;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_TANK_BOMBER_2;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_TANK_STEALTH_2;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_TANK_LANDER_2;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_TANK_CRUISER_2;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_TANK_SUB_2;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_TANK_BATT_SHIP_2;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_TANK_CARRIER_2;
+			}
+		} else if (unitTypeAttacker == MD_TANK) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_MD_TANK_INFANTRY_2;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_MD_TANK_MECH_2;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_MD_TANK_RECON_2;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_MD_TANK_TANK_2;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_MD_TANK_MD_TANK_2;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_MD_TANK_NEOTANK_2;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_MD_TANK_MEGATANK_2;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_MD_TANK_APC_2;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_MD_TANK_ARTILLERY_2;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_MD_TANK_ROCKETS_2;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_MD_TANK_ANTI_AIR_2;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_MD_TANK_MISSILES_2;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_MD_TANK_BATT_COP_2;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_MD_TANK_TRAN_COP_2;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_MD_TANK_FIGHTER_2;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_MD_TANK_BOMBER_2;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_MD_TANK_STEALTH_2;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_MD_TANK_LANDER_2;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_MD_TANK_CRUISER_2;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_MD_TANK_SUB_2;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_MD_TANK_BATT_SHIP_2;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_MD_TANK_CARRIER_2;
+			}
+		} else if (unitTypeAttacker == NEOTANK) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_NEOTANK_INFANTRY_2;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_NEOTANK_MECH_2;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_NEOTANK_RECON_2;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_NEOTANK_TANK_2;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_NEOTANK_MD_TANK_2;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_NEOTANK_NEOTANK_2;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_NEOTANK_MEGATANK_2;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_NEOTANK_APC_2;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_NEOTANK_ARTILLERY_2;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_NEOTANK_ROCKETS_2;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_NEOTANK_ANTI_AIR_2;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_NEOTANK_MISSILES_2;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_NEOTANK_BATT_COP_2;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_NEOTANK_TRAN_COP_2;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_NEOTANK_FIGHTER_2;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_NEOTANK_BOMBER_2;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_NEOTANK_STEALTH_2;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_NEOTANK_LANDER_2;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_NEOTANK_CRUISER_2;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_NEOTANK_SUB_2;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_NEOTANK_BATT_SHIP_2;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_NEOTANK_CARRIER_2;
+			}
+		} else if (unitTypeAttacker == MEGATANK) {
+			if (unitTypeDefender == INFANTRY) {
+				baseDamage = DAMAGE_MEGATANK_INFANTRY_2;
+			} else if (unitTypeDefender == MECH) {
+				baseDamage = DAMAGE_MEGATANK_MECH_2;
+			} else if (unitTypeDefender == RECON) {
+				baseDamage = DAMAGE_MEGATANK_RECON_2;
+			} else if (unitTypeDefender == TANK) {
+				baseDamage = DAMAGE_MEGATANK_TANK_2;
+			} else if (unitTypeDefender == MD_TANK) {
+				baseDamage = DAMAGE_MEGATANK_MD_TANK_2;
+			} else if (unitTypeDefender == NEOTANK) {
+				baseDamage = DAMAGE_MEGATANK_NEOTANK_2;
+			} else if (unitTypeDefender == MEGATANK) {
+				baseDamage = DAMAGE_MEGATANK_MEGATANK_2;
+			} else if (unitTypeDefender == APC) {
+				baseDamage = DAMAGE_MEGATANK_APC_2;
+			} else if (unitTypeDefender == ARTILLERY) {
+				baseDamage = DAMAGE_MEGATANK_ARTILLERY_2;
+			} else if (unitTypeDefender == ROCKETS) {
+				baseDamage = DAMAGE_MEGATANK_ROCKETS_2;
+			} else if (unitTypeDefender == ANTI_AIR) {
+				baseDamage = DAMAGE_MEGATANK_ANTI_AIR_2;
+			} else if (unitTypeDefender == MISSILES) {
+				baseDamage = DAMAGE_MEGATANK_MISSILES_2;
+			} else if (unitTypeDefender == BATT_COP) {
+				baseDamage = DAMAGE_MEGATANK_BATT_COP_2;
+			} else if (unitTypeDefender == TRAN_COP) {
+				baseDamage = DAMAGE_MEGATANK_TRAN_COP_2;
+			} else if (unitTypeDefender == FIGHTER) {
+				baseDamage = DAMAGE_MEGATANK_FIGHTER_2;
+			} else if (unitTypeDefender == BOMBER) {
+				baseDamage = DAMAGE_MEGATANK_BOMBER_2;
+			} else if (unitTypeDefender == STEALTH) {
+				baseDamage = DAMAGE_MEGATANK_STEALTH_2;
+			} else if (unitTypeDefender == LANDER) {
+				baseDamage = DAMAGE_MEGATANK_LANDER_2;
+			} else if (unitTypeDefender == CRUISER) {
+				baseDamage = DAMAGE_MEGATANK_CRUISER_2;
+			} else if (unitTypeDefender == SUB) {
+				baseDamage = DAMAGE_MEGATANK_SUB_2;
+			} else if (unitTypeDefender == BATT_SHIP) {
+				baseDamage = DAMAGE_MEGATANK_BATT_SHIP_2;
+			} else if (unitTypeDefender == CARRIER) {
+				baseDamage = DAMAGE_MEGATANK_CARRIER_2;
+			}
+		}
+	}
 	
 	return baseDamage;
 }
@@ -1302,10 +2413,12 @@ char maximumRangeGetter (game *data, short unitPos) {
 /// be damaged with that weapon.
 char whichWeapon (game *data, short attacker, short defender) {
 	/// This will only change if it CAN attack something.
-	// Change this back to NO when everything else is implemented.
-	char whichWeapon = PRIMARY;
-	
-	
+	char whichWeapon = NONE;
+	if ((baseDamageGetter(data, attacker, defender, PRIMARY) > 0) && ((data->unitData[attacker].ammo1 > 0) || (data->unitData[attacker].ammo1 == -1)) {
+		whichWeapon = PRIMARY;
+	} else if ((baseDamageGetter(data, attacker, defender, SECONDARY) > 0) && ((data->unitData[attacker].ammo2 > 0) || (data->unitData[attacker].ammo2 == -1))
+		whichWeapon = SECONDARY;
+	}
 	
 	return whichWeapon;
 }
