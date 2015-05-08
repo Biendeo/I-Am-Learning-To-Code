@@ -2414,9 +2414,9 @@ char maximumRangeGetter (game *data, short unitPos) {
 char whichWeapon (game *data, short attacker, short defender) {
 	/// This will only change if it CAN attack something.
 	char whichWeapon = NONE;
-	if ((baseDamageGetter(data, attacker, defender, PRIMARY) > 0) && ((data->unitData[attacker].ammo1 > 0) || (data->unitData[attacker].ammo1 == -1)) {
+	if ((baseDamageGetter(data, attacker, defender, PRIMARY) > 0) && ((data->unitData[attacker].ammo1 > 0) || (data->unitData[attacker].ammo1 == -1))) {
 		whichWeapon = PRIMARY;
-	} else if ((baseDamageGetter(data, attacker, defender, SECONDARY) > 0) && ((data->unitData[attacker].ammo2 > 0) || (data->unitData[attacker].ammo2 == -1))
+	} else if ((baseDamageGetter(data, attacker, defender, SECONDARY) > 0) && ((data->unitData[attacker].ammo2 > 0) || (data->unitData[attacker].ammo2 == -1))) {
 		whichWeapon = SECONDARY;
 	}
 	
