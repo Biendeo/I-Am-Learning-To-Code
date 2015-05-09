@@ -16,7 +16,7 @@ void screenSplash() {
 	printf("+------------------------------+\n");
 	printf("|                              |\n");
 	printf("|         ");
-	setColor(LIGHTBLUE);
+	setColor(LIGHTMAGENTA);
 	printf("TERMINAL WARS");
 	setColor(GREY);
 	printf("        |\n");
@@ -25,7 +25,7 @@ void screenSplash() {
 	printf("\n");
 	printf("An attempt to recreate the game Advance Wars in C.\n");
 	printf("\n");
-	printf("Version \"Stage 10\"\n\n");
+	printf("Version \"Stage 12\"\n\n");
 	
 	/// This tells the user if their screen is too small.
 	if (trows() < (MAP_HEIGHT + 10)) {
@@ -455,7 +455,6 @@ void drawAttackUI (game *data, short attacker, short x, short y) {
 	// (but it's ever so slightly different from the unit UI one).
 	short defender = unitGetter(data, data->cursor.x, data->cursor.y);
 	char baseDamage = 0;
-	printf("%d\n", whichWeapon(data, attacker, defender));
 	if (whichWeapon(data, attacker, defender) == PRIMARY) {
 		baseDamage = baseDamageGetter(data, attacker, defender, PRIMARY);
 	} else if (whichWeapon(data, attacker, defender) == SECONDARY) {
@@ -905,6 +904,9 @@ void testDrawing (game *data) {
 	/// This stores what unit is currently under the cursor.
 	short selectedUnit = MAX_UNITS;
 	
+	/// This is for storing the cursor position in buy menus.
+	short selection = 0;
+	
 	/// If the game is told to quit, then it exits this.
 	while (data->interfaceMode != INTERFACEMODE_QUIT) {
 		selectedUnit = unitGetter(data, data->cursor.x, data->cursor.y);
@@ -1000,6 +1002,461 @@ void testDrawing (game *data) {
 				data->interfaceMode = INTERFACEMODE_MAP;
 				data->attacker = MAX_UNITS;
 			}
+		} else if (data->interfaceMode == INTERFACEMODE_BUY_LAND) {
+			keyPress = 5001;
+			selection = 0;
+			while (keyPress != KEY_ESCAPE && keyPress != KEY_SPACE) {
+				mapDraw(data);
+				
+				if (selection == 0) {
+					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_INFANTRY)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_INFANTRY)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_INFANTRY)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_INFANTRY))) {
+						if (data->p1.money < COST_INFANTRY) {
+							setColor(BROWN);
+						}
+					} else {
+						setColor(YELLOW);
+					}
+				} else if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_INFANTRY)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_INFANTRY)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_INFANTRY)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_INFANTRY))) {
+					setColor(DARKGREY);
+				}
+				printf("INFANTRY        - $%d\n", COST_INFANTRY);
+				setColor(GREY);
+				if (selection == 1) {
+					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_MECH)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_MECH)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_MECH)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_MECH))) {
+						if (data->p1.money < COST_MECH) {
+							setColor(BROWN);
+						}
+					} else {
+						setColor(YELLOW);
+					}
+				} else if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_MECH)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_MECH)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_MECH)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_MECH))) {
+					setColor(DARKGREY);
+				}
+				printf("MECH            - $%d\n", COST_MECH);
+				setColor(GREY);
+				if (selection == 2) {
+					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_RECON)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_RECON)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_RECON)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_RECON))) {
+						if (data->p1.money < COST_RECON) {
+							setColor(BROWN);
+						}
+					} else {
+						setColor(YELLOW);
+					}
+				} else if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_RECON)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_RECON)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_RECON)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_RECON))) {
+					setColor(DARKGREY);
+				}
+				printf("RECON           - $%d\n", COST_RECON);
+				setColor(GREY);
+				if (selection == 3) {
+					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_TANK)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_TANK)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_TANK)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_TANK))) {
+						if (data->p1.money < COST_TANK) {
+							setColor(BROWN);
+						}
+					} else {
+						setColor(YELLOW);
+					}
+				} else if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_TANK)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_TANK)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_TANK)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_TANK))) {
+					setColor(DARKGREY);
+				}
+				printf("TANK            - $%d\n", COST_TANK);
+				setColor(GREY);
+				if (selection == 4) {
+					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_MD_TANK)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_MD_TANK)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_MD_TANK)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_MD_TANK))) {
+						if (data->p1.money < COST_MD_TANK) {
+							setColor(BROWN);
+						}
+					} else {
+						setColor(YELLOW);
+					}
+				} else if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_MD_TANK)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_MD_TANK)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_MD_TANK)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_MD_TANK))) {
+					setColor(DARKGREY);
+				}
+				printf("MEDIUM TANK     - $%d\n", COST_MD_TANK);
+				setColor(GREY);
+				if (selection == 5) {
+					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_NEOTANK)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_NEOTANK)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_NEOTANK)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_NEOTANK))) {
+						if (data->p1.money < COST_NEOTANK) {
+							setColor(BROWN);
+						}
+					} else {
+						setColor(YELLOW);
+					}
+				} else if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_NEOTANK)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_NEOTANK)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_NEOTANK)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_NEOTANK))) {
+					setColor(DARKGREY);
+				}
+				printf("NEOTANK         - $%d\n", COST_NEOTANK);
+				setColor(GREY);
+				if (selection == 6) {
+					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_MEGATANK)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_MEGATANK)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_MEGATANK)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_MEGATANK))) {
+						if (data->p1.money < COST_MEGATANK) {
+							setColor(BROWN);
+						}
+					} else {
+						setColor(YELLOW);
+					}
+				} else if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_MEGATANK)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_MEGATANK)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_MEGATANK)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_MEGATANK))) {
+					setColor(DARKGREY);
+				}
+				printf("MEGATANK        - $%d\n", COST_MEGATANK);
+				setColor(GREY);
+				if (selection == 7) {
+					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_APC)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_APC)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_APC)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_APC))) {
+						if (data->p1.money < COST_APC) {
+							setColor(BROWN);
+						}
+					} else {
+						setColor(YELLOW);
+					}
+				} else if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_APC)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_APC)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_APC)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_APC))) {
+					setColor(DARKGREY);
+				}
+				printf("APC             - $%d\n", COST_APC);
+				setColor(GREY);
+				if (selection == 8) {
+					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_ARTILLERY)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_ARTILLERY)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_ARTILLERY)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_ARTILLERY))) {
+						if (data->p1.money < COST_ARTILLERY) {
+							setColor(BROWN);
+						}
+					} else {
+						setColor(YELLOW);
+					}
+				} else if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_ARTILLERY)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_ARTILLERY)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_ARTILLERY)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_ARTILLERY))) {
+					setColor(DARKGREY);
+				}
+				printf("ARTILLERY       - $%d\n", COST_ARTILLERY);
+				setColor(GREY);
+				if (selection == 9) {
+					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_ROCKETS)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_ROCKETS)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_ROCKETS)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_ROCKETS))) {
+						if (data->p1.money < COST_ROCKETS) {
+							setColor(BROWN);
+						}
+					} else {
+						setColor(YELLOW);
+					}
+				} else if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_ROCKETS)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_ROCKETS)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_ROCKETS)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_ROCKETS))) {
+					setColor(DARKGREY);
+				}
+				printf("ROCKET LAUNCHER - $%d\n", COST_ROCKETS);
+				setColor(GREY);
+				if (selection == 10) {
+					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_ANTI_AIR)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_ANTI_AIR)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_ANTI_AIR)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_ANTI_AIR))) {
+						if (data->p1.money < COST_ANTI_AIR) {
+							setColor(BROWN);
+						}
+					} else {
+						setColor(YELLOW);
+					}
+				} else if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_ANTI_AIR)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_ANTI_AIR)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_ANTI_AIR)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_ANTI_AIR))) {
+					setColor(DARKGREY);
+				}
+				printf("ANTI-AIR CANNON - $%d\n", COST_ANTI_AIR);
+				setColor(GREY);
+				if (selection == 11) {
+					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_MISSILES)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_MISSILES)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_MISSILES)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_MISSILES))) {
+						if (data->p1.money < COST_MISSILES) {
+							setColor(BROWN);
+						}
+					} else {
+						setColor(YELLOW);
+					}
+				} else if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_MISSILES)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_MISSILES)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_MISSILES)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_MISSILES))) {
+					setColor(DARKGREY);
+				}
+				printf("MISSILES        - $%d\n", COST_MISSILES);
+				setColor(GREY);
+				
+				keyPress = getkey();
+				
+				if (keyPress == KEY_UP) {
+					if (selection > 0) {
+						selection--;
+					}
+				} else if (keyPress == KEY_DOWN) {
+					if (selection < 11) {
+						selection++;
+					}
+				}
+			}
+			if (keyPress == KEY_SPACE) {
+				if (selection == 0) {
+					// INFANTRY
+					if (data->whoseTurn == TEAM_RED) {
+						if (data->p1.money >= COST_INFANTRY) {
+							createUnit(data, data->cursor.x, data->cursor.y, INFANTRY, TEAM_RED);
+							data->p1.money -= COST_INFANTRY;
+						}
+					} else if (data->whoseTurn == TEAM_BLUE) {
+						if (data->p2.money >= COST_INFANTRY) {
+							createUnit(data, data->cursor.x, data->cursor.y, INFANTRY, TEAM_BLUE);
+							data->p2.money -= COST_INFANTRY;
+						}
+					} else if (data->whoseTurn == TEAM_GREEN) {
+						if (data->p3.money >= COST_INFANTRY) {
+							createUnit(data, data->cursor.x, data->cursor.y, INFANTRY, TEAM_GREEN);
+							data->p3.money -= COST_INFANTRY;
+						}
+					} else if (data->whoseTurn == TEAM_YELLOW) {
+						if (data->p4.money >= COST_INFANTRY) {
+							createUnit(data, data->cursor.x, data->cursor.y, INFANTRY, TEAM_YELLOW);
+							data->p4.money -= COST_INFANTRY;
+						}
+					}
+				} else if (selection == 1) {
+					// MECH
+					if (data->whoseTurn == TEAM_RED) {
+						if (data->p1.money >= COST_MECH) {
+							createUnit(data, data->cursor.x, data->cursor.y, MECH, TEAM_RED);
+							data->p1.money -= COST_MECH;
+						}
+					} else if (data->whoseTurn == TEAM_BLUE) {
+						if (data->p2.money >= COST_MECH) {
+							createUnit(data, data->cursor.x, data->cursor.y, MECH, TEAM_BLUE);
+							data->p2.money -= COST_MECH;
+						}
+					} else if (data->whoseTurn == TEAM_GREEN) {
+						if (data->p3.money >= COST_MECH) {
+							createUnit(data, data->cursor.x, data->cursor.y, MECH, TEAM_GREEN);
+							data->p3.money -= COST_MECH;
+						}
+					} else if (data->whoseTurn == TEAM_YELLOW) {
+						if (data->p4.money >= COST_MECH) {
+							createUnit(data, data->cursor.x, data->cursor.y, MECH, TEAM_YELLOW);
+							data->p4.money -= COST_MECH;
+						}
+					}
+				} else if (selection == 2) {
+					// RECON
+					if (data->whoseTurn == TEAM_RED) {
+						if (data->p1.money >= COST_RECON) {
+							createUnit(data, data->cursor.x, data->cursor.y, RECON, TEAM_RED);
+							data->p1.money -= COST_RECON;
+						}
+					} else if (data->whoseTurn == TEAM_BLUE) {
+						if (data->p2.money >= COST_RECON) {
+							createUnit(data, data->cursor.x, data->cursor.y, RECON, TEAM_BLUE);
+							data->p2.money -= COST_RECON;
+						}
+					} else if (data->whoseTurn == TEAM_GREEN) {
+						if (data->p3.money >= COST_RECON) {
+							createUnit(data, data->cursor.x, data->cursor.y, RECON, TEAM_GREEN);
+							data->p3.money -= COST_RECON;
+						}
+					} else if (data->whoseTurn == TEAM_YELLOW) {
+						if (data->p4.money >= COST_RECON) {
+							createUnit(data, data->cursor.x, data->cursor.y, RECON, TEAM_YELLOW);
+							data->p4.money -= COST_RECON;
+						}
+					}
+				} else if (selection == 3) {
+					// TANK
+					if (data->whoseTurn == TEAM_RED) {
+						if (data->p1.money >= COST_TANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, TANK, TEAM_RED);
+							data->p1.money -= COST_TANK;
+						}
+					} else if (data->whoseTurn == TEAM_BLUE) {
+						if (data->p2.money >= COST_TANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, TANK, TEAM_BLUE);
+							data->p2.money -= COST_TANK;
+						}
+					} else if (data->whoseTurn == TEAM_GREEN) {
+						if (data->p3.money >= COST_TANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, TANK, TEAM_GREEN);
+							data->p3.money -= COST_TANK;
+						}
+					} else if (data->whoseTurn == TEAM_YELLOW) {
+						if (data->p4.money >= COST_TANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, TANK, TEAM_YELLOW);
+							data->p4.money -= COST_TANK;
+						}
+					}
+				} else if (selection == 4) {
+					// MD_TANK
+					if (data->whoseTurn == TEAM_RED) {
+						if (data->p1.money >= COST_MD_TANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, MD_TANK, TEAM_RED);
+							data->p1.money -= COST_MD_TANK;
+						}
+					} else if (data->whoseTurn == TEAM_BLUE) {
+						if (data->p2.money >= COST_MD_TANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, MD_TANK, TEAM_BLUE);
+							data->p2.money -= COST_MD_TANK;
+						}
+					} else if (data->whoseTurn == TEAM_GREEN) {
+						if (data->p3.money >= COST_MD_TANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, MD_TANK, TEAM_GREEN);
+							data->p3.money -= COST_MD_TANK;
+						}
+					} else if (data->whoseTurn == TEAM_YELLOW) {
+						if (data->p4.money >= COST_MD_TANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, MD_TANK, TEAM_YELLOW);
+							data->p4.money -= COST_MD_TANK;
+						}
+					}
+				} else if (selection == 5) {
+					// NEOTANK
+					if (data->whoseTurn == TEAM_RED) {
+						if (data->p1.money >= COST_NEOTANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, NEOTANK, TEAM_RED);
+							data->p1.money -= COST_NEOTANK;
+						}
+					} else if (data->whoseTurn == TEAM_BLUE) {
+						if (data->p2.money >= COST_NEOTANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, NEOTANK, TEAM_BLUE);
+							data->p2.money -= COST_NEOTANK;
+						}
+					} else if (data->whoseTurn == TEAM_GREEN) {
+						if (data->p3.money >= COST_NEOTANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, NEOTANK, TEAM_GREEN);
+							data->p3.money -= COST_NEOTANK;
+						}
+					} else if (data->whoseTurn == TEAM_YELLOW) {
+						if (data->p4.money >= COST_NEOTANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, NEOTANK, TEAM_YELLOW);
+							data->p4.money -= COST_NEOTANK;
+						}
+					}
+				} else if (selection == 6) {
+					// MEGATANK
+					if (data->whoseTurn == TEAM_RED) {
+						if (data->p1.money >= COST_MEGATANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, MEGATANK, TEAM_RED);
+							data->p1.money -= COST_MEGATANK;
+						}
+					} else if (data->whoseTurn == TEAM_BLUE) {
+						if (data->p2.money >= COST_MEGATANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, MEGATANK, TEAM_BLUE);
+							data->p2.money -= COST_MEGATANK;
+						}
+					} else if (data->whoseTurn == TEAM_GREEN) {
+						if (data->p3.money >= COST_MEGATANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, MEGATANK, TEAM_GREEN);
+							data->p3.money -= COST_MEGATANK;
+						}
+					} else if (data->whoseTurn == TEAM_YELLOW) {
+						if (data->p4.money >= COST_MEGATANK) {
+							createUnit(data, data->cursor.x, data->cursor.y, MEGATANK, TEAM_YELLOW);
+							data->p4.money -= COST_MEGATANK;
+						}
+					}
+				} else if (selection == 7) {
+					// APC
+					if (data->whoseTurn == TEAM_RED) {
+						if (data->p1.money >= COST_APC) {
+							createUnit(data, data->cursor.x, data->cursor.y, APC, TEAM_RED);
+							data->p1.money -= COST_APC;
+						}
+					} else if (data->whoseTurn == TEAM_BLUE) {
+						if (data->p2.money >= COST_APC) {
+							createUnit(data, data->cursor.x, data->cursor.y, APC, TEAM_BLUE);
+							data->p2.money -= COST_APC;
+						}
+					} else if (data->whoseTurn == TEAM_GREEN) {
+						if (data->p3.money >= COST_APC) {
+							createUnit(data, data->cursor.x, data->cursor.y, APC, TEAM_GREEN);
+							data->p3.money -= COST_APC;
+						}
+					} else if (data->whoseTurn == TEAM_YELLOW) {
+						if (data->p4.money >= COST_APC) {
+							createUnit(data, data->cursor.x, data->cursor.y, APC, TEAM_YELLOW);
+							data->p4.money -= COST_APC;
+						}
+					}
+				} else if (selection == 8) {
+					// ARTILLERY
+					if (data->whoseTurn == TEAM_RED) {
+						if (data->p1.money >= COST_ARTILLERY) {
+							createUnit(data, data->cursor.x, data->cursor.y, ARTILLERY, TEAM_RED);
+							data->p1.money -= COST_ARTILLERY;
+						}
+					} else if (data->whoseTurn == TEAM_BLUE) {
+						if (data->p2.money >= COST_ARTILLERY) {
+							createUnit(data, data->cursor.x, data->cursor.y, ARTILLERY, TEAM_BLUE);
+							data->p2.money -= COST_ARTILLERY;
+						}
+					} else if (data->whoseTurn == TEAM_GREEN) {
+						if (data->p3.money >= COST_ARTILLERY) {
+							createUnit(data, data->cursor.x, data->cursor.y, ARTILLERY, TEAM_GREEN);
+							data->p3.money -= COST_ARTILLERY;
+						}
+					} else if (data->whoseTurn == TEAM_YELLOW) {
+						if (data->p4.money >= COST_ARTILLERY) {
+							createUnit(data, data->cursor.x, data->cursor.y, ARTILLERY, TEAM_YELLOW);
+							data->p4.money -= COST_ARTILLERY;
+						}
+					}
+				} else if (selection == 9) {
+					// ROCKETS
+					if (data->whoseTurn == TEAM_RED) {
+						if (data->p1.money >= COST_ROCKETS) {
+							createUnit(data, data->cursor.x, data->cursor.y, ROCKETS, TEAM_RED);
+							data->p1.money -= COST_ROCKETS;
+						}
+					} else if (data->whoseTurn == TEAM_BLUE) {
+						if (data->p2.money >= COST_ROCKETS) {
+							createUnit(data, data->cursor.x, data->cursor.y, ROCKETS, TEAM_BLUE);
+							data->p2.money -= COST_ROCKETS;
+						}
+					} else if (data->whoseTurn == TEAM_GREEN) {
+						if (data->p3.money >= COST_ROCKETS) {
+							createUnit(data, data->cursor.x, data->cursor.y, ROCKETS, TEAM_GREEN);
+							data->p3.money -= COST_ROCKETS;
+						}
+					} else if (data->whoseTurn == TEAM_YELLOW) {
+						if (data->p4.money >= COST_ROCKETS) {
+							createUnit(data, data->cursor.x, data->cursor.y, ROCKETS, TEAM_YELLOW);
+							data->p4.money -= COST_ROCKETS;
+						}
+					}
+				} else if (selection == 10) {
+					// ANTI_AIR
+					if (data->whoseTurn == TEAM_RED) {
+						if (data->p1.money >= COST_ANTI_AIR) {
+							createUnit(data, data->cursor.x, data->cursor.y, ANTI_AIR, TEAM_RED);
+							data->p1.money -= COST_ANTI_AIR;
+						}
+					} else if (data->whoseTurn == TEAM_BLUE) {
+						if (data->p2.money >= COST_ANTI_AIR) {
+							createUnit(data, data->cursor.x, data->cursor.y, ANTI_AIR, TEAM_BLUE);
+							data->p2.money -= COST_ANTI_AIR;
+						}
+					} else if (data->whoseTurn == TEAM_GREEN) {
+						if (data->p3.money >= COST_ANTI_AIR) {
+							createUnit(data, data->cursor.x, data->cursor.y, ANTI_AIR, TEAM_GREEN);
+							data->p3.money -= COST_ANTI_AIR;
+						}
+					} else if (data->whoseTurn == TEAM_YELLOW) {
+						if (data->p4.money >= COST_ANTI_AIR) {
+							createUnit(data, data->cursor.x, data->cursor.y, ANTI_AIR, TEAM_YELLOW);
+							data->p4.money -= COST_ANTI_AIR;
+						}
+					}
+				} else if (selection == 11) {
+					// MISSILES
+					if (data->whoseTurn == TEAM_RED) {
+						if (data->p1.money >= COST_MISSILES) {
+							createUnit(data, data->cursor.x, data->cursor.y, MISSILES, TEAM_RED);
+							data->p1.money -= COST_MISSILES;
+						}
+					} else if (data->whoseTurn == TEAM_BLUE) {
+						if (data->p2.money >= COST_MISSILES) {
+							createUnit(data, data->cursor.x, data->cursor.y, MISSILES, TEAM_BLUE);
+							data->p2.money -= COST_MISSILES;
+						}
+					} else if (data->whoseTurn == TEAM_GREEN) {
+						if (data->p3.money >= COST_MISSILES) {
+							createUnit(data, data->cursor.x, data->cursor.y, MISSILES, TEAM_GREEN);
+							data->p3.money -= COST_MISSILES;
+						}
+					} else if (data->whoseTurn == TEAM_YELLOW) {
+						if (data->p4.money >= COST_MISSILES) {
+							createUnit(data, data->cursor.x, data->cursor.y, MISSILES, TEAM_YELLOW);
+							data->p4.money -= COST_MISSILES;
+						}
+					}
+				}
+				data->interfaceMode = INTERFACEMODE_MAP;
+			}
 		}
 		/// If the user ever hits ENTER, the draw mode switches.
 		/// This can be used on any interface mode.
@@ -1022,8 +1479,22 @@ void drawMenu(game *data) {
 	short selection = 0;
 	/// This stores what unit is under the cursor.
 	short selectedUnit = unitGetter (data, data->cursor.x, data->cursor.y);
-	/// If the selection wasn't on a unit, it shows this.
-	if (data->interfaceMode == INTERFACEMODE_MENU_FIELD) {
+	/// This determines which UI to draw.
+	short ui = 0;
+	// This is unclean and is going to win no points in neatness.
+	if (data->interfaceMode == INTERFACEMODE_MENU_UNIT) {
+		ui = 5;
+	} else if ((data->whoseTurn == (data->mapData[data->cursor.x][data->cursor.y] / 10)) && ((data->mapData[data->cursor.x][data->cursor.y] % 10) == 3)) {
+		ui = 1;
+	} else if ((data->whoseTurn == (data->mapData[data->cursor.x][data->cursor.y] / 10)) && ((data->mapData[data->cursor.x][data->cursor.y] % 10) == 4)) {
+		ui = 2;
+	} else if ((data->whoseTurn == (data->mapData[data->cursor.x][data->cursor.y] / 10)) && ((data->mapData[data->cursor.x][data->cursor.y] % 10) == 5)) {
+		ui = 3;
+	} else if (data->interfaceMode == INTERFACEMODE_MENU_FIELD) {
+		ui = 4;
+	}
+	/// If the selection was on a base, airport, or port, this comes up.
+	if ((ui == 1) || (ui == 2) || (ui == 3)) {
 		/// This breaks when the user hits either ESCAPE or SPACE.
 		while (keyPress != KEY_ESCAPE && keyPress != KEY_SPACE) {
 			/// Firstly the map is drawn.
@@ -1031,6 +1502,51 @@ void drawMenu(game *data) {
 			
 			/// Then the menu items are displayed. If they're
 			/// highlighted, they turn yellow.
+			if (selection == 0) {
+				setColor(YELLOW);
+			}
+			printf("BUY UNIT\n");
+			setColor(GREY);
+			if (selection == 1) {
+				setColor(YELLOW);
+			}
+			printf("END TURN\n");
+			setColor(GREY);
+			if (selection == 2) {
+				setColor(YELLOW);
+			}
+			printf("INFO (UNFINISHED)\n");
+			setColor(GREY);
+			if (selection == 3) {
+				setColor(YELLOW);
+			}
+			printf("SAVE (UNFINISHED)\n");
+			setColor(GREY);
+			if (selection == 4) {
+				setColor(YELLOW);
+			}
+			printf("QUIT\n");
+			setColor(GREY);
+			
+			/// Then we get user input.
+			keyPress = getkey();
+			
+			/// If they are moving up and down, we shift the selection.
+			if (keyPress == KEY_UP) {
+				if (selection > 0) {
+					selection--;
+				}
+			} else if (keyPress == KEY_DOWN) {
+				if (selection < 4) {
+					selection++;
+				}
+			}
+		}
+	/// Similarly, if the field is selected...
+	} else if (ui == 4) {
+		while (keyPress != KEY_ESCAPE && keyPress != KEY_SPACE) {
+			mapDraw(data);
+			
 			if (selection == 0) {
 				setColor(YELLOW);
 			}
@@ -1052,10 +1568,8 @@ void drawMenu(game *data) {
 			printf("QUIT\n");
 			setColor(GREY);
 			
-			/// Then we get user input.
 			keyPress = getkey();
 			
-			/// If they are moving up and down, we shift the selection.
 			if (keyPress == KEY_UP) {
 				if (selection > 0) {
 					selection--;
@@ -1067,7 +1581,7 @@ void drawMenu(game *data) {
 			}
 		}
 	/// Similarly, if a unit is selected, a different menu comes up.
-	} else if (data->interfaceMode == INTERFACEMODE_MENU_UNIT) {
+	} else if (ui == 5) {
 		/// It breaks if the user hits ESCAPE or SPACE.
 		while (keyPress != KEY_ESCAPE && keyPress != KEY_SPACE) {
 			/// Map is drawn.
@@ -1094,7 +1608,7 @@ void drawMenu(game *data) {
 			} else if ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].player != data->whoseTurn)) {
 				setColor(DARKGREY);
 			}
-			printf("ATTACK (UNFINISHED)\n");
+			printf("ATTACK\n");
 			setColor(GREY);
 			if (selection == 2) {
 				setColor(YELLOW);
@@ -1136,7 +1650,61 @@ void drawMenu(game *data) {
 	/// If the user hits SPACE (selecting the option), then we change
 	/// the subsequent mode.
 	if (keyPress == KEY_SPACE) {
-		if (data->interfaceMode == INTERFACEMODE_MENU_FIELD) {
+		if (ui == 1) {
+			if (selection == 0) {
+				// BUY UNIT
+				data->interfaceMode = INTERFACEMODE_BUY_LAND;
+			} else if (selection == 1) {
+				// END TURN
+				endTurn(data);
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 2) {
+				// HELP
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 3) {
+				// SAVE
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 4) {
+				// QUIT
+				data->interfaceMode = INTERFACEMODE_QUIT;
+			}
+		} else if (ui == 2) {
+			if (selection == 0) {
+				// BUY UNIT
+				data->interfaceMode = INTERFACEMODE_BUY_AIR;
+			} else if (selection == 1) {
+				// END TURN
+				endTurn(data);
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 2) {
+				// HELP
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 3) {
+				// SAVE
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 4) {
+				// QUIT
+				data->interfaceMode = INTERFACEMODE_QUIT;
+			}
+		} else if (ui == 3) {
+			if (selection == 0) {
+				// BUY UNIT
+				data->interfaceMode = INTERFACEMODE_BUY_SEA;
+			} else if (selection == 1) {
+				// END TURN
+				endTurn(data);
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 2) {
+				// HELP
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 3) {
+				// SAVE
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 4) {
+				// QUIT
+				data->interfaceMode = INTERFACEMODE_QUIT;
+			}
+		} else if (ui == 4) {
 			if (selection == 0) {
 				// END TURN
 				endTurn(data);
@@ -1151,7 +1719,7 @@ void drawMenu(game *data) {
 				// QUIT
 				data->interfaceMode = INTERFACEMODE_QUIT;
 			}
-		} else if (data->interfaceMode == INTERFACEMODE_MENU_UNIT) {
+		} else if (ui == 5) {
 			if (selection == 0) {
 				// MOVE
 				/// If it was greyed out, it won't move it.
