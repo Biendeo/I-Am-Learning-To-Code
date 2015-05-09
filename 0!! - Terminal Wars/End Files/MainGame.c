@@ -339,15 +339,13 @@ void attackUnit (game *data, short attacker, short defender) {
 	
 	/// The base damage and defense are grabbed.
 	char weapon = whichWeapon(data, attacker, defender);
-	unsigned char baseDamage = baseDamageGetter (data, data->unitData[attacker].unitType, data->unitData[defender].unitType, weapon);
+	unsigned char baseDamage = baseDamageGetter (data, attacker, defender, weapon);
 	unsigned char defenseRating = tileDefenseGetter (data, data->unitData[defender].x, data->unitData[defender].y);
 	
 	/// Now, the damage is calculated. The formula is a bit messy.
 	/// Basically, a number is calculated after passing through this.
 	float endDamage;
 	endDamage = roundf(((baseDamage + attackRandom) / 100.0) * (data->unitData[attacker].health / 10.0) * ((100.0 - (defenseRating * data->unitData[defender].health)) / 100.0) * 100.0) / 10.0;
-	
-	printf("((%d + %d) / 100) * (%g / 10) * ((100 - (%d * %g)) / 100) = %g\n", baseDamage, attackRandom, data->unitData[attacker].health, defenseRating, data->unitData[defender].health, endDamage);
 	
 	/// The end health is applied, and the value is rounded (as health
 	/// is only one decimal place).
@@ -374,12 +372,10 @@ void attackUnit (game *data, short attacker, short defender) {
 		if (canItCounter(data, attacker, defender) == YES) {
 			attackRandom = rand() % 10;
 			weapon = whichWeapon(data, defender, attacker);
-			baseDamage = baseDamageGetter (data, data->unitData[defender].unitType, data->unitData[attacker].unitType, weapon);
+			baseDamage = baseDamageGetter (data, defender, attacker, weapon);
 			defenseRating = tileDefenseGetter (data, data->unitData[attacker].x, data->unitData[attacker].y);
 			
 			endDamage = roundf(((baseDamage + attackRandom) / 100.0) * (data->unitData[defender].health / 10.0) * ((100.0 - (defenseRating * data->unitData[attacker].health)) / 100.0) * 100.0) / 10.0;
-	
-			printf("((%d + %d) / 100) * (%g / 10) * ((100 - (%d * %g)) / 100) = %g\n", baseDamage, attackRandom, data->unitData[defender].health, defenseRating, data->unitData[attacker].health, endDamage);
 			
 			data->unitData[attacker].health -= endDamage;
 			
