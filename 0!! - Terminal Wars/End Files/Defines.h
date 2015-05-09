@@ -100,7 +100,6 @@
 #define MOVE_CARRIER  7
 
 /// Tile movement costs
-// THIS IS INCOMPLETE (ALL PLACEHOLDER VALUES)
 // Setting a value to 0 will mean a unit cannot move onto it.
 #define MOVE_HQ_INFANTRY 1
 #define MOVE_HQ_MECH     1
@@ -166,26 +165,26 @@
 #define MOVE_SEA_SHIP     1
 #define MOVE_SEA_CARRIER  1
 
-#define MOVE_RIVER_INFANTRY 1
+#define MOVE_RIVER_INFANTRY 2
 #define MOVE_RIVER_MECH     1
-#define MOVE_RIVER_TIRES    1
-#define MOVE_RIVER_TREAD    1
+#define MOVE_RIVER_TIRES    0
+#define MOVE_RIVER_TREAD    0
 #define MOVE_RIVER_AIR      1
 #define MOVE_RIVER_SHIP     0
 #define MOVE_RIVER_CARRIER  0
 
 #define MOVE_WOOD_INFANTRY 1
 #define MOVE_WOOD_MECH     1
-#define MOVE_WOOD_TIRES    1
-#define MOVE_WOOD_TREAD    1
+#define MOVE_WOOD_TIRES    3
+#define MOVE_WOOD_TREAD    2
 #define MOVE_WOOD_AIR      1
 #define MOVE_WOOD_SHIP     0
 #define MOVE_WOOD_CARRIER  0
 
-#define MOVE_MOUNTAIN_INFANTRY 1
+#define MOVE_MOUNTAIN_INFANTRY 2
 #define MOVE_MOUNTAIN_MECH     1
-#define MOVE_MOUNTAIN_TIRES    1
-#define MOVE_MOUNTAIN_TREAD    1
+#define MOVE_MOUNTAIN_TIRES    0
+#define MOVE_MOUNTAIN_TREAD    0
 #define MOVE_MOUNTAIN_AIR      1
 #define MOVE_MOUNTAIN_SHIP     0
 #define MOVE_MOUNTAIN_CARRIER  0
@@ -204,15 +203,15 @@
 #define MOVE_SHOAL_TREAD    1
 #define MOVE_SHOAL_AIR      1
 #define MOVE_SHOAL_SHIP     0
-#define MOVE_SHOAL_CARRIER  0
+#define MOVE_SHOAL_CARRIER  1
 
-#define MOVE_REEF_INFANTRY 1
-#define MOVE_REEF_MECH     1
-#define MOVE_REEF_TIRES    1
-#define MOVE_REEF_TREAD    1
+#define MOVE_REEF_INFANTRY 0
+#define MOVE_REEF_MECH     0
+#define MOVE_REEF_TIRES    0
+#define MOVE_REEF_TREAD    0
 #define MOVE_REEF_AIR      1
-#define MOVE_REEF_SHIP     0
-#define MOVE_REEF_CARRIER  0
+#define MOVE_REEF_SHIP     2
+#define MOVE_REEF_CARRIER  1
 
 /// Tile defense ranks
 #define DEFENSE_HQ       4
@@ -223,10 +222,10 @@
 #define DEFENSE_PLAIN    1
 #define DEFENSE_ROAD     0
 #define DEFENSE_SEA      0
-#define DEFENSE_RIVER    0 // UNCONFIRMED
+#define DEFENSE_RIVER    0
 #define DEFENSE_WOOD     2
 #define DEFENSE_MOUNTAIN 4
-#define DEFENSE_BRIDGE   0 // UNCONFIRMED
+#define DEFENSE_BRIDGE   0
 #define DEFENSE_SHOAL    0
 #define DEFENSE_REEF     1
 
@@ -416,7 +415,7 @@
 #define MOVETYPE_CRUISER  MOVE_SHIP
 #define MOVESPEED_CRUISER 6
 #define MAXAMMO_CRUISER_1 9
-#define MAXAMMO_CRUISER_2 -1 // I THINK THIS IS DIFFERENT
+#define MAXAMMO_CRUISER_2 -1
 #define MAXFUEL_CRUISER   99
 #define VISION_CRUISER    3
 #define RANGE_MIN_CRUISER 1
@@ -457,7 +456,6 @@
 // Use the style DAMAGE_ATTACKER_DEFENDER and add _WEAPON if there's two
 // weapons. The APC, TRAN_COP, and LANDER don't attack, so they're not
 // on this list.
-// I NEED TO ADD VALUES FOR SECONDARY WEAPONS ON MOST THINGS
 #define DAMAGE_INFANTRY_INFANTRY  55
 #define DAMAGE_INFANTRY_MECH      45
 #define DAMAGE_INFANTRY_RECON     12
