@@ -28,15 +28,15 @@ void screenSplash() {
 	printf("Version \"Stage 12\"\n\n");
 	
 	/// This tells the user if their screen is too small.
-	if (trows() < (MAP_HEIGHT + 10)) {
+	if (trows() < (MAP_HEIGHT + 14)) {
 		printf("Your screen is too short to properly view this.\n");
-		printf("Make your window taller to fit %d rows.\n\n", MAP_HEIGHT + 10);
+		printf("Make your window taller to fit %d rows.\n\n", MAP_HEIGHT + 14);
 	}
 	// This magic number is just how roughly wide the screen needs to be.
 	// I don't kow exactly how wide it should be.
 	if ((tcols() < MAP_WIDTH) || (tcols() < 50)) {
 		printf("Your screen is too thin to properly view this.\n");
-		printf("Make your window wider to fit %d columns.\n\n", MAP_WIDTH + 10);
+		printf("Make your window wider to fit %d columns.\n\n", MAP_WIDTH);
 	}
 	anykey();
 }
@@ -398,6 +398,39 @@ void drawFieldUI (game *data, short x, short y) {
 		setColor(GREY);
 	}
 	printf("'s turn.\n");
+	
+	printf("You currently have $");
+	if (data->whoseTurn == TEAM_RED) {
+		printf("%d.\n", data->p1.money);
+	} else if (data->whoseTurn == TEAM_BLUE) {
+		printf("%d.\n", data->p2.money);
+	} else if (data->whoseTurn == TEAM_GREEN) {
+		printf("%d.\n", data->p3.money);
+	} else if (data->whoseTurn == TEAM_YELLOW) {
+		printf("%d.\n", data->p4.money);
+	}
+	
+	printf("You own ");
+	if (data->whoseTurn == TEAM_RED) {
+		printf("%d", data->p1.buildingsOwned);
+	} else if (data->whoseTurn == TEAM_BLUE) {
+		printf("%d", data->p2.buildingsOwned);
+	} else if (data->whoseTurn == TEAM_GREEN) {
+		printf("%d", data->p3.buildingsOwned);
+	} else if (data->whoseTurn == TEAM_YELLOW) {
+		printf("%d", data->p4.buildingsOwned);
+	}	
+	printf(" buildings and ");
+	if (data->whoseTurn == TEAM_RED) {
+		printf("%d", data->p1.unitsOwned);
+	} else if (data->whoseTurn == TEAM_BLUE) {
+		printf("%d", data->p2.unitsOwned);
+	} else if (data->whoseTurn == TEAM_GREEN) {
+		printf("%d", data->p3.unitsOwned);
+	} else if (data->whoseTurn == TEAM_YELLOW) {
+		printf("%d", data->p4.unitsOwned);
+	}
+	printf(" units.\n");
 	
 	printf("Currently at %d, %d\n", data->cursor.x, data->cursor.y);
 	
@@ -1008,6 +1041,25 @@ void testDrawing (game *data) {
 			while (keyPress != KEY_ESCAPE && keyPress != KEY_SPACE) {
 				mapDraw(data);
 				
+					if (data->numberOfPlayers >= 1) {
+						setColor(LIGHTRED);
+						printf("$%d   ", data->p1.money);
+					}
+					if (data->numberOfPlayers >= 2) {
+						setColor(LIGHTBLUE);
+						printf("$%d   ", data->p2.money);
+					}
+					if (data->numberOfPlayers >= 3) {
+						setColor(LIGHTGREEN);
+						printf("$%d   ", data->p3.money);
+					}
+					if (data->numberOfPlayers >= 4) {
+						setColor(YELLOW);
+						printf("$%d", data->p4.money);
+					}
+					printf("\n");
+					setColor(GREY);
+				
 				if (selection == 0) {
 					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_INFANTRY)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_INFANTRY)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_INFANTRY)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_INFANTRY))) {
 						if (data->p1.money < COST_INFANTRY) {
@@ -1177,7 +1229,9 @@ void testDrawing (game *data) {
 					}
 				}
 			}
-			if (keyPress == KEY_SPACE) {
+			if (keyPress == KEY_ESCAPE) {
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (keyPress == KEY_SPACE) {
 				if (selection == 0) {
 					// INFANTRY
 					if (data->whoseTurn == TEAM_RED) {

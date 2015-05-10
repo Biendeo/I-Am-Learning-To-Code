@@ -428,6 +428,16 @@ void createUnit (game *data, short x, short y, char unitType, char player) {
 	data->unitData[unitPos].finished = YES;
 	data->unitData[unitPos].x = x;
 	data->unitData[unitPos].y = y;
+	
+	if (player == TEAM_RED) {
+		data->p1.unitsOwned++;
+	} else if (player == TEAM_BLUE) {
+		data->p2.unitsOwned++;
+	} else if (player == TEAM_GREEN) {
+		data->p3.unitsOwned++;
+	} else if (player == TEAM_YELLOW) {
+		data->p4.unitsOwned++;
+	}
 }
 
 /// This function deletes a unit from the game.
@@ -441,6 +451,16 @@ void deleteUnit (game *data, short unitPos) {
 	// 99 times as long as before, rather than scanning for units might
 	// take 3 times as long (while a more common process, it's much
 	// shorter too).
+	if (data->unitData[unitPos].player == TEAM_RED) {
+		data->p1.unitsOwned--;
+	} else if (data->unitData[unitPos].player == TEAM_BLUE) {
+		data->p2.unitsOwned--;
+	} else if (data->unitData[unitPos].player == TEAM_GREEN) {
+		data->p3.unitsOwned--;
+	} else if (data->unitData[unitPos].player == TEAM_YELLOW) {
+		data->p4.unitsOwned--;
+	}
+	
 	data->unitData[unitPos].unitType = 0;
 	data->unitData[unitPos].player = 0;
 	data->unitData[unitPos].ammo1 = 0;
@@ -478,6 +498,16 @@ void endTurn(game *data) {
 	if (data->whoseTurn > data->numberOfPlayers) {
 		data->whoseTurn = TEAM_RED;
 		data->turnNum++;
+	}
+	
+	if (data->whoseTurn == TEAM_RED) {
+		data->p1.money += (data->p1.buildingsOwned * MONEY_PER_BUILDING);
+	} else if (data->whoseTurn == TEAM_BLUE) {
+		data->p2.money += (data->p2.buildingsOwned * MONEY_PER_BUILDING);
+	} else if (data->whoseTurn == TEAM_GREEN) {
+		data->p3.money += (data->p3.buildingsOwned * MONEY_PER_BUILDING);
+	} else if (data->whoseTurn == TEAM_YELLOW) {
+		data->p4.money += (data->p4.buildingsOwned * MONEY_PER_BUILDING);
 	}
 }
 
