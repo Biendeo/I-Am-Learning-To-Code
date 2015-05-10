@@ -1119,7 +1119,7 @@
 #define MAX_UNITTYPES 23
 
 /// Some game-specific numbers
-#define STARTING_MONEY 7000
+#define STARTING_MONEY 0
 #define MONEY_PER_BUILDING 1000
 
 /// Error messages

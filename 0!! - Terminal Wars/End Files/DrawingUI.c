@@ -1004,7 +1004,7 @@ void testDrawing (game *data) {
 				moveUnit(data, selectedUnit, RIGHT);
 			/// They hit SPACE when they stop, and it goes back to the
 			/// map.
-			} else if (keyPress == KEY_SPACE) {
+			} else if (keyPress == KEY_SPACE || keyPress == KEY_ESCAPE) {
 				data->interfaceMode = INTERFACEMODE_MAP;
 			}
 		} else if (data->interfaceMode == INTERFACEMODE_ATTACK) {
@@ -1032,6 +1032,9 @@ void testDrawing (game *data) {
 					anykey();
 				}
 				
+				data->interfaceMode = INTERFACEMODE_MAP;
+				data->attacker = MAX_UNITS;
+			} else if (keyPress == KEY_ESCAPE) {
 				data->interfaceMode = INTERFACEMODE_MAP;
 				data->attacker = MAX_UNITS;
 			}

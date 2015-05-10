@@ -175,6 +175,7 @@ void initialiseGame (game *data) {
 	
 	// This is just a bit of example setup to get the game started.
 	// It's purely so that I can debug stuff right now.
+	/*
 	createUnit(data, 4, 3, INFANTRY, TEAM_RED);
 	createUnit(data, 8, 6, MECH, TEAM_RED);
 	createUnit(data, 5, 3, ARTILLERY, TEAM_BLUE);
@@ -187,6 +188,7 @@ void initialiseGame (game *data) {
 	deleteUnit(data, 4);
 	// And creating new units after that.
 	createUnit(data, 2, 2, BATT_COP, TEAM_GREEN);
+	*/
 	
 	/// Then, a new turn is performed, which moves to player 1.
 	endTurn(data);
