@@ -62,7 +62,7 @@ typedef struct _buildingdata {
 	char player;
 	
 	/// This stores how much "health" the building has (when capping).
-	char health;
+	float health;
 	
 	/// This is where it is.
 	short x;
@@ -160,6 +160,7 @@ char unitMovementTypeGetter(game *data, short unitPos);
 char unitAmmoGetter (game *data, short unitPos, char weapon);
 char unitFuelGetter (game *data, short unitPos);
 char unitVisionGetter (game *data, short unitPos);
+short buildingGetter (game *data, short x, short y);
 char tileMovementGetter (game *data, short x, short y, char movementType);
 char tileDefenseGetter (game *data, short x, short y);
 unsigned char baseDamageGetter (game *data, short attacker, short defender, char weapon);

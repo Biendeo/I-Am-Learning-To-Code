@@ -1540,7 +1540,11 @@ void drawMenu(game *data) {
 	short ui = 0;
 	// This is unclean and is going to win no points in neatness.
 	if (data->interfaceMode == INTERFACEMODE_MENU_UNIT) {
-		ui = 5;
+		if (((data->unitData[selectedUnit].unitType == INFANTRY) || (data->unitData[selectedUnit].unitType == MECH)) && (data->mapData[data->cursor.x][data->cursor.y] < PLAIN)) {
+			ui = 6;
+		} else {
+			ui = 5;
+		}
 	} else if ((data->whoseTurn == (data->mapData[data->cursor.x][data->cursor.y] / 10)) && ((data->mapData[data->cursor.x][data->cursor.y] % 10) == 3)) {
 		ui = 1;
 	} else if ((data->whoseTurn == (data->mapData[data->cursor.x][data->cursor.y] / 10)) && ((data->mapData[data->cursor.x][data->cursor.y] % 10) == 4)) {
@@ -1702,6 +1706,71 @@ void drawMenu(game *data) {
 				}
 			}
 		}
+	} else if (ui == 6) {
+		while (keyPress != KEY_ESCAPE && keyPress != KEY_SPACE) {
+			mapDraw(data);
+			
+			if ((selection == 0) && ((data->unitData[selectedUnit].player) == (data->mapData[data->cursor.x][data->cursor.y] / 10) || (data->unitData[selectedUnit].player != data->whoseTurn) || (data->unitData[selectedUnit].finished == YES))) {
+				setColor(BROWN);
+			} else if (selection == 0) {
+				setColor(YELLOW);
+			} else if (((data->unitData[selectedUnit].player) == (data->mapData[data->cursor.x][data->cursor.y] / 10) || (data->unitData[selectedUnit].player != data->whoseTurn) || (data->unitData[selectedUnit].finished == YES))) {
+				setColor(DARKGREY);
+			}
+			printf("CAPTURE\n");
+			setColor(GREY);
+			
+			if ((selection == 1) && ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].movement == 0) || (data->unitData[selectedUnit].player != data->whoseTurn))) {
+				setColor(BROWN);
+			} else if (selection == 1) {
+				setColor(YELLOW);
+			} else if ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].movement == 0) || (data->unitData[selectedUnit].player != data->whoseTurn)) {
+				setColor(DARKGREY);
+			}
+			printf("MOVE\n");
+			setColor(GREY);
+			if ((selection == 2) && ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].player != data->whoseTurn))) {
+				setColor(BROWN);
+			} else if (selection == 2) {
+				setColor(YELLOW);
+			} else if ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].player != data->whoseTurn)) {
+				setColor(DARKGREY);
+			}
+			printf("ATTACK\n");
+			setColor(GREY);
+			if (selection == 3) {
+				setColor(YELLOW);
+			}
+			printf("END TURN\n");
+			setColor(GREY);
+			if (selection == 4) {
+				setColor(YELLOW);
+			}
+			printf("INFO (UNFINISHED)\n");
+			setColor(GREY);
+			if (selection == 5) {
+				setColor(YELLOW);
+			}
+			printf("SAVE (UNFINISHED)\n");
+			setColor(GREY);
+			if (selection == 6) {
+				setColor(YELLOW);
+			}
+			printf("QUIT\n");
+			setColor(GREY);
+			
+			keyPress = getkey();
+			
+			if (keyPress == KEY_UP) {
+				if (selection > 0) {
+					selection--;
+				}
+			} else if (keyPress == KEY_DOWN) {
+				if (selection < 6) {
+					selection++;
+				}
+			}
+		}
 	}
 	
 	/// If the user hits SPACE (selecting the option), then we change
@@ -1712,7 +1781,8 @@ void drawMenu(game *data) {
 				// BUY UNIT
 				data->interfaceMode = INTERFACEMODE_BUY_LAND;
 			} else if (selection == 1) {
-				// END TURN
+			
+			// END TURN
 				endTurn(data);
 				data->interfaceMode = INTERFACEMODE_MAP;
 			} else if (selection == 2) {
@@ -1805,6 +1875,89 @@ void drawMenu(game *data) {
 				// SAVE
 				data->interfaceMode = INTERFACEMODE_MAP;
 			} else if (selection == 5) {
+				// QUIT
+				data->interfaceMode = INTERFACEMODE_QUIT;
+			}
+		} else if (ui == 6) {
+			if (selection == 0) {
+				// CAPTURE
+				if ((data->unitData[selectedUnit].player) != (data->mapData[data->cursor.x][data->cursor.y] / 10) && (data->unitData[selectedUnit].player == data->whoseTurn) && (data->unitData[selectedUnit].finished == NO)) {
+					short buildingPos = buildingGetter(data, data->cursor.x, data->cursor.y);
+					data->buildingData[buildingPos].health -= data->unitData[selectedUnit].health;
+					printf("The building's health reduced by %g to %g.\n", data->unitData[selectedUnit].health, data->buildingData[buildingPos].health);
+					if (data->buildingData[buildingPos].health <= 0) {
+						if (data->buildingData[buildingPos].player == TEAM_RED) {
+							data->p1.buildingsOwned--;
+						} else if (data->buildingData[buildingPos].player == TEAM_BLUE) {
+							data->p2.buildingsOwned--;
+						} else if (data->buildingData[buildingPos].player == TEAM_GREEN) {
+							data->p3.buildingsOwned--;
+						} else if (data->buildingData[buildingPos].player == TEAM_YELLOW) {
+							data->p4.buildingsOwned--;
+						}
+						data->buildingData[buildingPos].health = 20;
+						data->buildingData[buildingPos].player = data->whoseTurn;
+						if (data->buildingData[buildingPos].player == TEAM_RED) {
+							data->p1.buildingsOwned++;
+						} else if (data->buildingData[buildingPos].player == TEAM_BLUE) {
+							data->p2.buildingsOwned++;
+						} else if (data->buildingData[buildingPos].player == TEAM_GREEN) {
+							data->p3.buildingsOwned++;
+						} else if (data->buildingData[buildingPos].player == TEAM_YELLOW) {
+							data->p4.buildingsOwned++;
+						}
+						printf("The building now belongs to ");
+						if (data->buildingData[buildingPos].player == TEAM_RED) {
+							setColor(LIGHTRED);
+							printf("RED");
+						} else if (data->buildingData[buildingPos].player == TEAM_BLUE) {
+							setColor(LIGHTBLUE);
+							printf("BLUE");
+						} else if (data->buildingData[buildingPos].player == TEAM_GREEN) {
+							setColor(LIGHTGREEN);
+							printf("GREEN");
+						} else if (data->buildingData[buildingPos].player == TEAM_YELLOW) {
+							setColor(YELLOW);
+							printf("YELLOW");
+						}
+						data->mapData[data->cursor.x][data->cursor.y] += ((-(data->mapData[data->cursor.x][data->cursor.y] / 10) + data->whoseTurn) * 10);
+						setColor(GREY);
+						printf(".\n");
+					}
+					anykey();
+					data->unitData[selectedUnit].finished = YES;
+					data->interfaceMode = INTERFACEMODE_MAP;
+				} else {
+					data->interfaceMode = INTERFACEMODE_MAP;
+				}
+			} else if (selection == 1) {
+				// MOVE
+				/// If it was greyed out, it won't move it.
+				if ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].movement == 0) || (data->unitData[selectedUnit].player != data->whoseTurn)) {
+					data->interfaceMode = INTERFACEMODE_MAP;
+				} else {
+					data->interfaceMode = INTERFACEMODE_MOVE;
+				}
+			} else if (selection == 2) {
+				// ATTACK
+				/// If it was greyed out, it won't attack.
+				if ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].player != data->whoseTurn)) {
+					data->interfaceMode = INTERFACEMODE_MAP;
+				} else {
+					data->attacker = unitGetter(data, data->cursor.x, data->cursor.y);
+					data->interfaceMode = INTERFACEMODE_ATTACK;
+				}
+			} else if (selection == 3) {
+				// END TURN
+				endTurn(data);
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 4) {
+				// HELP
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 5) {
+				// SAVE
+				data->interfaceMode = INTERFACEMODE_MAP;
+			} else if (selection == 6) {
 				// QUIT
 				data->interfaceMode = INTERFACEMODE_QUIT;
 			}

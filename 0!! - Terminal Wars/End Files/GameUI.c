@@ -10,8 +10,8 @@
 #include "FileIO.h"
 #include "DrawingUI.h"
 
+// After capturing works, this will be the next priority.
 int main (int argc, char *argv[]) {
-	// This is to test the screenClear function.
 	srand(time(NULL));
 	screenSplash();
 	START_GAME;

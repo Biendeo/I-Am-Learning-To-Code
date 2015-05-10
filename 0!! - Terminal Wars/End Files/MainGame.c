@@ -927,6 +927,20 @@ char unitVisionGetter (game *data, short unitPos) {
 	return unitVision;
 }
 
+/// This function gets a building's ID based on a position.
+short buildingGetter (game *data, short x, short y) {
+	short buildingPos = 0;
+	while (buildingPos < MAX_UNITS) {
+		if ((data->buildingData[buildingPos].x == x) &&
+			(data->buildingData[buildingPos].y == y)) {
+			break;
+		}
+		buildingPos++;
+	}
+	
+	return buildingPos;
+}
+
 /// This function gets the movement cost for a certain tile based on
 /// the movement type provided.
 char tileMovementGetter (game *data, short x, short y, char movementType) {
