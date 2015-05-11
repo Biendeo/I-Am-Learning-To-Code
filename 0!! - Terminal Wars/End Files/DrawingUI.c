@@ -1566,7 +1566,7 @@ void drawMenu(game *data) {
 			if (selection == 3) {
 				setColor(YELLOW);
 			}
-			printf("SAVE (UNFINISHED)\n");
+			printf("SAVE\n");
 			setColor(GREY);
 			if (selection == 4) {
 				setColor(YELLOW);
@@ -1606,7 +1606,7 @@ void drawMenu(game *data) {
 			if (selection == 2) {
 				setColor(YELLOW);
 			}
-			printf("SAVE (UNFINISHED)\n");
+			printf("SAVE\n");
 			setColor(GREY);
 			if (selection == 3) {
 				setColor(YELLOW);
@@ -1669,7 +1669,7 @@ void drawMenu(game *data) {
 			if (selection == 4) {
 				setColor(YELLOW);
 			}
-			printf("SAVE (UNFINISHED)\n");
+			printf("SAVE\n");
 			setColor(GREY);
 			if (selection == 5) {
 				setColor(YELLOW);
@@ -1736,7 +1736,7 @@ void drawMenu(game *data) {
 			if (selection == 5) {
 				setColor(YELLOW);
 			}
-			printf("SAVE (UNFINISHED)\n");
+			printf("SAVE\n");
 			setColor(GREY);
 			if (selection == 6) {
 				setColor(YELLOW);
@@ -1775,6 +1775,9 @@ void drawMenu(game *data) {
 				data->interfaceMode = INTERFACEMODE_MAP;
 			} else if (selection == 3) {
 				// SAVE
+				cls();
+				saveGameData(data);
+				anykey();
 				data->interfaceMode = INTERFACEMODE_MAP;
 			} else if (selection == 4) {
 				// QUIT
@@ -1793,6 +1796,9 @@ void drawMenu(game *data) {
 				data->interfaceMode = INTERFACEMODE_MAP;
 			} else if (selection == 3) {
 				// SAVE
+				cls();
+				saveGameData(data);
+				anykey();
 				data->interfaceMode = INTERFACEMODE_MAP;
 			} else if (selection == 4) {
 				// QUIT
@@ -1861,6 +1867,9 @@ void drawMenu(game *data) {
 				data->interfaceMode = INTERFACEMODE_MAP;
 			} else if (selection == 4) {
 				// SAVE
+				cls();
+				saveGameData(data);
+				anykey();
 				data->interfaceMode = INTERFACEMODE_MAP;
 			} else if (selection == 5) {
 				// QUIT
@@ -1944,6 +1953,9 @@ void drawMenu(game *data) {
 				data->interfaceMode = INTERFACEMODE_MAP;
 			} else if (selection == 5) {
 				// SAVE
+				cls();
+				saveGameData(data);
+				anykey();
 				data->interfaceMode = INTERFACEMODE_MAP;
 			} else if (selection == 6) {
 				// QUIT

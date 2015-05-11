@@ -234,12 +234,12 @@ void loadGameData (game *data, char *filename) {
 
 void saveGameData (game *data) {
 	FILE *savefile;
-	// time_t currentTime = time(NULL);
-	// char *timestring = ctime(&currentTime);
-	// char *filename = malloc(sizeof(timestring) + 7);
-	// strcat(filename, timestring);
-	// strcat(filename, ".twsave");
-	char *filename = "savefile.twsave";
+	
+	char filename[100] = "savegame.twsave";
+	
+	printf("Type in a file name. End it with .twsave. ");
+	gets(filename);
+	
 	savefile = fopen(filename, "wb");
 	
 	printf("Saving game properties...\n");
