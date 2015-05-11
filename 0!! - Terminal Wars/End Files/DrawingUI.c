@@ -25,7 +25,7 @@ void screenSplash() {
 	printf("\n");
 	printf("An attempt to recreate the game Advance Wars in C.\n");
 	printf("\n");
-	printf("Version \"Stage 12\"\n\n");
+	printf("Version \"Stage 13\"\n\n");
 	
 	/// This tells the user if their screen is too small.
 	if (trows() < (MAP_HEIGHT + 14)) {

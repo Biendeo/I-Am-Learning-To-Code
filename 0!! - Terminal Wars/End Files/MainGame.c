@@ -502,6 +502,8 @@ void endTurn(game *data) {
 		data->turnNum++;
 	}
 	
+	/// It also gives the next player money based on how many buildings
+	/// they own.
 	if (data->whoseTurn == TEAM_RED) {
 		data->p1.money += (data->p1.buildingsOwned * MONEY_PER_BUILDING);
 	} else if (data->whoseTurn == TEAM_BLUE) {
@@ -510,6 +512,40 @@ void endTurn(game *data) {
 		data->p3.money += (data->p3.buildingsOwned * MONEY_PER_BUILDING);
 	} else if (data->whoseTurn == TEAM_YELLOW) {
 		data->p4.money += (data->p4.buildingsOwned * MONEY_PER_BUILDING);
+	}
+	
+	/// If any friendly units are on friendly buildings, they heal.
+	arrayPos = 0;
+	while (arrayPos < MAX_UNITS) {
+		/// This checks if the selected unit is on a friendly building
+		/// and also belongs to the next player.
+		if ((data->mapData[data->unitData[arrayPos].x][data->unitData[arrayPos].y] / 10) == data->whoseTurn) {
+			/// They heal 2 health and a third of their fuel and ammo.
+			data->unitData[arrayPos].health += 2;
+			data->unitData[arrayPos].fuel += (data->unitData[arrayPos].maxFuel / 3);
+			if (data->unitData[arrayPos].ammo1 != -1) {
+				data->unitData[arrayPos].ammo1 += (data->unitData[arrayPos].maxAmmo1 / 3);
+			}
+			if (data->unitData[arrayPos].ammo2 != -1) {
+				data->unitData[arrayPos].ammo2 += (data->unitData[arrayPos].maxAmmo2 / 3);
+			}
+			
+			/// This makes sure they don't get excess.
+			if (data->unitData[arrayPos].health > 10) {
+				data->unitData[arrayPos].health = 10;
+			}
+			/// This value can overflow, so it checks if it's below 0.
+			if ((data->unitData[arrayPos].fuel > data->unitData[arrayPos].maxFuel) || (data->unitData[arrayPos].fuel < 0)) {
+				data->unitData[arrayPos].fuel = data->unitData[arrayPos].maxFuel;
+			}
+			if (data->unitData[arrayPos].ammo1 > data->unitData[arrayPos].maxAmmo1) {
+				data->unitData[arrayPos].ammo1 = data->unitData[arrayPos].maxAmmo1;
+			}
+			if (data->unitData[arrayPos].ammo2 > data->unitData[arrayPos].maxAmmo2) {
+				data->unitData[arrayPos].ammo2 = data->unitData[arrayPos].maxAmmo2;
+			}
+		}
+		arrayPos++;
 	}
 }
 
