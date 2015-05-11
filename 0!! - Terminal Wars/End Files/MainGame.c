@@ -303,6 +303,9 @@ void moveUnit (game *data, short mover, int keyPress) {
 	short y = data->cursor.y;
 	short movementType = unitMovementTypeGetter(data, mover);
 	
+	/// On a keypress, if the unit can move there, then it moves them
+	/// and the cursor to that position. It also reduces the unit's
+	/// movement and fuel for that turn.
 	if (keyPress == UP) {
 		if (validMoveChecker(data, mover, UP) == YES) {
 			data->cursor.y--;
@@ -544,6 +547,20 @@ void endTurn(game *data) {
 			if (data->unitData[arrayPos].ammo2 > data->unitData[arrayPos].maxAmmo2) {
 				data->unitData[arrayPos].ammo2 = data->unitData[arrayPos].maxAmmo2;
 			}
+		}
+		arrayPos++;
+	}
+	
+	/// Finally, if any buildings do not have people capturing on them,
+	/// they fully heal.
+	arrayPos = 0;
+	short x = 0;
+	short y = 0;
+	while (arrayPos < MAX_BUILDINGS) {
+		x = data->buildingData[arrayPos].x;
+		y = data->buildingData[arrayPos].y;
+		if (unitGetter(data, x, y) >= MAX_UNITS) {
+			data->buildingData[arrayPos].health = 20;
 		}
 		arrayPos++;
 	}

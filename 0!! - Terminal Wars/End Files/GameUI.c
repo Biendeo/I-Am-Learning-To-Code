@@ -15,6 +15,9 @@ int main (int argc, char *argv[]) {
 	srand(time(NULL));
 	screenSplash();
 	START_GAME;
+	if (argv[1]) {
+		loadGameData(data, argv[1]);
+	}
 	testDrawing(data);
 	END_GAME;
 	return ERROR_CODE;

@@ -1065,9 +1065,7 @@ void testDrawing (game *data) {
 				
 				if (selection == 0) {
 					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_INFANTRY)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_INFANTRY)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_INFANTRY)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_INFANTRY))) {
-						if (data->p1.money < COST_INFANTRY) {
-							setColor(BROWN);
-						}
+						setColor(BROWN);
 					} else {
 						setColor(YELLOW);
 					}
@@ -1078,9 +1076,7 @@ void testDrawing (game *data) {
 				setColor(GREY);
 				if (selection == 1) {
 					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_MECH)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_MECH)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_MECH)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_MECH))) {
-						if (data->p1.money < COST_MECH) {
-							setColor(BROWN);
-						}
+						setColor(BROWN);
 					} else {
 						setColor(YELLOW);
 					}
@@ -1091,9 +1087,7 @@ void testDrawing (game *data) {
 				setColor(GREY);
 				if (selection == 2) {
 					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_RECON)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_RECON)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_RECON)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_RECON))) {
-						if (data->p1.money < COST_RECON) {
-							setColor(BROWN);
-						}
+						setColor(BROWN);
 					} else {
 						setColor(YELLOW);
 					}
@@ -1104,9 +1098,7 @@ void testDrawing (game *data) {
 				setColor(GREY);
 				if (selection == 3) {
 					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_TANK)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_TANK)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_TANK)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_TANK))) {
-						if (data->p1.money < COST_TANK) {
-							setColor(BROWN);
-						}
+						setColor(BROWN);
 					} else {
 						setColor(YELLOW);
 					}
@@ -1117,9 +1109,7 @@ void testDrawing (game *data) {
 				setColor(GREY);
 				if (selection == 4) {
 					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_MD_TANK)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_MD_TANK)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_MD_TANK)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_MD_TANK))) {
-						if (data->p1.money < COST_MD_TANK) {
-							setColor(BROWN);
-						}
+						setColor(BROWN);
 					} else {
 						setColor(YELLOW);
 					}
@@ -1130,9 +1120,7 @@ void testDrawing (game *data) {
 				setColor(GREY);
 				if (selection == 5) {
 					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_NEOTANK)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_NEOTANK)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_NEOTANK)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_NEOTANK))) {
-						if (data->p1.money < COST_NEOTANK) {
-							setColor(BROWN);
-						}
+						setColor(BROWN);
 					} else {
 						setColor(YELLOW);
 					}
@@ -1143,9 +1131,7 @@ void testDrawing (game *data) {
 				setColor(GREY);
 				if (selection == 6) {
 					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_MEGATANK)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_MEGATANK)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_MEGATANK)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_MEGATANK))) {
-						if (data->p1.money < COST_MEGATANK) {
-							setColor(BROWN);
-						}
+						setColor(BROWN);
 					} else {
 						setColor(YELLOW);
 					}
@@ -1156,9 +1142,7 @@ void testDrawing (game *data) {
 				setColor(GREY);
 				if (selection == 7) {
 					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_APC)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_APC)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_APC)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_APC))) {
-						if (data->p1.money < COST_APC) {
-							setColor(BROWN);
-						}
+						setColor(BROWN);
 					} else {
 						setColor(YELLOW);
 					}
@@ -1169,9 +1153,7 @@ void testDrawing (game *data) {
 				setColor(GREY);
 				if (selection == 8) {
 					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_ARTILLERY)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_ARTILLERY)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_ARTILLERY)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_ARTILLERY))) {
-						if (data->p1.money < COST_ARTILLERY) {
-							setColor(BROWN);
-						}
+						setColor(BROWN);
 					} else {
 						setColor(YELLOW);
 					}
@@ -1182,9 +1164,7 @@ void testDrawing (game *data) {
 				setColor(GREY);
 				if (selection == 9) {
 					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_ROCKETS)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_ROCKETS)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_ROCKETS)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_ROCKETS))) {
-						if (data->p1.money < COST_ROCKETS) {
-							setColor(BROWN);
-						}
+						setColor(BROWN);
 					} else {
 						setColor(YELLOW);
 					}
@@ -1195,9 +1175,7 @@ void testDrawing (game *data) {
 				setColor(GREY);
 				if (selection == 10) {
 					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_ANTI_AIR)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_ANTI_AIR)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_ANTI_AIR)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_ANTI_AIR))) {
-						if (data->p1.money < COST_ANTI_AIR) {
-							setColor(BROWN);
-						}
+						setColor(BROWN);
 					} else {
 						setColor(YELLOW);
 					}
@@ -1208,9 +1186,7 @@ void testDrawing (game *data) {
 				setColor(GREY);
 				if (selection == 11) {
 					if (((data->whoseTurn == TEAM_RED) && (data->p1.money < COST_MISSILES)) || ((data->whoseTurn == TEAM_BLUE) && (data->p2.money < COST_MISSILES)) || ((data->whoseTurn == TEAM_GREEN) && (data->p3.money < COST_MISSILES)) || ((data->whoseTurn == TEAM_YELLOW) && (data->p4.money < COST_MISSILES))) {
-						if (data->p1.money < COST_MISSILES) {
 							setColor(BROWN);
-						}
 					} else {
 						setColor(YELLOW);
 					}
@@ -1538,6 +1514,15 @@ void drawMenu(game *data) {
 	short selectedUnit = unitGetter (data, data->cursor.x, data->cursor.y);
 	/// This determines which UI to draw.
 	short ui = 0;
+	/// Ranged units cannot attack after they move. This determines
+	/// whether a unit is ranged can't move because of this.
+	short noAttack = NO;
+	if (maximumRangeGetter(data, selectedUnit) > 1) {
+		if (data->unitData[selectedUnit].movement < data->unitData[selectedUnit].maxMovement) {
+			noAttack = YES;
+		}
+	}
+	
 	// This is unclean and is going to win no points in neatness.
 	if (data->interfaceMode == INTERFACEMODE_MENU_UNIT) {
 		if (((data->unitData[selectedUnit].unitType == INFANTRY) || (data->unitData[selectedUnit].unitType == MECH)) && (data->mapData[data->cursor.x][data->cursor.y] < PLAIN)) {
@@ -1660,13 +1645,13 @@ void drawMenu(game *data) {
 			}
 			printf("MOVE\n");
 			setColor(GREY);
-			if ((selection == 1) && ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].player != data->whoseTurn))) {
+			if ((selection == 1) && ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].player != data->whoseTurn) || (noAttack == YES))) {
 				setColor(BROWN);
 			} else if (selection == 1) {
 				setColor(YELLOW);
 			/// If it's finished, grey this out. It's also greyed if
 			/// it's not the user's unit.
-			} else if ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].player != data->whoseTurn)) {
+			} else if ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].player != data->whoseTurn) || (noAttack == YES)) {
 				setColor(DARKGREY);
 			}
 			printf("ATTACK\n");
@@ -1841,6 +1826,9 @@ void drawMenu(game *data) {
 				data->interfaceMode = INTERFACEMODE_MAP;
 			} else if (selection == 2) {
 				// SAVE
+				cls();
+				saveGameData(data);
+				anykey();
 				data->interfaceMode = INTERFACEMODE_MAP;
 			} else if (selection == 3) {
 				// QUIT
@@ -1858,7 +1846,7 @@ void drawMenu(game *data) {
 			} else if (selection == 1) {
 				// ATTACK
 				/// If it was greyed out, it won't attack.
-				if ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].player != data->whoseTurn)) {
+				if ((data->unitData[selectedUnit].finished == YES) || (data->unitData[selectedUnit].player != data->whoseTurn) || (noAttack == YES)) {
 					data->interfaceMode = INTERFACEMODE_MAP;
 				} else {
 					data->attacker = unitGetter(data, data->cursor.x, data->cursor.y);
