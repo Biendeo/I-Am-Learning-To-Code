@@ -14,11 +14,18 @@
 int main (int argc, char *argv[]) {
 	srand(time(NULL));
 	screenSplash();
-	START_GAME;
-	if (argv[1]) {
-		loadGameData(data, argv[1]);
-	}
+	if (!argv[1]) {
+		START_GAME;
 	testDrawing(data);
 	END_GAME;
 	return ERROR_CODE;
+	} else {
+		game *data = malloc(sizeof(game));
+		loadGameData(data, argv[1]);
+	if (ERROR_CODE == ALL_GOOD) {
+		testDrawing(data);
+	}
+	END_GAME;
+	return ERROR_CODE;
+	}
 }

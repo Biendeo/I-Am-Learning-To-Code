@@ -139,93 +139,97 @@ void translateMapData (game *data, unsigned char tile, short x, short y) {
 }
 void loadGameData (game *data, char *filename) {
 	FILE *savefile;
-	savefile = fopen(filename, "wb");
+	savefile = fopen(filename, "r");
 	
-	printf("Loading game properties...\n");
-	
-	fread(&data->turnNum, sizeof(data->turnNum), 1, savefile);
-	fread(&data->numberOfPlayers, sizeof(data->numberOfPlayers), 1, savefile);
-	fread(&data->whoseTurn, sizeof(data->whoseTurn), 1, savefile);
-	fread(&data->cursor.x, sizeof(data->cursor.x), 1, savefile);
-	fread(&data->cursor.y, sizeof(data->cursor.y), 1, savefile);
-	fread(&data->interfaceMode, sizeof(data->interfaceMode), 1, savefile);
-	fread(&data->drawMode, sizeof(data->drawMode), 1, savefile);
-	fread(&data->attacker, sizeof(data->attacker), 1, savefile);
-	
-	printf("Loading map data...\n");
-	
-	short xPos = 0;
-	short yPos = 0;
-	
-	while (yPos < MAP_HEIGHT) {
-		while (xPos < MAP_WIDTH) {
-			fread(&data->mapData[xPos][yPos], sizeof(unsigned char), 1, savefile);
-			xPos++;
+	if (savefile == NULL) {
+		ERROR_CODE = FILE_NOT_FOUND;
+	} else {
+		
+		printf("Loading game properties...\n");
+		
+		fread(&data->turnNum, sizeof(data->turnNum), 1, savefile);
+		fread(&data->numberOfPlayers, sizeof(data->numberOfPlayers), 1, savefile);
+		fread(&data->whoseTurn, sizeof(data->whoseTurn), 1, savefile);
+		fread(&data->cursor.x, sizeof(data->cursor.x), 1, savefile);
+		fread(&data->cursor.y, sizeof(data->cursor.y), 1, savefile);
+		fread(&data->interfaceMode, sizeof(data->interfaceMode), 1, savefile);
+		fread(&data->drawMode, sizeof(data->drawMode), 1, savefile);
+		fread(&data->attacker, sizeof(data->attacker), 1, savefile);
+		
+		printf("Loading map data...\n");
+		
+		short xPos = 0;
+		short yPos = 0;
+		
+		while (yPos < MAP_HEIGHT) {
+			while (xPos < MAP_WIDTH) {
+				fread(&data->mapData[xPos][yPos], sizeof(unsigned char), 1, savefile);
+				xPos++;
+			}
+			xPos = 0;
+			yPos++;
 		}
-		xPos = 0;
-		yPos++;
+		
+		printf("Loading player data...\n");
+		
+		fread(&data->p1.isItHuman, sizeof(data->p1.isItHuman), 1, savefile);
+		fread(&data->p1.color, sizeof(data->p1.color), 1, savefile);
+		fread(&data->p1.money, sizeof(data->p1.money), 1, savefile);
+		fread(&data->p1.buildingsOwned, sizeof(data->p1.buildingsOwned), 1, savefile);
+		fread(&data->p1.unitsOwned, sizeof(data->p1.unitsOwned), 1, savefile);
+		fread(&data->p2.isItHuman, sizeof(data->p2.isItHuman), 1, savefile);
+		fread(&data->p2.color, sizeof(data->p2.color), 1, savefile);
+		fread(&data->p2.money, sizeof(data->p2.money), 1, savefile);
+		fread(&data->p2.buildingsOwned, sizeof(data->p2.buildingsOwned), 1, savefile);
+		fread(&data->p2.unitsOwned, sizeof(data->p2.unitsOwned), 1, savefile);
+		fread(&data->p3.isItHuman, sizeof(data->p3.isItHuman), 1, savefile);
+		fread(&data->p3.color, sizeof(data->p3.color), 1, savefile);
+		fread(&data->p3.money, sizeof(data->p3.money), 1, savefile);
+		fread(&data->p3.buildingsOwned, sizeof(data->p3.buildingsOwned), 1, savefile);
+		fread(&data->p3.unitsOwned, sizeof(data->p3.unitsOwned), 1, savefile);
+		fread(&data->p4.isItHuman, sizeof(data->p4.isItHuman), 1, savefile);
+		fread(&data->p4.color, sizeof(data->p4.color), 1, savefile);
+		fread(&data->p4.money, sizeof(data->p4.money), 1, savefile);
+		fread(&data->p4.buildingsOwned, sizeof(data->p4.buildingsOwned), 1, savefile);
+		fread(&data->p4.unitsOwned, sizeof(data->p4.unitsOwned), 1, savefile);
+		
+		printf("Loading unit data...\n");
+		
+		short arrayPos = 0;
+		
+		while (arrayPos < MAX_UNITS) {
+			fread(&data->unitData[arrayPos].unitType, sizeof(data->unitData[arrayPos].unitType), 1, savefile);
+			fread(&data->unitData[arrayPos].player, sizeof(data->unitData[arrayPos].player), 1, savefile);
+			fread(&data->unitData[arrayPos].health, sizeof(data->unitData[arrayPos].health), 1, savefile);
+			fread(&data->unitData[arrayPos].ammo1, sizeof(data->unitData[arrayPos].ammo1), 1, savefile);
+			fread(&data->unitData[arrayPos].ammo2, sizeof(data->unitData[arrayPos].ammo2), 1, savefile);
+			fread(&data->unitData[arrayPos].maxAmmo1, sizeof(data->unitData[arrayPos].maxAmmo1), 1, savefile);
+			fread(&data->unitData[arrayPos].maxAmmo2, sizeof(data->unitData[arrayPos].maxAmmo2), 1, savefile);
+			fread(&data->unitData[arrayPos].fuel, sizeof(data->unitData[arrayPos].fuel), 1, savefile);
+			fread(&data->unitData[arrayPos].maxFuel, sizeof(data->unitData[arrayPos].maxFuel), 1, savefile);
+			fread(&data->unitData[arrayPos].movement, sizeof(data->unitData[arrayPos].movement), 1, savefile);
+			fread(&data->unitData[arrayPos].maxMovement, sizeof(data->unitData[arrayPos].maxMovement), 1, savefile);
+			fread(&data->unitData[arrayPos].vision, sizeof(data->unitData[arrayPos].vision), 1, savefile);
+			fread(&data->unitData[arrayPos].finished, sizeof(data->unitData[arrayPos].finished), 1, savefile);
+			fread(&data->unitData[arrayPos].x, sizeof(data->unitData[arrayPos].x), 1, savefile);
+			fread(&data->unitData[arrayPos].y, sizeof(data->unitData[arrayPos].y), 1, savefile);
+			arrayPos++;
+		}
+		
+		printf("Loading building data...\n");
+		arrayPos = 0;
+		while (arrayPos < MAX_BUILDINGS) {
+			fread(&data->buildingData[arrayPos].buildingType, sizeof(data->buildingData[arrayPos].buildingType), 1, savefile);
+			fread(&data->buildingData[arrayPos].player, sizeof(data->buildingData[arrayPos].player), 1, savefile);
+			fread(&data->buildingData[arrayPos].health, sizeof(data->buildingData[arrayPos].health), 1, savefile);
+			fread(&data->buildingData[arrayPos].x, sizeof(data->buildingData[arrayPos].x), 1, savefile);
+			fread(&data->buildingData[arrayPos].y, sizeof(data->buildingData[arrayPos].y), 1, savefile);
+			arrayPos++;
+		}
+		printf("Savefile successfully loaded.\n");
 	}
-	
-	printf("Loading player data...\n");
-	
-	fread(&data->p1.isItHuman, sizeof(data->p1.isItHuman), 1, savefile);
-	fread(&data->p1.color, sizeof(data->p1.color), 1, savefile);
-	fread(&data->p1.money, sizeof(data->p1.money), 1, savefile);
-	fread(&data->p1.buildingsOwned, sizeof(data->p1.buildingsOwned), 1, savefile);
-	fread(&data->p1.unitsOwned, sizeof(data->p1.unitsOwned), 1, savefile);
-	fread(&data->p2.isItHuman, sizeof(data->p2.isItHuman), 1, savefile);
-	fread(&data->p2.color, sizeof(data->p2.color), 1, savefile);
-	fread(&data->p2.money, sizeof(data->p2.money), 1, savefile);
-	fread(&data->p2.buildingsOwned, sizeof(data->p2.buildingsOwned), 1, savefile);
-	fread(&data->p2.unitsOwned, sizeof(data->p2.unitsOwned), 1, savefile);
-	fread(&data->p3.isItHuman, sizeof(data->p3.isItHuman), 1, savefile);
-	fread(&data->p3.color, sizeof(data->p3.color), 1, savefile);
-	fread(&data->p3.money, sizeof(data->p3.money), 1, savefile);
-	fread(&data->p3.buildingsOwned, sizeof(data->p3.buildingsOwned), 1, savefile);
-	fread(&data->p3.unitsOwned, sizeof(data->p3.unitsOwned), 1, savefile);
-	fread(&data->p4.isItHuman, sizeof(data->p4.isItHuman), 1, savefile);
-	fread(&data->p4.color, sizeof(data->p4.color), 1, savefile);
-	fread(&data->p4.money, sizeof(data->p4.money), 1, savefile);
-	fread(&data->p4.buildingsOwned, sizeof(data->p4.buildingsOwned), 1, savefile);
-	fread(&data->p4.unitsOwned, sizeof(data->p4.unitsOwned), 1, savefile);
-	
-	printf("Loading unit data...\n");
-	
-	short arrayPos = 0;
-	
-	while (arrayPos < MAX_UNITS) {
-		fread(&data->unitData[arrayPos].unitType, sizeof(data->unitData[arrayPos].unitType), 1, savefile);
-		fread(&data->unitData[arrayPos].player, sizeof(data->unitData[arrayPos].player), 1, savefile);
-		fread(&data->unitData[arrayPos].health, sizeof(data->unitData[arrayPos].health), 1, savefile);
-		fread(&data->unitData[arrayPos].ammo1, sizeof(data->unitData[arrayPos].ammo1), 1, savefile);
-		fread(&data->unitData[arrayPos].ammo2, sizeof(data->unitData[arrayPos].ammo2), 1, savefile);
-		fread(&data->unitData[arrayPos].maxAmmo1, sizeof(data->unitData[arrayPos].maxAmmo1), 1, savefile);
-		fread(&data->unitData[arrayPos].maxAmmo2, sizeof(data->unitData[arrayPos].maxAmmo2), 1, savefile);
-		fread(&data->unitData[arrayPos].fuel, sizeof(data->unitData[arrayPos].fuel), 1, savefile);
-		fread(&data->unitData[arrayPos].maxFuel, sizeof(data->unitData[arrayPos].maxFuel), 1, savefile);
-		fread(&data->unitData[arrayPos].movement, sizeof(data->unitData[arrayPos].movement), 1, savefile);
-		fread(&data->unitData[arrayPos].maxMovement, sizeof(data->unitData[arrayPos].maxMovement), 1, savefile);
-		fread(&data->unitData[arrayPos].vision, sizeof(data->unitData[arrayPos].vision), 1, savefile);
-		fread(&data->unitData[arrayPos].finished, sizeof(data->unitData[arrayPos].finished), 1, savefile);
-		fread(&data->unitData[arrayPos].x, sizeof(data->unitData[arrayPos].x), 1, savefile);
-		fread(&data->unitData[arrayPos].y, sizeof(data->unitData[arrayPos].y), 1, savefile);
-		arrayPos++;
-	}
-	
-	printf("Loading building data...\n");
-	arrayPos = 0;
-	while (arrayPos < MAX_BUILDINGS) {
-		fread(&data->buildingData[arrayPos].buildingType, sizeof(data->buildingData[arrayPos].buildingType), 1, savefile);
-		fread(&data->buildingData[arrayPos].player, sizeof(data->buildingData[arrayPos].player), 1, savefile);
-		fread(&data->buildingData[arrayPos].health, sizeof(data->buildingData[arrayPos].health), 1, savefile);
-		fread(&data->buildingData[arrayPos].x, sizeof(data->buildingData[arrayPos].x), 1, savefile);
-		fread(&data->buildingData[arrayPos].y, sizeof(data->buildingData[arrayPos].y), 1, savefile);
-		arrayPos++;
-	}
-	
 	fclose(savefile);
 	// free(filename);
-	printf("Savefile successfully loaded.\n");
 }
 
 void saveGameData (game *data) {
