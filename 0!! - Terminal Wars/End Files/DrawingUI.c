@@ -10,6 +10,13 @@
 #include "DrawingUI.h"
 #include "rlutil.h"
 
+#ifndef _WIN32
+	#define KEY_UP 'i'
+	#define KEY_DOWN 'k'
+	#define KEY_LEFT 'j'
+	#define KEY_RIGHT 'l'
+#endif
+
 /// This is just a splash screen for presentation.
 void screenSplash() {
 	setColor(GREY);
