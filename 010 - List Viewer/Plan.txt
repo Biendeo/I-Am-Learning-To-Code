@@ -1,0 +1,34 @@
+Features:
+A list that you can view elements in.
+Save list to a file.
+Load list to a file.
+Add items between any elements you want.
+Remove any items you want.
+Move elements in the list.
+Copy elements in the list.
+
+Bonus features if I want to keep going:
+Re-order the list in terms of alphabetical order.
+Re-order the list in terms of ASCII order (so capitals are separate to lower-case).
+Move and copy chunks in the list.
+Read in a text file, and add elements based on that.
+
+How it works:
+Elements will be a linked list.
+	There must be a head element that points to the first element in the list.
+		It can also store the size, just so computation can be down a bit.
+	It will give no inherit max size to the list.
+	Elements will be a string of 256 characters (possibly find a way to make this the size of the string + a terminating character).
+	Since it's a linked list, each element refers to the next element.
+		For storing it only needs the data, and in the order it is in the list.
+	It won't affect the save data, but I'll need to figure out if I will need the previous element in the list.
+Displaying the elements will use rlutil.h. Everything is grey, but the highlighted element will be yellow.
+	I will need a good unified way of calculating this. Because the names are dynamically given, then this can be done with an algorithm, and the text colour can just be a selected element.
+	How would screen scrolling work? I'd need to use rlutil's tcol (and I guess trow) to figure out what to draw and how much of it to draw.
+Saving a file will just save the data in order. If I ever include any metadata, that will be included too. Proceed through each element until I'm at the end of the list.
+Loading is the same thing.
+Adding elements to the list requires to know whether they're adding above the selected element, or below.
+	Count to the element before where it needs to be inserted. Make the element and hold to its pointer. Its next pointer goes to the next element. The counted element's next is then set to the new element. Then add the data (although that could be done at any time).
+Removing elements from the list just involves counting to the element before it, then storing where the next element (the one that needs to be deleted). Then point the current one to the one after the next one, and then delete the selected one.
+Moving elements requires just changing pointers. Figure out the element before where the selected one wants to be moved to. <SOME MORE STUFF>
+Copying is basically just making a new element, just with a value already given.
