@@ -11,6 +11,10 @@
 typedef struct _item * Item;
 
 /**
+ *  \struct _item
+ *  \brief This is an element of the list.
+ */
+/**
  *  \typedef struct _item item
  *  \brief Defines item as the struct item.
  */
@@ -33,6 +37,10 @@ typedef struct _item {
 typedef struct _list * List;
 
 /**
+ *  \struct _list
+ *  \brief This marks the beginning of the list.
+ */
+/**
  *  \typedef struct _list list
  *  \brief Defines list as the struct list.
  */
@@ -53,3 +61,10 @@ typedef struct _list {
  *  terms of characters).
  */
 #define DATA_MAX_SIZE 256
+
+List createList();
+void addItem(List l, char *data, int pos);
+void deleteItem(List l, int pos);
+void moveItem(List l, int posFrom, int posTo);
+void copyItem(List l, int posFrom, int posTo);
+void deleteList(List l);
