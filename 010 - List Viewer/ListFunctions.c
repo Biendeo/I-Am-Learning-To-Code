@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "rlutil.h"
 #include "Interface.h"
 #include "ListFunctions.h"
 #include "FileIO.h"
@@ -22,7 +21,7 @@ List createList() {
 	List l = malloc(sizeof(list));
 	l->size = 0;
 	l->next = NULL;
-	return list;
+	return l;
 }
 
 /**
@@ -34,7 +33,33 @@ List createList() {
  *  \param [in] pos The position in the list that the item is going in.
  */
 void addItem(List l, char *data, int pos) {
-	
+	int currentPos = 1;
+	Item currentItem = l->next;
+	Item addingItem = NULL;
+	/// It'll now count to the item before the one that needs to be
+	/// added.
+	if (pos == 1) {
+		addingItem = malloc(sizeof(item));
+		addingItem->data = malloc(strlen(data) + 1);
+		strncpy(addingItem->data, data, strlen(data) + 1);
+		l->next = addingItem;
+		addingItem->next = currentItem;
+	} else {
+		while ((currentPos != pos - 1) && (currentItem != NULL)) {
+			currentItem = currentItem->next;
+			currentPos++;
+		}
+
+		if (currentItem == NULL) {
+			reportError(ERROR_ADDED_PAST_SIZE);
+		} else {
+			addingItem = malloc(sizeof(item));
+			addingItem->data = malloc(strlen(data) + 1);
+			strncpy(addingItem->data, data, strlen(data) + 1);
+			addingItem->next = currentItem->next;
+			currentItem->next = addingItem;
+		}
+	}
 }
 
 /**
@@ -45,7 +70,35 @@ void addItem(List l, char *data, int pos) {
  *  \param [in] pos The position in the list that the item is going out.
  */
 void deleteItem(List l, int pos) {
-	
+	int currentPos = 0;
+	Item currentItem = NULL;
+	Item deletingItem = NULL;
+	/// If the list isn't empty.
+	if (l->next != NULL) {
+		/// We start at the first item.
+		currentItem = l->next;
+		currentPos++;
+		
+		/// It'll now count to the item before the one that needs to be
+		/// deleted.
+		while ((currentPos != pos - 1) && (currentItem != NULL)) {
+			currentItem = currentItem->next;
+			currentPos++;
+		}
+		
+		if (currentItem == NULL) {
+			reportError(ERROR_DELETED_PAST_SIZE);
+		/// Then, we store the item to delete, cover the link, and
+		/// delete the item.
+		} else {
+			deletingItem = currentItem->next;
+			currentItem->next = currentItem->next->next;
+			free(deletingItem->data);
+			free(deletingItem);
+		}
+	} else {
+		reportError(ERROR_DELETED_ITEM_FROM_NULL_LIST);
+	}
 }
 
 /**
