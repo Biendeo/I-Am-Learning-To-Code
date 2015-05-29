@@ -8,6 +8,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "Interface.h"
 #include "ListFunctions.h"
+#include "Interface.h"
 #include "FileIO.h"

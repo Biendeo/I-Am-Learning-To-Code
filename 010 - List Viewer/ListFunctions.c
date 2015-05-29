@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "Interface.h"
 #include "ListFunctions.h"
+#include "Interface.h"
 #include "FileIO.h"
 
 /**
@@ -40,10 +40,11 @@ void addItem(List l, char *data, int pos) {
 	/// added.
 	if (pos == 1) {
 		addingItem = malloc(sizeof(item));
-		addingItem->data = malloc(strlen(data) + 1);
-		strncpy(addingItem->data, data, strlen(data) + 1);
+		addingItem->data = malloc(strlen(data));
+		strncpy(addingItem->data, data, strlen(data));
 		l->next = addingItem;
 		addingItem->next = currentItem;
+		l->size++;
 	} else {
 		while ((currentPos != pos - 1) && (currentItem != NULL)) {
 			currentItem = currentItem->next;
@@ -58,6 +59,7 @@ void addItem(List l, char *data, int pos) {
 			strncpy(addingItem->data, data, strlen(data) + 1);
 			addingItem->next = currentItem->next;
 			currentItem->next = addingItem;
+			l->size++;
 		}
 	}
 }
@@ -70,31 +72,37 @@ void addItem(List l, char *data, int pos) {
  *  \param [in] pos The position in the list that the item is going out.
  */
 void deleteItem(List l, int pos) {
-	int currentPos = 0;
-	Item currentItem = NULL;
+	int currentPos = 1;
+	Item currentItem = l->next;
 	Item deletingItem = NULL;
 	/// If the list isn't empty.
 	if (l->next != NULL) {
-		/// We start at the first item.
-		currentItem = l->next;
-		currentPos++;
-		
-		/// It'll now count to the item before the one that needs to be
-		/// deleted.
-		while ((currentPos != pos - 1) && (currentItem != NULL)) {
-			currentItem = currentItem->next;
-			currentPos++;
-		}
-		
-		if (currentItem == NULL) {
-			reportError(ERROR_DELETED_PAST_SIZE);
-		/// Then, we store the item to delete, cover the link, and
-		/// delete the item.
+		if (currentItem->next != NULL) {
+			/// It'll now count to the item before the one that needs to be
+			/// deleted.
+			while ((currentPos < pos - 1) && (currentItem != NULL)) {
+				currentItem = currentItem->next;
+				currentPos++;
+			}
+			
+			if (currentItem->next == NULL) {
+				reportError(ERROR_DELETED_PAST_SIZE);
+			/// Then, we store the item to delete, cover the link, and
+			/// delete the item.
+			} else {
+				deletingItem = currentItem->next;
+				currentItem->next = currentItem->next->next;
+				free(deletingItem->data);
+				free(deletingItem);
+				l->size--;
+			}
 		} else {
-			deletingItem = currentItem->next;
-			currentItem->next = currentItem->next->next;
+			deletingItem = l->next;
+			currentItem = l->next->next;
+			l->next = currentItem;
 			free(deletingItem->data);
 			free(deletingItem);
+			l->size--;
 		}
 	} else {
 		reportError(ERROR_DELETED_ITEM_FROM_NULL_LIST);
