@@ -29,3 +29,4 @@ void reportError(int errorCode);
 Data startProgram();
 void quitProgram(Data d, List l);
 void printList(Data d, List l);
+void printFooter(Data d, List l);

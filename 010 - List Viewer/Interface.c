@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "rlutil.h"
 #include "ListFunctions.h"
@@ -22,8 +23,16 @@ int main(int argc, char *argv[]) {
 	addItem(l, "test2", 2);
 	addItem(l, "test1.5", 2);
 	
+	printf("d->consoleWidth = %d, d->consoleHeight = %d\n", d->consoleWidth, d->consoleHeight);
+	getkey();
+	
+	cls();
 	printList(d, l);
+	printFooter(d, l);
+	getkey();
+	
 	quitProgram(d, l);
+	
 	return EXIT_SUCCESS;
 }
 
@@ -74,8 +83,8 @@ void printList(Data d, List l) {
 	
 	/// This loops until we hit the row just above the bottom of the
 	/// screen, or we hit a null item.
-	while ((writingPos != (d->topItem + d->consoleHeight - 2)) && (currentItem->next != NULL)) {
-		if (l->next == NULL) {
+	while ((writingPos != (d->topItem + d->consoleHeight - 2)) && (currentItem != NULL)) {
+		if (currentItem->next == NULL) {
 			setColor(DARKGREY);
 			printf("Reached the end of the list of %d elements.\n", l->size);
 			setColor(GREY);
@@ -120,5 +129,26 @@ void printList(Data d, List l) {
 			writingPos++;
 		}
 	}
+}
 
+void printFooter(Data d, List l) {
+	/// This is the left-most element of the footer.
+	// It'll probably print the current action.
+	setColor(DARKGREY);
+	
+	locate(1, d->consoleHeight);
+	printf("VIEWMODE");
+	
+	/// This is the right-most element of the footer. It shows the
+	/// current number of the selected element, and the total items in
+	/// the list.
+	int charsToDraw = 3;
+	if (l->size != 0) {
+		charsToDraw += log10(l->size);
+		charsToDraw += log10(d->cursorPos);
+	}
+	locate(77, d->consoleHeight);
+	printf("%d/%d", d->cursorPos, l->size);
+	
+	setColor(GREY);
 }
