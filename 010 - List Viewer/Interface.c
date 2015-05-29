@@ -27,13 +27,12 @@ int main(int argc, char *argv[]) {
 		addItem(l, "BLAH", 3);
 	}
 	
-	printf("d->consoleWidth = %d, d->consoleHeight = %d\n", d->consoleWidth, d->consoleHeight);
-	getkey();
-	
-	cls();
-	printList(d, l);
-	printFooter(d, l);
-	getkey();
+	while (d->mode != MODE_EXIT) {
+		updateConsoleData(d);
+		printList(d, l);
+		printFooter(d, l);
+		computeInput(d, l);
+	}
 	
 	quitProgram(d, l);
 	
@@ -69,6 +68,7 @@ Data startProgram() {
 	d->cursorPos = 4505;
 	d->cursorWidth = 0;
 	d->topItem = 4500;
+	d->mode = MODE_VIEW;
 	return d;
 }
 
@@ -85,9 +85,13 @@ void printList(Data d, List l) {
 	int currentPos = 1;
 	int stringPos = 0;
 	
+	/// Firstly, we clear the screen.
+	cls();
+	
 	/// This loops until we hit the row just above the bottom of the
 	/// screen, or we hit a null item.
 	while ((writingPos != (d->topItem + d->consoleHeight - 2)) && (currentItem != NULL)) {
+		/// If we've hit the end of the list, we print this message.
 		if (currentItem->next == NULL) {
 			setColor(DARKGREY);
 			printf("Reached the end of the list of %d elements.\n", l->size);
@@ -115,8 +119,6 @@ void printList(Data d, List l) {
 				setColor(YELLOW);
 			}
 			
-			// printf("sizeof(*(currentItem->data)) = %d\n", strlen(currentItem->data));
-			
 			/// Now, we print the letters we need to display. We stop 
 			/// either when we hit the end of the string, or when we hit
 			/// the end of the word.
@@ -141,8 +143,9 @@ void printFooter(Data d, List l) {
 	setColor(DARKGREY);
 	
 	locate(1, d->consoleHeight);
-	printf("VIEWMODE");
-	
+	if (d->mode == MODE_VIEW) {
+		printf("VIEWMODE");	
+	}
 	/// This is the right-most element of the footer. It shows the
 	/// current number of the selected element, and the total items in
 	/// the list.
@@ -158,4 +161,75 @@ void printFooter(Data d, List l) {
 	printf("%d/%d", d->cursorPos, l->size);
 	
 	setColor(GREY);
+}
+
+void computeInput(Data d, List l) {
+	/// Firstly, we get the keypress, then figure out what to do with it.
+	int keyPress = getkey();
+	/// When in viewmode...
+	if (d->mode == MODE_VIEW) {
+		/// If up is pressed...
+		if (keyPress == KEY_UP) {
+			/// If the cursor is not at the top of the list, we move it up.
+			if (d->cursorPos > 1) {
+				d->cursorPos--;
+			}
+			
+			/// If the screen is not at the top, we move it up.
+			if (d->topItem > 1) {
+				d->topItem--;
+			}
+		/// If down is pressed...
+		} else if (keyPress == KEY_DOWN) {
+			/// If the cursor is not at the bottom of the list, we move it down.
+			if (d->cursorPos < l->size) {
+				d->cursorPos++;
+			}
+			
+			/// If the screen is not at the bottom, we move it down.
+			// This currently goes further, leaving black space. Ideally, we
+			// should just leave it when it prints NO MORE ITEMs.
+			if (d->topItem < l->size) {
+				/// There's also a catch if it's at the top of the list.
+				// Ideally, this should be relative to where the cursor is on
+				// the screen, as we can basically make it smooth.
+				if (d->topItem > 5) {
+					d->topItem++;
+				}
+			}
+		} else if (keyPress == KEY_PGUP) {
+			if (d->cursorPos > d->consoleHeight - 2) {
+				d->cursorPos -= d->consoleHeight - 2;
+			} else {
+				d->cursorPos = 1;
+			}
+			
+			if (d->topItem > d->consoleHeight - 2) {
+				d->topItem -= d->consoleHeight - 2;
+			} else {
+				d->topItem = 1;
+			}
+		} else if (keyPress == KEY_PGDOWN) {
+			if (d->cursorPos < l->size - (d->consoleHeight - 2)) {
+				d->cursorPos += d->consoleHeight - 2;
+			} else {
+				d->cursorPos = l->size;
+			}
+			
+			if (d->topItem < l->size - (d->consoleHeight - 2)) {
+				d->topItem += d->consoleHeight - 2;
+			} else {
+				d->topItem = l->size;
+			}
+		} else if (keyPress == KEY_SPACE) {
+			d->mode = MODE_VIEW_MENU;
+		} else if (keyPress == KEY_ESCAPE) {
+			d->mode = MODE_EXIT;
+		}
+	}
+}
+
+void updateConsoleData(Data d) {
+	d->consoleHeight = trows();
+	d->consoleWidth = tcols();
 }
