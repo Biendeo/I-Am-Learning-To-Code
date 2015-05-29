@@ -90,7 +90,7 @@ void printList(Data d, List l) {
 	
 	/// This loops until we hit the row just above the bottom of the
 	/// screen, or we hit a null item.
-	while ((writingPos != (d->topItem + d->consoleHeight - 2)) && (currentItem != NULL)) {
+	while ((writingPos != (d->topItem + d->consoleHeight - 1)) && (currentItem != NULL)) {
 		/// If we've hit the end of the list, we print this message.
 		if (currentItem->next == NULL) {
 			setColor(DARKGREY);
@@ -193,37 +193,50 @@ void computeInput(Data d, List l) {
 				/// There's also a catch if it's at the top of the list.
 				// Ideally, this should be relative to where the cursor is on
 				// the screen, as we can basically make it smooth.
-				if (d->topItem > 5) {
+				if ((d->topItem > 5) || (d->cursorPos > 5)) {
 					d->topItem++;
 				}
 			}
+		/// If page up is pressed...
 		} else if (keyPress == KEY_PGUP) {
-			if (d->cursorPos > d->consoleHeight - 2) {
-				d->cursorPos -= d->consoleHeight - 2;
+			/// If the cursor is within a screen's distance to the top, then it
+			/// just sets it as the top. Otherwise, it moves it a screen.
+			if (d->cursorPos > d->consoleHeight - 1) {
+				d->cursorPos -= d->consoleHeight - 1;
 			} else {
 				d->cursorPos = 1;
 			}
 			
-			if (d->topItem > d->consoleHeight - 2) {
-				d->topItem -= d->consoleHeight - 2;
+			/// Similarly with the top item.
+			if (d->topItem > d->consoleHeight - 1) {
+				d->topItem -= d->consoleHeight - 1;
 			} else {
 				d->topItem = 1;
 			}
+		/// If page down is pressed...
 		} else if (keyPress == KEY_PGDOWN) {
-			if (d->cursorPos < l->size - (d->consoleHeight - 2)) {
-				d->cursorPos += d->consoleHeight - 2;
+			/// If the cursor is within a screen's distance to the bottom, then
+			/// it just sets it as the bottom. Otherwise, it moves it a screen.
+			if (d->cursorPos < l->size - (d->consoleHeight - 1)) {
+				d->cursorPos += d->consoleHeight - 1;
 			} else {
 				d->cursorPos = l->size;
 			}
 			
-			if (d->topItem < l->size - (d->consoleHeight - 2)) {
-				d->topItem += d->consoleHeight - 2;
+			/// Similarly with the bottom item.
+			if (d->topItem < l->size - (d->consoleHeight - 1)) {
+				d->topItem += d->consoleHeight - 1;
 			} else {
 				d->topItem = l->size;
 			}
+		/// If space is pressed...
 		} else if (keyPress == KEY_SPACE) {
-			d->mode = MODE_VIEW_MENU;
+			/// The program enters the menu.
+			// THIS DOES NOT WORK.
+			// d->mode = MODE_VIEW_MENU;
+		/// If escape is pressed...
 		} else if (keyPress == KEY_ESCAPE) {
+			/// Quit the program.
 			d->mode = MODE_EXIT;
 		}
 	}
