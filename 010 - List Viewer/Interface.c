@@ -23,6 +23,10 @@ int main(int argc, char *argv[]) {
 	addItem(l, "test2", 2);
 	addItem(l, "test1.5", 2);
 	
+	while (l->size < 4510) {
+		addItem(l, "BLAH", 3);
+	}
+	
 	printf("d->consoleWidth = %d, d->consoleHeight = %d\n", d->consoleWidth, d->consoleHeight);
 	getkey();
 	
@@ -62,9 +66,9 @@ Data startProgram() {
 	Data d = malloc(sizeof(data));
 	d->consoleHeight = trows();
 	d->consoleWidth = tcols();
-	d->cursorPos = 0;
+	d->cursorPos = 4505;
 	d->cursorWidth = 0;
-	d->topItem = 1;
+	d->topItem = 4500;
 	return d;
 }
 
@@ -145,9 +149,12 @@ void printFooter(Data d, List l) {
 	int charsToDraw = 3;
 	if (l->size != 0) {
 		charsToDraw += log10(l->size);
+	}
+	if (d->cursorPos != 0) {
 		charsToDraw += log10(d->cursorPos);
 	}
-	locate(77, d->consoleHeight);
+	
+	locate(d->consoleWidth - charsToDraw, d->consoleHeight);
 	printf("%d/%d", d->cursorPos, l->size);
 	
 	setColor(GREY);
