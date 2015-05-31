@@ -175,9 +175,13 @@ void computeInput(Data d, List l) {
 				d->cursorPos--;
 			}
 			
-			/// If the screen is not at the top, we move it up.
+			/// If the screen is not at the top...
 			if (d->topItem > 1) {
-				d->topItem--;
+				/// And it's moved past the top quarter of the screen, then we
+				/// move it up.
+				if ((d->topItem + d->consoleHeight / 4) > d->cursorPos) {
+					d->topItem--;
+				}
 			}
 		/// If down is pressed...
 		} else if (keyPress == KEY_DOWN) {
@@ -191,10 +195,12 @@ void computeInput(Data d, List l) {
 			// should just leave it when it prints NO MORE ITEMs.
 			if (d->topItem < l->size) {
 				/// There's also a catch if it's at the top of the list.
-				// Ideally, this should be relative to where the cursor is on
-				// the screen, as we can basically make it smooth.
 				if ((d->topItem > 5) || (d->cursorPos > 5)) {
-					d->topItem++;
+					/// Also, if the cursor moves to the bottom quarter of the
+					/// screen, then the screen moves down.
+					if ((d->topItem + 3 * d->consoleHeight / 4) < d->cursorPos) {
+						d->topItem++;
+					}
 				}
 			}
 		/// If page up is pressed...
