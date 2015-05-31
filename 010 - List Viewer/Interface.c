@@ -117,6 +117,10 @@ void printList(Data d, List l) {
 			/// If it's highlighted, then it's printed as yellow.
 			if (writingPos == d->cursorPos) {
 				setColor(YELLOW);
+			} else if ((writingPos >= d->selectedTopItem) && (writingPos <= d->selectedBottomItem)) {
+				if ((d->mode == MODE_MOVE) || (d->mode == MODE_MOVE_MENU)) {
+					setColor(LIGHTGREEN);
+				}
 			}
 			
 			/// Now, we print the letters we need to display. We stop 
@@ -128,7 +132,7 @@ void printList(Data d, List l) {
 			}
 			
 			/// If it's highlighted, then we change the colour back.
-			if (writingPos == d->cursorPos) {
+			if ((writingPos == d->cursorPos) || ((writingPos >= d->selectedTopItem) && (writingPos <= d->selectedBottomItem))) {
 				setColor(GREY);
 			}
 			printf("\n");

@@ -20,6 +20,10 @@ typedef struct _internaldata {
 	int topItem;
 	/// This stores what mode the program is currently in.
 	int mode;
+	/// This stores the top selected item.
+	int selectedTopItem;
+	/// This stores the bottom selected item (used for ranges later).
+	int selectedBottomItem;
 } data;
 
 /// Program modes
