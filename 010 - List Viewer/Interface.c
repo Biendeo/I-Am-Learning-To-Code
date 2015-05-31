@@ -170,71 +170,16 @@ void computeInput(Data d, List l) {
 	if (d->mode == MODE_VIEW) {
 		/// If up is pressed...
 		if (keyPress == KEY_UP) {
-			/// If the cursor is not at the top of the list, we move it up.
-			if (d->cursorPos > 1) {
-				d->cursorPos--;
-			}
-			
-			/// If the screen is not at the top...
-			if (d->topItem > 1) {
-				/// And it's moved past the top quarter of the screen, then we
-				/// move it up.
-				if ((d->topItem + d->consoleHeight / 4) > d->cursorPos) {
-					d->topItem--;
-				}
-			}
+			scrollScreenUp(d, l);
 		/// If down is pressed...
 		} else if (keyPress == KEY_DOWN) {
-			/// If the cursor is not at the bottom of the list, we move it down.
-			if (d->cursorPos < l->size) {
-				d->cursorPos++;
-			}
-			
-			/// If the screen is not at the bottom, we move it down.
-			// This currently goes further, leaving black space. Ideally, we
-			// should just leave it when it prints NO MORE ITEMs.
-			if (d->topItem < l->size) {
-				/// There's also a catch if it's at the top of the list.
-				if ((d->topItem > 5) || (d->cursorPos > 5)) {
-					/// Also, if the cursor moves to the bottom quarter of the
-					/// screen, then the screen moves down.
-					if ((d->topItem + 3 * d->consoleHeight / 4) < d->cursorPos) {
-						d->topItem++;
-					}
-				}
-			}
+			scrollScreenDown(d, l);
 		/// If page up is pressed...
 		} else if (keyPress == KEY_PGUP) {
-			/// If the cursor is within a screen's distance to the top, then it
-			/// just sets it as the top. Otherwise, it moves it a screen.
-			if (d->cursorPos > d->consoleHeight - 1) {
-				d->cursorPos -= d->consoleHeight - 1;
-			} else {
-				d->cursorPos = 1;
-			}
-			
-			/// Similarly with the top item.
-			if (d->topItem > d->consoleHeight - 1) {
-				d->topItem -= d->consoleHeight - 1;
-			} else {
-				d->topItem = 1;
-			}
+			jumpScreenUp(d, l);
 		/// If page down is pressed...
 		} else if (keyPress == KEY_PGDOWN) {
-			/// If the cursor is within a screen's distance to the bottom, then
-			/// it just sets it as the bottom. Otherwise, it moves it a screen.
-			if (d->cursorPos < l->size - (d->consoleHeight - 1)) {
-				d->cursorPos += d->consoleHeight - 1;
-			} else {
-				d->cursorPos = l->size;
-			}
-			
-			/// Similarly with the bottom item.
-			if (d->topItem < l->size - (d->consoleHeight - 1)) {
-				d->topItem += d->consoleHeight - 1;
-			} else {
-				d->topItem = l->size;
-			}
+			jumpScreenDown(d, l);
 		/// If space is pressed...
 		} else if (keyPress == KEY_SPACE) {
 			/// The program enters the menu.
@@ -251,4 +196,76 @@ void computeInput(Data d, List l) {
 void updateConsoleData(Data d) {
 	d->consoleHeight = trows();
 	d->consoleWidth = tcols();
+}
+
+void scrollScreenUp(Data d, List l) {
+	/// If the cursor is not at the top of the list, we move it up.
+	if (d->cursorPos > 1) {
+		d->cursorPos--;
+	}
+	
+	/// If the screen is not at the top...
+	if (d->topItem > 1) {
+		/// And it's moved past the top quarter of the screen, then we
+		/// move it up.
+		if ((d->topItem + d->consoleHeight / 4) > d->cursorPos) {
+			d->topItem--;
+		}
+	}
+}
+
+void scrollScreenDown(Data d, List l) {
+	/// If the cursor is not at the bottom of the list, we move it down.
+	if (d->cursorPos < l->size) {
+		d->cursorPos++;
+	}
+	
+	/// If the screen is not at the bottom, we move it down.
+	// This currently goes further, leaving black space. Ideally, we
+	// should just leave it when it prints NO MORE ITEMs.
+	if (d->topItem < l->size) {
+		/// There's also a catch if it's at the top of the list.
+		// Do we still need this after the next check?
+		if ((d->topItem > 5) || (d->cursorPos > 5)) {
+			/// Also, if the cursor moves to the bottom quarter of the
+			/// screen, then the screen moves down.
+			if ((d->topItem + 3 * d->consoleHeight / 4) < d->cursorPos) {
+				d->topItem++;
+			}
+		}
+	}
+}
+
+void jumpScreenUp(Data d, List l) {
+	/// If the cursor is within a screen's distance to the top, then it
+	/// just sets it as the top. Otherwise, it moves it a screen.
+	if (d->cursorPos > d->consoleHeight - 1) {
+		d->cursorPos -= d->consoleHeight - 1;
+	} else {
+		d->cursorPos = 1;
+	}
+	
+	/// Similarly with the top item.
+	if (d->topItem > d->consoleHeight - 1) {
+		d->topItem -= d->consoleHeight - 1;
+	} else {
+		d->topItem = 1;
+	}
+}
+
+void jumpScreenDown(Data d, List l) {
+	/// If the cursor is within a screen's distance to the bottom, then
+	/// it just sets it as the bottom. Otherwise, it moves it a screen.
+	if (d->cursorPos < l->size - (d->consoleHeight - 1)) {
+		d->cursorPos += d->consoleHeight - 1;
+	} else {
+		d->cursorPos = l->size;
+	}
+	
+	/// Similarly with the bottom item.
+	if (d->topItem < l->size - (d->consoleHeight - 1)) {
+		d->topItem += d->consoleHeight - 1;
+	} else {
+		d->topItem = l->size;
+	}
 }
