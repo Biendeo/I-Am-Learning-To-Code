@@ -24,6 +24,8 @@ typedef struct _internaldata {
 	int selectedTopItem;
 	/// This stores the bottom selected item (used for ranges later).
 	int selectedBottomItem;
+	/// This stores what is selected in the menu.
+	int menuItem;
 } data;
 
 /// Program modes
@@ -38,12 +40,14 @@ typedef struct _internaldata {
 #define ERROR_DELETED_PAST_SIZE 1
 #define ERROR_DELETED_ITEM_FROM_NULL_LIST 2
 #define ERROR_ADDED_PAST_SIZE 3
+#define ERROR_UNIMPLEMENTED 4
 
 void reportError(int errorCode);
 Data startProgram();
 void quitProgram(Data d, List l);
 void printList(Data d, List l);
 void printFooter(Data d, List l);
+void printViewMenu(Data d, List l);
 void showList(Data d, List l);
 void computeInput(Data d, List l);
 void updateConsoleData(Data d);

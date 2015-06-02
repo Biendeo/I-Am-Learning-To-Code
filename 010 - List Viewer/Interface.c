@@ -30,7 +30,11 @@ int main(int argc, char *argv[]) {
 	while (d->mode != MODE_EXIT) {
 		updateConsoleData(d);
 		printList(d, l);
-		printFooter(d, l);
+		if (d->mode == MODE_VIEW_MENU) {
+			printViewMenu(d, l);
+		} else {
+			printFooter(d, l);
+		}
 		computeInput(d, l);
 	}
 	
@@ -40,6 +44,7 @@ int main(int argc, char *argv[]) {
 }
 
 void reportError(int errorCode) {
+	printf("\n");
 	if (errorCode == ERROR_DELETED_PAST_SIZE) {
 		setColor(LIGHTRED);
 		printf("ERROR (%d): ERROR_DELETED_PAST_SIZE\n", ERROR_DELETED_PAST_SIZE);
@@ -58,7 +63,15 @@ void reportError(int errorCode) {
 		setColor(GREY);
 		printf("The program tried to add an item past the size of the list.\n");
 		printf("If you're seeing this error, then the program messed up. Blame it on me.\n");
+	} else if (errorCode == ERROR_UNIMPLEMENTED) {
+		setColor(YELLOW);
+		printf("WARNING (%d): ERROR_UNIMPLEMENTED\n", ERROR_UNIMPLEMENTED);
+		setColor(GREY);
+		printf("The bit you accessed hasn't been written yet.\n");
+		printf("Nothing is wrong, just that feature isn't in the program yet.\n");
 	}
+	printf("Press ENTER to keep using the program.\n");
+	getkey();
 }
 
 Data startProgram() {
@@ -69,6 +82,9 @@ Data startProgram() {
 	d->cursorWidth = 0;
 	d->topItem = 4500;
 	d->mode = MODE_VIEW;
+	d->selectedTopItem = 0;
+	d->selectedBottomItem = 0;
+	d->menuItem = 0;
 	return d;
 }
 
@@ -117,10 +133,15 @@ void printList(Data d, List l) {
 			/// If it's highlighted, then it's printed as yellow.
 			if (writingPos == d->cursorPos) {
 				setColor(YELLOW);
+			/// If it's selected for a process, we colour it depending on the
+			/// mode we're in.
 			} else if ((writingPos >= d->selectedTopItem) && (writingPos <= d->selectedBottomItem)) {
+				/// If we're moving it, we highlight it green.
 				if ((d->mode == MODE_MOVE) || (d->mode == MODE_MOVE_MENU)) {
 					setColor(LIGHTGREEN);
 				}
+				/// If we're copying it, we highlight it blue.
+				/// If we're deleting it, we highlight it red.
 			}
 			
 			/// Now, we print the letters we need to display. We stop 
@@ -167,6 +188,73 @@ void printFooter(Data d, List l) {
 	setColor(GREY);
 }
 
+void printViewMenu(Data d, List l) {
+	// This will not be 100% good on thinner terminals.
+	/// This is the number of characters that is drawn on the menu.
+	// It's hardcoded per menu. Plus, I don't entirely know how to
+	// implement it.
+	int charsToDraw = 31;
+	
+	setColor(WHITE);
+	
+	if (d->menuItem == 0) {
+		setColor(YELLOW);
+	}
+	locate(1, d->consoleHeight);
+	printf("ADD");
+	setColor(WHITE);
+	
+	if (d->menuItem == 1) {
+		setColor(YELLOW);
+	}
+	locate(5, d->consoleHeight);
+	printf("EDIT");
+	setColor(WHITE);
+	
+	if (d->menuItem == 2) {
+		setColor(YELLOW);
+	}
+	locate(10, d->consoleHeight);
+	printf("DELETE");
+	setColor(WHITE);
+	
+	if (d->menuItem == 3) {
+		setColor(YELLOW);
+	}
+	locate(17, d->consoleHeight);
+	printf("MOVE");
+	setColor(WHITE);
+	
+	if (d->menuItem == 4) {
+		setColor(YELLOW);
+	}
+	locate(22, d->consoleHeight);
+	printf("COPY");
+	setColor(WHITE);
+	
+	if (d->menuItem == 5) {
+		setColor(YELLOW);
+	}
+	locate(27, d->consoleHeight);
+	printf("LOAD");
+	setColor(WHITE);
+	
+	if (d->menuItem == 6) {
+		setColor(YELLOW);
+	}
+	locate(32, d->consoleHeight);
+	printf("SAVE");
+	setColor(WHITE);
+	
+	if (d->menuItem == 7) {
+		setColor(YELLOW);
+	}
+	locate(37, d->consoleHeight);
+	printf("EXIT");
+	
+	setColor(GREY);
+}
+
 void computeInput(Data d, List l) {
 	/// Firstly, we get the keypress, then figure out what to do with it.
 	int keyPress = getkey();
@@ -187,12 +275,42 @@ void computeInput(Data d, List l) {
 		/// If space is pressed...
 		} else if (keyPress == KEY_SPACE) {
 			/// The program enters the menu.
-			// THIS DOES NOT WORK.
-			// d->mode = MODE_VIEW_MENU;
+			d->mode = MODE_VIEW_MENU;
+			d->menuItem = 0;
 		/// If escape is pressed...
 		} else if (keyPress == KEY_ESCAPE) {
 			/// Quit the program.
 			d->mode = MODE_EXIT;
+		}
+	} else if (d->mode == MODE_VIEW_MENU) {
+		if (keyPress == KEY_RIGHT) {
+			if (d->menuItem < 7) { // The 7 is the number of list items + 1.
+				d->menuItem++;
+			}
+		} else if (keyPress == KEY_LEFT) {
+			if (d->menuItem > 0) {
+				d->menuItem--;
+			}
+		} else if (keyPress == KEY_ESCAPE) {
+			d->mode = MODE_VIEW;
+		} else if (keyPress == KEY_SPACE) {
+			if (d->menuItem == 0) { // ADD
+				reportError(ERROR_UNIMPLEMENTED);
+			} else if (d->menuItem == 1) { // EDIT
+				reportError(ERROR_UNIMPLEMENTED);
+			} else if (d->menuItem == 2) { // DELETE
+				reportError(ERROR_UNIMPLEMENTED);
+			} else if (d->menuItem == 3) { // MOVE
+				reportError(ERROR_UNIMPLEMENTED);
+			} else if (d->menuItem == 4) { // COPY
+				reportError(ERROR_UNIMPLEMENTED);
+			} else if (d->menuItem == 5) { // LOAD
+				reportError(ERROR_UNIMPLEMENTED);
+			} else if (d->menuItem == 6) { // SAVE
+				reportError(ERROR_UNIMPLEMENTED);
+			} else if (d->menuItem == 7) { // EXIT
+				d->mode = MODE_EXIT;
+			}
 		}
 	}
 }
