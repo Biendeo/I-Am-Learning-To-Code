@@ -56,5 +56,7 @@ void computeInput(Data d, List l);
 void updateConsoleData(Data d);
 void scrollScreenUp(Data d, List l);
 void scrollScreenDown(Data d, List l);
+void scrollItemLeft(Data d, List l);
+void scrollItemRight(Data d, List l);
 void jumpScreenUp(Data d, List l);
 void jumpScreenDown(Data d, List l);

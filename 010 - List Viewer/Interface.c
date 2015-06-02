@@ -195,7 +195,7 @@ void printFooter(Data d, List l) {
 		charsToDraw += log10(d->cursorPos);
 	}
 	
-	locate(d->consoleWidth - charsToDraw, d->consoleHeight);
+	locate(d->consoleWidth - charsToDraw + 1, d->consoleHeight);
 	printf("%d/%d", d->cursorPos, l->size);
 	
 	setColor(GREY);
@@ -291,6 +291,10 @@ void editItemScreen(Data d, List l) {
 	
 	/// Finally, we edit this specific item in the interface.
 	editItem(l, inputText, d->cursorPos);
+	
+	/// We also flush stdin, as if you write over the limit, it'll try to apply
+	/// itself to the next thing you write.
+	fflush(stdin);
 }
 
 void computeInput(Data d, List l) {
@@ -300,16 +304,26 @@ void computeInput(Data d, List l) {
 	if (d->mode == MODE_VIEW) {
 		/// If up is pressed...
 		if (keyPress == KEY_UP) {
+			d->cursorWidth = 0;
 			scrollScreenUp(d, l);
 		/// If down is pressed...
 		} else if (keyPress == KEY_DOWN) {
+			d->cursorWidth = 0;
 			scrollScreenDown(d, l);
 		/// If page up is pressed...
 		} else if (keyPress == KEY_PGUP) {
+			d->cursorWidth = 0;
 			jumpScreenUp(d, l);
 		/// If page down is pressed...
 		} else if (keyPress == KEY_PGDOWN) {
+			d->cursorWidth = 0;
 			jumpScreenDown(d, l);
+		/// If left was pressed...
+		} else if (keyPress == KEY_LEFT) {
+			scrollItemLeft(d, l);
+		/// If right was pressed...
+		} else if (keyPress == KEY_RIGHT) {
+			scrollItemRight(d, l);
 		/// If space is pressed...
 		} else if (keyPress == KEY_SPACE) {
 			/// The program enters the menu.
@@ -355,7 +369,7 @@ void computeInput(Data d, List l) {
 
 void updateConsoleData(Data d) {
 	d->consoleHeight = trows();
-	d->consoleWidth = tcols();
+	d->consoleWidth = tcols() - 1;
 }
 
 void scrollScreenUp(Data d, List l) {
@@ -393,6 +407,21 @@ void scrollScreenDown(Data d, List l) {
 				d->topItem++;
 			}
 		}
+	}
+}
+
+void scrollItemLeft(Data d, List l) {
+	if (d->cursorWidth > 0) {
+		d->cursorWidth--;
+	}
+}
+
+void scrollItemRight(Data d, List l) {
+	// In the future, replace this 256 with the stringlength. I'll add a function
+	// in ListFunctions that returns the length of the data of an item, which will
+	// assist this.
+	if (d->cursorWidth < (256 - d->consoleWidth)) {
+		d->cursorWidth++;
 	}
 }
 
