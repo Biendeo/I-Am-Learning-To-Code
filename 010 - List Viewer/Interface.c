@@ -37,7 +37,12 @@ int main(int argc, char *argv[]) {
 		} else {
 			printFooter(d, l);
 		}
-		computeInput(d, l);
+		
+		if (d->mode == MODE_EDIT) {
+			d->mode = MODE_VIEW;
+		} else {
+			computeInput(d, l);
+		}
 	}
 	
 	quitProgram(d, l);
@@ -345,10 +350,6 @@ void computeInput(Data d, List l) {
 				d->mode = MODE_EXIT;
 			}
 		}
-	} else if (d->mode == MODE_EDIT) {
-		/// If we came out of edit mode, then we go back to the
-		/// default view mode.
-		d->mode = MODE_VIEW;
 	}
 }
 
