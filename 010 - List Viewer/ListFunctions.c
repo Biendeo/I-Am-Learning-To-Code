@@ -64,6 +64,24 @@ void addItem(List l, char *data, int pos) {
 	}
 }
 
+void editItem(List l, char *data, int pos) {
+	int currentPos = 1;
+	Item currentItem = l->next;
+	/// It'll now count to the item that needs to be edited.
+	while ((currentPos != pos) && (currentItem != NULL)) {
+		currentItem = currentItem->next;
+		currentPos++;
+	}
+
+	if (currentItem == NULL) {
+		reportError(ERROR_EDITED_PAST_SIZE);
+	} else {
+		free(currentItem->data);
+		currentItem->data = malloc(strlen(data) + 1);
+		strncpy(currentItem->data, data, strlen(data) + 1);
+	}
+}
+
 /**
  *  \brief This function deletes an item from the given list, accepting
  *  the position of the item.

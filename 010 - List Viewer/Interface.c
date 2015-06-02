@@ -69,6 +69,12 @@ void reportError(int errorCode) {
 		setColor(GREY);
 		printf("The bit you accessed hasn't been written yet.\n");
 		printf("Nothing is wrong, just that feature isn't in the program yet.\n");
+	} else if (errorCode == ERROR_EDITED_PAST_SIZE) {
+		setColor(LIGHTRED);
+		printf("ERROR (%d): ERROR_EDITED_PAST_SIZE\n", ERROR_EDITED_PAST_SIZE);
+		setColor(GREY);
+		printf("The program tried to edit an item past the size of the list.\n");
+		printf("If you're seeing this error, then the program messed up. Blame it on me.\n");
 	}
 	printf("Press ENTER to keep using the program.\n");
 	getkey();

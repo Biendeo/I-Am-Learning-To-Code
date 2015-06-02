@@ -41,6 +41,7 @@ typedef struct _internaldata {
 #define ERROR_DELETED_ITEM_FROM_NULL_LIST 2
 #define ERROR_ADDED_PAST_SIZE 3
 #define ERROR_UNIMPLEMENTED 4
+#define ERROR_EDITED_PAST_SIZE 5
 
 void reportError(int errorCode);
 Data startProgram();

@@ -64,6 +64,7 @@ typedef struct _list {
 
 List createList();
 void addItem(List l, char *data, int pos);
+void editItem(List l, char *data, int pos);
 void deleteItem(List l, int pos);
 void moveItem(List l, int posFrom, int posTo);
 void copyItem(List l, int posFrom, int posTo);
