@@ -32,6 +32,8 @@ int main(int argc, char *argv[]) {
 		printList(d, l);
 		if (d->mode == MODE_VIEW_MENU) {
 			printViewMenu(d, l);
+		} else if (d->mode == MODE_EDIT) {
+			editItemScreen(d, l);
 		} else {
 			printFooter(d, l);
 		}
@@ -261,6 +263,31 @@ void printViewMenu(Data d, List l) {
 	setColor(GREY);
 }
 
+void editItemScreen(Data d, List l) {
+	/// Firstly, we move the cursor to the bottom of the screen.
+	locate(1, d->consoleHeight);
+	
+	/// Our text will be stored in this array.
+	char inputText[DATA_MAX_SIZE] = {0};
+	
+	/// The user then inputs the text.
+	printf("Type what you want: ");
+	fgets(inputText, DATA_MAX_SIZE, stdin);
+	
+	/// Then, we scan through the input and get rid of any unnecessary
+	/// characters.
+	int pos = 0;
+	while (pos < DATA_MAX_SIZE) {
+		if (inputText[pos] == '\n') {
+			inputText[pos] = 0;
+		}
+		pos++;
+	}
+	
+	/// Finally, we edit this specific item in the interface.
+	editItem(l, inputText, d->cursorPos);
+}
+
 void computeInput(Data d, List l) {
 	/// Firstly, we get the keypress, then figure out what to do with it.
 	int keyPress = getkey();
@@ -303,7 +330,7 @@ void computeInput(Data d, List l) {
 			if (d->menuItem == 0) { // ADD
 				reportError(ERROR_UNIMPLEMENTED);
 			} else if (d->menuItem == 1) { // EDIT
-				reportError(ERROR_UNIMPLEMENTED);
+				d->mode = MODE_EDIT;
 			} else if (d->menuItem == 2) { // DELETE
 				reportError(ERROR_UNIMPLEMENTED);
 			} else if (d->menuItem == 3) { // MOVE
@@ -318,6 +345,10 @@ void computeInput(Data d, List l) {
 				d->mode = MODE_EXIT;
 			}
 		}
+	} else if (d->mode == MODE_EDIT) {
+		/// If we came out of edit mode, then we go back to the
+		/// default view mode.
+		d->mode = MODE_VIEW;
 	}
 }
 

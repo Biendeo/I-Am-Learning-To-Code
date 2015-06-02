@@ -34,6 +34,7 @@ typedef struct _internaldata {
 #define MODE_MOVE      3
 #define MODE_MOVE_MENU 4
 #define MODE_ADD       5
+#define MODE_EDIT      6
 #define MODE_EXIT      20
 
 /// Error codes
@@ -49,6 +50,7 @@ void quitProgram(Data d, List l);
 void printList(Data d, List l);
 void printFooter(Data d, List l);
 void printViewMenu(Data d, List l);
+void editItemScreen(Data d, List l);
 void showList(Data d, List l);
 void computeInput(Data d, List l);
 void updateConsoleData(Data d);
