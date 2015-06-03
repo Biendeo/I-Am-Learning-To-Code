@@ -160,11 +160,19 @@ void printList(Data d, List l) {
 			/// Now, we print the letters we need to display. We stop 
 			/// either when we hit the end of the string, or when we hit
 			/// the end of the word.
-			while ((stringPos < d->cursorWidth + d->consoleWidth) && (stringPos < strlen(currentItem->data))) {
-				printf("%c", currentItem->data[stringPos]);
-				stringPos++;
-			}
 			
+			/// If it's selected...
+			if (writingPos == d->cursorPos) {
+				while ((stringPos < d->cursorWidth + d->consoleWidth) && (stringPos < strlen(currentItem->data))) {
+					printf("%c", currentItem->data[stringPos]);
+					stringPos++;
+				}
+			} else {
+				while ((stringPos < d->consoleWidth) && (stringPos < strlen(currentItem->data))) {
+					printf("%c", currentItem->data[stringPos]);
+					stringPos++;
+				}
+			}
 			/// If it's highlighted, then we change the colour back.
 			if ((writingPos == d->cursorPos) || ((writingPos >= d->selectedTopItem) && (writingPos <= d->selectedBottomItem))) {
 				setColor(GREY);
