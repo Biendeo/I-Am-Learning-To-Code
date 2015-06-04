@@ -34,11 +34,17 @@ int main(int argc, char *argv[]) {
 			printViewMenu(d, l);
 		} else if (d->mode == MODE_EDIT) {
 			editItemScreen(d, l);
+		} else if (d->mode == MODE_ADD_MENU) {
+			printAddMenu(d, l);
+		} else if (d->mode == MODE_ADD) {
+			addItemScreen(d, l);
 		} else {
 			printFooter(d, l);
 		}
 		
 		if (d->mode == MODE_EDIT) {
+			d->mode = MODE_VIEW;
+		} else if (d->mode == MODE_ADD) {
 			d->mode = MODE_VIEW;
 		} else {
 			computeInput(d, l);
@@ -161,12 +167,15 @@ void printList(Data d, List l) {
 			/// either when we hit the end of the string, or when we hit
 			/// the end of the word.
 			
-			/// If it's selected...
+			/// If it's selected, we go until the point where we need
+			/// to end.
 			if (writingPos == d->cursorPos) {
 				while ((stringPos < d->cursorWidth + d->consoleWidth) && (stringPos < strlen(currentItem->data))) {
 					printf("%c", currentItem->data[stringPos]);
 					stringPos++;
 				}
+			/// Otherwise, we don't care how far across they are, we go
+			/// up to the screen width.
 			} else {
 				while ((stringPos < d->consoleWidth) && (stringPos < strlen(currentItem->data))) {
 					printf("%c", currentItem->data[stringPos]);
@@ -191,6 +200,10 @@ void printFooter(Data d, List l) {
 	locate(1, d->consoleHeight);
 	if (d->mode == MODE_VIEW) {
 		printf("VIEWMODE");	
+	} else if (d->mode == MODE_ADD) {
+		printf("ADDMODE");
+	} else if (d->mode == MODE_DELETE) {
+		printf("DELETEMODE");
 	}
 	/// This is the right-most element of the footer. It shows the
 	/// current number of the selected element, and the total items in
@@ -214,7 +227,7 @@ void printViewMenu(Data d, List l) {
 	/// This is the number of characters that is drawn on the menu.
 	// It's hardcoded per menu. Plus, I don't entirely know how to
 	// implement it.
-	int charsToDraw = 31;
+	// int charsToDraw = 31;
 	
 	setColor(WHITE);
 	
@@ -276,6 +289,26 @@ void printViewMenu(Data d, List l) {
 	setColor(GREY);
 }
 
+void printAddMenu(Data d, List l) {
+	setColor(WHITE);
+	
+	if (d->menuItem == 0) {
+		setColor(YELLOW);
+	}
+	locate(1, d->consoleHeight);
+	printf("ADD ABOVE");
+	setColor(WHITE);
+	
+	if (d->menuItem == 1) {
+		setColor(YELLOW);
+	}
+	locate(11, d->consoleHeight);
+	printf("ADD BELOW");
+	setColor(WHITE);
+	
+	setColor(GREY);
+}
+
 void editItemScreen(Data d, List l) {
 	/// Firstly, we move the cursor to the bottom of the screen.
 	locate(1, d->consoleHeight);
@@ -299,6 +332,37 @@ void editItemScreen(Data d, List l) {
 	
 	/// Finally, we edit this specific item in the interface.
 	editItem(l, inputText, d->cursorPos);
+	
+	/// We also flush stdin, as if you write over the limit, it'll try to apply
+	/// itself to the next thing you write.
+	fflush(stdin);
+}
+
+void addItemScreen(Data d, List l) {
+	// This is the same as editItemScreen, just with a different function.
+	// I might need to merge them.
+	/// Firstly, we move the cursor to the bottom of the screen.
+	locate(1, d->consoleHeight);
+	
+	/// Our text will be stored in this array.
+	char inputText[DATA_MAX_SIZE] = {0};
+	
+	/// The user then inputs the text.
+	printf("Type what you want: ");
+	fgets(inputText, DATA_MAX_SIZE, stdin);
+	
+	/// Then, we scan through the input and get rid of any unnecessary
+	/// characters.
+	int pos = 0;
+	while (pos < DATA_MAX_SIZE) {
+		if (inputText[pos] == '\n') {
+			inputText[pos] = 0;
+		}
+		pos++;
+	}
+	
+	/// Finally, we edit this specific item in the interface.
+	addItem(l, inputText, d->targetedItem);
 	
 	/// We also flush stdin, as if you write over the limit, it'll try to apply
 	/// itself to the next thing you write.
@@ -355,7 +419,8 @@ void computeInput(Data d, List l) {
 			d->mode = MODE_VIEW;
 		} else if (keyPress == KEY_SPACE) {
 			if (d->menuItem == 0) { // ADD
-				reportError(ERROR_UNIMPLEMENTED);
+				d->mode = MODE_ADD_MENU;
+				d->menuItem = 0;
 			} else if (d->menuItem == 1) { // EDIT
 				d->mode = MODE_EDIT;
 			} else if (d->menuItem == 2) { // DELETE
@@ -371,6 +436,26 @@ void computeInput(Data d, List l) {
 			} else if (d->menuItem == 7) { // EXIT
 				d->mode = MODE_EXIT;
 			}
+		}
+	} else if (d->mode == MODE_ADD_MENU) {
+		if (keyPress == KEY_RIGHT) {
+			if (d->menuItem < 1) {
+				d->menuItem++;
+			}
+		} else if (keyPress == KEY_LEFT) {
+			if (d->menuItem > 0) {
+				d->menuItem--;
+			}
+		} else if (keyPress == KEY_ESCAPE) {
+			d->mode = MODE_VIEW_MENU;
+			d->menuItem = 0;
+		} else if (keyPress == KEY_SPACE) {
+			if (d->menuItem == 0) { // ADD ABOVE
+				d->targetedItem = d->cursorPos;
+			} else if (d->menuItem == 1) { // ADD BELOW
+				d->targetedItem = d->cursorPos + 1;
+			}
+			d->mode = MODE_ADD;
 		}
 	}
 }

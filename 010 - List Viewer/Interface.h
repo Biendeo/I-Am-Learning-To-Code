@@ -24,20 +24,29 @@ typedef struct _internaldata {
 	int selectedTopItem;
 	/// This stores the bottom selected item (used for ranges later).
 	int selectedBottomItem;
+	/// This stores the position of the item being targeted for single
+	/// operations.
+	int targetedItem;
 	/// This stores what is selected in the menu.
 	int menuItem;
 } data;
 
 /// Program modes
+// Replace these with enums later
 #define MODE_VIEW      1
 #define MODE_VIEW_MENU 2
 #define MODE_MOVE      3
 #define MODE_MOVE_MENU 4
 #define MODE_ADD       5
 #define MODE_EDIT      6
+#define MODE_ADD_MENU  7
+#define MODE_DELETE    8
+#define MODE_DELETE_MENU 9
+#define MODE_DELETE_RANGE 10
 #define MODE_EXIT      20
 
 /// Error codes
+// REplace these with enums later
 #define ERROR_DELETED_PAST_SIZE 1
 #define ERROR_DELETED_ITEM_FROM_NULL_LIST 2
 #define ERROR_ADDED_PAST_SIZE 3
@@ -50,7 +59,9 @@ void quitProgram(Data d, List l);
 void printList(Data d, List l);
 void printFooter(Data d, List l);
 void printViewMenu(Data d, List l);
+void printAddMenu(Data d, List l);
 void editItemScreen(Data d, List l);
+void addItemScreen(Data d, List l);
 void showList(Data d, List l);
 void computeInput(Data d, List l);
 void updateConsoleData(Data d);
