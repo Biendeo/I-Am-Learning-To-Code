@@ -60,6 +60,7 @@ void printList(Data d, List l);
 void printFooter(Data d, List l);
 void printViewMenu(Data d, List l);
 void printAddMenu(Data d, List l);
+void printDeleteMenu(Data d, List l);
 void editItemScreen(Data d, List l);
 void addItemScreen(Data d, List l);
 void showList(Data d, List l);

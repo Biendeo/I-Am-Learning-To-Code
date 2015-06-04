@@ -19,13 +19,22 @@ int main(int argc, char *argv[]) {
 	
 	// For now, the program will just do some default operations.
 	List l = createList();
-	addItem(l, "test1", 1);
-	addItem(l, "test2", 2);
-	addItem(l, "test1.5", 2);
+	addItem(l, "The Linked List Viewer!", 1);
+	addItem(l, "\"It displays linked lists and lets you directly modify them!\"", 2);
+	addItem(l, "-----------------------------", 3);
 	
-	while (l->size < 4510) {
-		addItem(l, "BLAH", 3);
+	addItem(l, "The max length of an item in this list is 256 characters. That's a lot, it's like a couple of sentences. Still it's not forever, so you need to cut it off at some point.", 4);
+	addItem(l, "You can scroll LEFT and RIGHT too on things that are too long to fit on one screen, which is handy.", 4);
+	addItem(l, "You can also scroll UP and DOWN.", 6);
+	addItem(l, "PAGE UP and PAGE DOWN work to scroll through larger lists.", 7);
+	addItem(l, "Here's a bit of dummy items to test that.", 8);
+	
+	while (l->size < 50) {
+		addItem(l, "DUMMY TEXT", l->size + 1);
 	}
+	
+	addItem(l, "You can press SPACE to enter the menu, and accept options.", 51);
+	addItem(l, "Finally, ESCAPE exits the program.", 52);
 	
 	while (d->mode != MODE_EXIT) {
 		updateConsoleData(d);
@@ -38,6 +47,8 @@ int main(int argc, char *argv[]) {
 			printAddMenu(d, l);
 		} else if (d->mode == MODE_ADD) {
 			addItemScreen(d, l);
+		} else if (d->mode == MODE_DELETE_MENU) {
+			printDeleteMenu(d, l);
 		} else {
 			printFooter(d, l);
 		}
@@ -45,6 +56,8 @@ int main(int argc, char *argv[]) {
 		if (d->mode == MODE_EDIT) {
 			d->mode = MODE_VIEW;
 		} else if (d->mode == MODE_ADD) {
+			d->mode = MODE_VIEW;
+		} else if (d->mode == MODE_DELETE) {
 			d->mode = MODE_VIEW;
 		} else {
 			computeInput(d, l);
@@ -97,9 +110,9 @@ Data startProgram() {
 	Data d = malloc(sizeof(data));
 	d->consoleHeight = trows();
 	d->consoleWidth = tcols();
-	d->cursorPos = 4505;
+	d->cursorPos = 1;
 	d->cursorWidth = 0;
-	d->topItem = 4500;
+	d->topItem = 1;
 	d->mode = MODE_VIEW;
 	d->selectedTopItem = 0;
 	d->selectedBottomItem = 0;
@@ -309,6 +322,26 @@ void printAddMenu(Data d, List l) {
 	setColor(GREY);
 }
 
+void printDeleteMenu(Data d, List l) {
+	setColor(WHITE);
+	
+	if (d->menuItem == 0) {
+		setColor(YELLOW);
+	}
+	locate(1, d->consoleHeight);
+	printf("DELETE ITEM");
+	setColor(WHITE);
+	
+	if (d->menuItem == 1) {
+		setColor(YELLOW);
+	}
+	locate(13, d->consoleHeight);
+	printf("DELETE RANGE");
+	setColor(WHITE);
+	
+	setColor(GREY);
+}
+
 void editItemScreen(Data d, List l) {
 	/// Firstly, we move the cursor to the bottom of the screen.
 	locate(1, d->consoleHeight);
@@ -424,7 +457,8 @@ void computeInput(Data d, List l) {
 			} else if (d->menuItem == 1) { // EDIT
 				d->mode = MODE_EDIT;
 			} else if (d->menuItem == 2) { // DELETE
-				reportError(ERROR_UNIMPLEMENTED);
+				d->mode = MODE_DELETE_MENU;
+				d->menuItem = 0;
 			} else if (d->menuItem == 3) { // MOVE
 				reportError(ERROR_UNIMPLEMENTED);
 			} else if (d->menuItem == 4) { // COPY
@@ -456,6 +490,27 @@ void computeInput(Data d, List l) {
 				d->targetedItem = d->cursorPos + 1;
 			}
 			d->mode = MODE_ADD;
+		}
+	} else if (d->mode == MODE_DELETE_MENU) {
+		if (keyPress == KEY_RIGHT) {
+			if (d->menuItem < 1) {
+				d->menuItem++;
+			}
+		} else if (keyPress == KEY_LEFT) {
+			if (d->menuItem > 0) {
+				d->menuItem--;
+			}
+		} else if (keyPress == KEY_ESCAPE) {
+			d->mode = MODE_VIEW_MENU;
+			d->menuItem = 2;
+		} else if (keyPress == KEY_SPACE) {
+			if (d->menuItem == 0) { // DELETE ITEM
+				d->targetedItem = d->cursorPos;
+				deleteItem(l, d->cursorPos);
+			} else if (d->menuItem == 1) { // DELETE RANGE
+				reportError(ERROR_UNIMPLEMENTED);
+			}
+			d->mode = MODE_VIEW;
 		}
 	}
 }
