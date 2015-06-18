@@ -51,7 +51,7 @@
 	#endif
 #endif
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(_WIN64)
 	#include <windows.h>  // for WinAPI and Sleep()
 	#define _NO_OLDNAMES  // for MinGW compatibility
 	#include <conio.h>    // for getch() and kbhit()
@@ -317,7 +317,7 @@ const int KEY_NUMPAD9 = 135;
 /// Note:
 /// Only Arrows, Esc, Enter and Space are currently working properly.
 RLUTIL_INLINE int getkey(void) {
-	#ifndef _WIN32
+	#if !defined(_WIN32) && !defined(_WIN64)
 	int cnt = kbhit(); // for ANSI escapes processing
 	#endif
 	int k = getch();
@@ -353,7 +353,7 @@ RLUTIL_INLINE int getkey(void) {
 				default: return kk-123+KEY_F1; // Function keys
 			}}
 		case 13: return KEY_ENTER;
-#ifdef _WIN32
+#if defined(_WIN32) || defined(_WIN64)
 		case 27: return KEY_ESCAPE;
 #else // _WIN32
 		case 155: // single-character CSI
@@ -411,7 +411,7 @@ RLUTIL_INLINE RLUTIL_STRING_T getANSIColor(const int c) {
 ///
 /// See <Color Codes>
 RLUTIL_INLINE void setColor(int c) {
-#if defined(_WIN32) && !defined(RLUTIL_USE_ANSI)
+#if (defined(_WIN32) || defined(_WIN64)) && !defined(RLUTIL_USE_ANSI)
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (WORD)c);
 #else
@@ -422,7 +422,7 @@ RLUTIL_INLINE void setColor(int c) {
 /// Function: cls
 /// Clears screen and moves cursor home.
 RLUTIL_INLINE void cls(void) {
-#if defined(_WIN32) && !defined(RLUTIL_USE_ANSI)
+#if (defined(_WIN32) || defined(_WIN64)) && !defined(RLUTIL_USE_ANSI)
 	// TODO: This is cheating...
 	system("cls");
 #else
@@ -433,7 +433,7 @@ RLUTIL_INLINE void cls(void) {
 /// Function: locate
 /// Sets the cursor position to 1-based x,y.
 RLUTIL_INLINE void locate(int x, int y) {
-#if defined(_WIN32) && !defined(RLUTIL_USE_ANSI)
+#if (defined(_WIN32) || defined(_WIN64)) && !defined(RLUTIL_USE_ANSI)
 	COORD coord;
 	coord.X = (SHORT)x-1;
 	coord.Y = (SHORT)y-1; // Windows uses 0-based coordinates
@@ -454,7 +454,7 @@ RLUTIL_INLINE void locate(int x, int y) {
 /// Function: hidecursor
 /// Hides the cursor.
 RLUTIL_INLINE void hidecursor(void) {
-#if defined(_WIN32) && !defined(RLUTIL_USE_ANSI)
+#if (defined(_WIN32) || defined(_WIN64)) && !defined(RLUTIL_USE_ANSI)
 	HANDLE hConsoleOutput;
 	CONSOLE_CURSOR_INFO structCursorInfo;
 	hConsoleOutput = GetStdHandle( STD_OUTPUT_HANDLE );
@@ -469,7 +469,7 @@ RLUTIL_INLINE void hidecursor(void) {
 /// Function: showcursor
 /// Shows the cursor.
 RLUTIL_INLINE void showcursor(void) {
-#if defined(_WIN32) && !defined(RLUTIL_USE_ANSI)
+#if (defined(_WIN32) || defined(_WIN64)) && !defined(RLUTIL_USE_ANSI)
 	HANDLE hConsoleOutput;
 	CONSOLE_CURSOR_INFO structCursorInfo;
 	hConsoleOutput = GetStdHandle( STD_OUTPUT_HANDLE );
@@ -484,7 +484,7 @@ RLUTIL_INLINE void showcursor(void) {
 /// Function: msleep
 /// Waits given number of milliseconds before continuing.
 RLUTIL_INLINE void msleep(unsigned int ms) {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(_WIN64)
 	Sleep(ms);
 #else
 	// usleep argument must be under 1 000 000
@@ -496,7 +496,7 @@ RLUTIL_INLINE void msleep(unsigned int ms) {
 /// Function: trows
 /// Get the number of rows in the terminal window or -1 on error.
 RLUTIL_INLINE int trows(void) {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(_WIN64)
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	if (!GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi))
 		return -1;
@@ -521,7 +521,7 @@ RLUTIL_INLINE int trows(void) {
 /// Function: tcols
 /// Get the number of columns in the terminal window or -1 on error.
 RLUTIL_INLINE int tcols(void) {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(_WIN64)
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	if (!GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi))
 		return -1;
