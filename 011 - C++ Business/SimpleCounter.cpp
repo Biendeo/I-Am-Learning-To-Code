@@ -2,13 +2,13 @@
 #include <iostream>
 
 // I've got a function to do the counting.
-unsigned int countingStage(unsigned int numGoal, unsigned int numStep);
+unsigned long long countingStage(unsigned long long numGoal, unsigned long long numStep);
 
 // Firstly, we start with the main.
 int main(int argc, char *argv[]) {
-	// We're going to be dealing with positive integers, so unsigned is the way to go.
-	unsigned int numGoal = 0;
-	unsigned int numStep = 0;
+	// We're going to be dealing with positive long longegers, so unsigned is the way to go.
+	unsigned long long numGoal = 0;
+	unsigned long long numStep = 0;
 
 	// We ask the user for input, and then we use cin to do that. The arrows are important in direction here.
 	std::cout << "Please enter what number you would like to count to. ";
@@ -23,16 +23,16 @@ int main(int argc, char *argv[]) {
 
 	fflush(stdin);
 
-	// Then, we run the function, passing the inputs into it.
+	// Then, we run the function, passing the inputs long longo it.
 	countingStage(numGoal, numStep);
 
 	return 0;
 }
 
-unsigned int countingStage(unsigned int numGoal, unsigned int numStep) {
+unsigned long long countingStage(unsigned long long numGoal, unsigned long long numStep) {
 	// We count the number of iterations, and what progress we're up to.
-	unsigned int iterations = 0;
-	unsigned int currentProgress = 0;
+	unsigned long long iterations = 0;
+	unsigned long long currentProgress = 0;
 
 	// While we haven't hit the goal, increment by the step, and count the number of iterations.
 	// This will end when it exceeds or equals it.
