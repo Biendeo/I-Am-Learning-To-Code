@@ -126,6 +126,7 @@ bool leapYearChecker(int year) {
 	// I've seen people call their bools starting with a b, so I'll do that here.
 	bool bIsLeapYear = false;
 
+	// Is this neater than the previous attempt?
 	if      ((year % 400) == 0) bIsLeapYear = true;
 	else if ((year % 100) == 0) bIsLeapYear = false;
 	else if ((year % 4) == 0)   bIsLeapYear = true;
