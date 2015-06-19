@@ -30,10 +30,7 @@ int main(int argc, char *argv[]) {
 	std::cout << "And the year? " << std::endl;
 	std::cin >> inputYear;
 
-
-	int returnWeekday = 0;
-
-	returnWeekday = calculationStage(inputDay, inputMonth, inputYear);
+	int returnWeekday = calculationStage(inputDay, inputMonth, inputYear);
 
 	// This basically checks what is returnWeekday with the cases. It's in C, but this is my first time using them.
 	switch (returnWeekday) {
@@ -69,8 +66,6 @@ int calculationStage(int inputDay, int inputMonth, int inputYear) {
 	int currentDay = START_DAY;
 	int currentMonth = START_MONTH;
 	int currentYear = START_YEAR;
-
-
 	bool bIsLeapYear = false;
 
 	while (currentDay != inputDay || currentMonth != inputMonth || currentYear != inputYear) {
@@ -121,7 +116,6 @@ int calculationStage(int inputDay, int inputMonth, int inputYear) {
 			if (currentWeekday == 7) {
 				currentWeekday = 0;
 			}
-
 		}
 
 	return currentWeekday;
@@ -132,19 +126,10 @@ bool leapYearChecker(int year) {
 	// I've seen people call their bools starting with a b, so I'll do that here.
 	bool bIsLeapYear = false;
 
-	if ((year % 4) == 0) {
-		if ((year % 100) == 0) {
-			if ((year % 400) == 0) {
-				bIsLeapYear = true;
-			} else {
-				bIsLeapYear = false;
-			}
-		} else {
-			bIsLeapYear = true;
-		}
-	} else {
-		bIsLeapYear = false;
-	}
+	if      ((year % 400) == 0) bIsLeapYear = true;
+	else if ((year % 100) == 0) bIsLeapYear = false;
+	else if ((year % 4) == 0)   bIsLeapYear = true;
+	else                        bIsLeapYear = false;
 
 	return bIsLeapYear;
 }
