@@ -1,0 +1,53 @@
+CALCULATOR PLAN
+
+What will this calculator do?
+    Allow the user to type a math equation.
+    Have the computer evaluate that equation.
+
+How will it do that?
+    The computer will need to firstly scan the entire string, and count the
+    brackets. This should allow it to find the greatest degree of bracket in the
+    equation. Ties should be okay.
+    Then, knowing the greatest degree of bracket, run through the string again.
+    FIGURE OUT HOW TO DO THIS BEFORE YOU START DOING CODE!
+
+What operands will it do?
+    Addition
+    Subtraction
+    Multiplication
+    Division
+    Powers
+    Modulus
+    
+    This stuff for stretch
+        Trigonometric functions
+        Variables?
+        Constants (e, pi, Avagadro's, etc.)
+        Imaginary numbers
+
+What else will it have?
+    You'll be able to get the values of previous results and call them later.
+
+Functions (think broad and separate them down)
+    main
+        Should firstly test to see if the program works (testComputations()).
+        Then will go into the normal mode (calculatorMode()).
+    
+    testComputations
+        This will test that the calculations work properly. This should just
+        call computeString() on some set things.
+
+    calculatorMode
+        This will call a few functions for the regular operation of the program.
+
+    equationInput
+        This should ask for user input. This should only relate to doing
+        equations. There will be other parts of the program that will just use
+        their own input.
+
+    validityCheck
+        This should scan the return of equationInput() and check if everything
+        is proper. If it's not proper, the program should then ask
+        equationInput() again.
+
+    ADD MORE STUFF
