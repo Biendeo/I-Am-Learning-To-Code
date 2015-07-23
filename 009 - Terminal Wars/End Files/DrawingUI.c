@@ -101,7 +101,7 @@ void drawUnit (game *data, short x, short y, short arrayPos) {
 		printf("%c", CHAR_NEOTANK);
 	} else if (data->unitData[arrayPos].unitType == MEGATANK) {
 		printf("%c", CHAR_MEGATANK);
-	} else if (data->unitData[arrayPos].unitType == APC) {
+	} else if (data->unitData[arrayPos].unitType == U_APC) {
 		printf("%c", CHAR_APC);
 	} else if (data->unitData[arrayPos].unitType == ARTILLERY) {
 		printf("%c", CHAR_ARTILLERY);
@@ -674,7 +674,7 @@ void drawUnitName (game *data, short selectedUnit) {
 		printf("NEOTANK");
 	} else if (data->unitData[selectedUnit].unitType == MEGATANK) {
 		printf("MEGATANK");
-	} else if (data->unitData[selectedUnit].unitType == APC) {
+	} else if (data->unitData[selectedUnit].unitType == U_APC) {
 		printf("APC");
 	} else if (data->unitData[selectedUnit].unitType == ARTILLERY) {
 		printf("ARTILLERY");
@@ -1380,25 +1380,25 @@ void testDrawing (game *data) {
 						}
 					}
 				} else if (selection == 7) {
-					// APC
+					// U_APC
 					if (data->whoseTurn == TEAM_RED) {
 						if (data->p1.money >= COST_APC) {
-							createUnit(data, data->cursor.x, data->cursor.y, APC, TEAM_RED);
+							createUnit(data, data->cursor.x, data->cursor.y, U_APC, TEAM_RED);
 							data->p1.money -= COST_APC;
 						}
 					} else if (data->whoseTurn == TEAM_BLUE) {
 						if (data->p2.money >= COST_APC) {
-							createUnit(data, data->cursor.x, data->cursor.y, APC, TEAM_BLUE);
+							createUnit(data, data->cursor.x, data->cursor.y, U_APC, TEAM_BLUE);
 							data->p2.money -= COST_APC;
 						}
 					} else if (data->whoseTurn == TEAM_GREEN) {
 						if (data->p3.money >= COST_APC) {
-							createUnit(data, data->cursor.x, data->cursor.y, APC, TEAM_GREEN);
+							createUnit(data, data->cursor.x, data->cursor.y, U_APC, TEAM_GREEN);
 							data->p3.money -= COST_APC;
 						}
 					} else if (data->whoseTurn == TEAM_YELLOW) {
 						if (data->p4.money >= COST_APC) {
-							createUnit(data, data->cursor.x, data->cursor.y, APC, TEAM_YELLOW);
+							createUnit(data, data->cursor.x, data->cursor.y, U_APC, TEAM_YELLOW);
 							data->p4.money -= COST_APC;
 						}
 					}

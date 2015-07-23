@@ -50,7 +50,7 @@
 #define MD_TANK   5
 #define NEOTANK   6
 #define MEGATANK  7
-#define APC       8  // SKIP FOR NOW
+#define U_APC       8  // SKIP FOR NOW
 #define ARTILLERY 9
 #define ROCKETS   10
 #define ANTI_AIR  11
@@ -454,7 +454,7 @@
 
 /// Base damage values (percentages)
 // Use the style DAMAGE_ATTACKER_DEFENDER and add _WEAPON if there's two
-// weapons. The APC, TRAN_COP, and LANDER don't attack, so they're not
+// weapons. The U_APC, TRAN_COP, and LANDER don't attack, so they're not
 // on this list.
 #define DAMAGE_INFANTRY_INFANTRY  55
 #define DAMAGE_INFANTRY_MECH      45

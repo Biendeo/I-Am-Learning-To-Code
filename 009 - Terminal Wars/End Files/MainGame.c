@@ -182,7 +182,7 @@ void initialiseGame (game *data) {
 	createUnit(data, 9, 6, MEGATANK, TEAM_BLUE);
 	createUnit(data, 11, 3, TANK, TEAM_BLUE);
 	createUnit(data, 1, 10, MECH, TEAM_GREEN);
-	createUnit(data, 12, 6, APC, TEAM_YELLOW);
+	createUnit(data, 12, 6, U_APC, TEAM_YELLOW);
 	createUnit(data, 10, 10, NEOTANK, TEAM_YELLOW);
 	// This demonstrates how deleting units works.
 	deleteUnit(data, 4);
@@ -686,7 +686,7 @@ char unitMovementGetter(game *data, short unitPos) {
 		unitMovement = MOVESPEED_NEOTANK;
 	} else if (unitType == MEGATANK) {
 		unitMovement = MOVESPEED_MEGATANK;
-	} else if (unitType == APC) {
+	} else if (unitType == U_APC) {
 		unitMovement = MOVESPEED_APC;
 	} else if (unitType == ARTILLERY) {
 		unitMovement = MOVESPEED_ARTILLERY;
@@ -737,7 +737,7 @@ char unitMovementTypeGetter(game *data, short unitPos) {
 		unitMovementType = MOVETYPE_NEOTANK;
 	} else if (data->unitData[unitPos].unitType == MEGATANK) {
 		unitMovementType = MOVETYPE_MEGATANK;
-	} else if (data->unitData[unitPos].unitType == APC) {
+	} else if (data->unitData[unitPos].unitType == U_APC) {
 		unitMovementType = MOVETYPE_APC;
 	} else if (data->unitData[unitPos].unitType == ARTILLERY) {
 		unitMovementType = MOVETYPE_ARTILLERY;
@@ -791,7 +791,7 @@ char unitAmmoGetter (game *data, short unitPos, char weapon) {
 			unitAmmo = MAXAMMO_NEOTANK_1;
 		} else if (unitType == MEGATANK) {
 			unitAmmo = MAXAMMO_MEGATANK_1;
-		} else if (unitType == APC) {
+		} else if (unitType == U_APC) {
 			unitAmmo = MAXAMMO_APC_1;
 		} else if (unitType == ARTILLERY) {
 			unitAmmo = MAXAMMO_ARTILLERY_1;
@@ -837,7 +837,7 @@ char unitAmmoGetter (game *data, short unitPos, char weapon) {
 			unitAmmo = MAXAMMO_NEOTANK_2;
 		} else if (unitType == MEGATANK) {
 			unitAmmo = MAXAMMO_MEGATANK_2;
-		} else if (unitType == APC) {
+		} else if (unitType == U_APC) {
 			unitAmmo = MAXAMMO_APC_2;
 		} else if (unitType == ARTILLERY) {
 			unitAmmo = MAXAMMO_ARTILLERY_2;
@@ -891,7 +891,7 @@ char unitFuelGetter (game *data, short unitPos) {
 		unitFuel = MAXFUEL_NEOTANK;
 	} else if (unitType == MEGATANK) {
 		unitFuel = MAXFUEL_MEGATANK;
-	} else if (unitType == APC) {
+	} else if (unitType == U_APC) {
 		unitFuel = MAXFUEL_APC;
 	} else if (unitType == ARTILLERY) {
 		unitFuel = MAXFUEL_ARTILLERY;
@@ -945,7 +945,7 @@ char unitVisionGetter (game *data, short unitPos) {
 		unitVision = VISION_NEOTANK;
 	} else if (unitType == MEGATANK) {
 		unitVision = VISION_MEGATANK;
-	} else if (unitType == APC) {
+	} else if (unitType == U_APC) {
 		unitVision = VISION_APC;
 	} else if (unitType == ARTILLERY) {
 		unitVision = VISION_ARTILLERY;
@@ -1296,7 +1296,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_INFANTRY_NEOTANK;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_INFANTRY_MEGATANK;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_INFANTRY_APC;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_INFANTRY_ARTILLERY;
@@ -1342,7 +1342,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_MECH_NEOTANK_1;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_MECH_MEGATANK_1;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_MECH_APC_1;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_MECH_ARTILLERY_1;
@@ -1388,7 +1388,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_RECON_NEOTANK;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_RECON_MEGATANK;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_RECON_APC;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_RECON_ARTILLERY;
@@ -1434,7 +1434,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_TANK_NEOTANK_1;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_TANK_MEGATANK_1;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_TANK_APC_1;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_TANK_ARTILLERY_1;
@@ -1480,7 +1480,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_MD_TANK_NEOTANK_1;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_MD_TANK_MEGATANK_1;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_MD_TANK_APC_1;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_MD_TANK_ARTILLERY_1;
@@ -1526,7 +1526,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_NEOTANK_NEOTANK_1;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_NEOTANK_MEGATANK_1;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_NEOTANK_APC_1;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_NEOTANK_ARTILLERY_1;
@@ -1572,7 +1572,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_MEGATANK_NEOTANK_1;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_MEGATANK_MEGATANK_1;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_MEGATANK_APC_1;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_MEGATANK_ARTILLERY_1;
@@ -1618,7 +1618,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_ARTILLERY_NEOTANK;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_ARTILLERY_MEGATANK;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_ARTILLERY_APC;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_ARTILLERY_ARTILLERY;
@@ -1664,7 +1664,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_ROCKETS_NEOTANK;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_ROCKETS_MEGATANK;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_ROCKETS_APC;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_ROCKETS_ARTILLERY;
@@ -1710,7 +1710,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_ANTI_AIR_NEOTANK;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_ANTI_AIR_MEGATANK;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_ANTI_AIR_APC;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_ANTI_AIR_ARTILLERY;
@@ -1756,7 +1756,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_MISSILES_NEOTANK;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_MISSILES_MEGATANK;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_MISSILES_APC;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_MISSILES_ARTILLERY;
@@ -1802,7 +1802,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_BATT_COP_NEOTANK;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_BATT_COP_MEGATANK;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_BATT_COP_APC;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_BATT_COP_ARTILLERY;
@@ -1848,7 +1848,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_FIGHTER_NEOTANK;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_FIGHTER_MEGATANK;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_FIGHTER_APC;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_FIGHTER_ARTILLERY;
@@ -1894,7 +1894,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_BOMBER_NEOTANK;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_BOMBER_MEGATANK;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_BOMBER_APC;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_BOMBER_ARTILLERY;
@@ -1940,7 +1940,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_STEALTH_NEOTANK;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_STEALTH_MEGATANK;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_STEALTH_APC;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_STEALTH_ARTILLERY;
@@ -1986,7 +1986,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_CRUISER_NEOTANK;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_CRUISER_MEGATANK;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_CRUISER_APC;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_CRUISER_ARTILLERY;
@@ -2032,7 +2032,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_SUB_NEOTANK;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_SUB_MEGATANK;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_SUB_APC;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_SUB_ARTILLERY;
@@ -2078,7 +2078,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_BATT_SHIP_NEOTANK;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_BATT_SHIP_MEGATANK;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_BATT_SHIP_APC;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_BATT_SHIP_ARTILLERY;
@@ -2124,7 +2124,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_CARRIER_NEOTANK;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_CARRIER_MEGATANK;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_CARRIER_APC;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_CARRIER_ARTILLERY;
@@ -2172,7 +2172,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_MECH_NEOTANK_2;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_MECH_MEGATANK_2;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_MECH_APC_2;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_MECH_ARTILLERY_2;
@@ -2218,7 +2218,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_TANK_NEOTANK_2;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_TANK_MEGATANK_2;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_TANK_APC_2;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_TANK_ARTILLERY_2;
@@ -2264,7 +2264,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_MD_TANK_NEOTANK_2;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_MD_TANK_MEGATANK_2;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_MD_TANK_APC_2;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_MD_TANK_ARTILLERY_2;
@@ -2310,7 +2310,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_NEOTANK_NEOTANK_2;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_NEOTANK_MEGATANK_2;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_NEOTANK_APC_2;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_NEOTANK_ARTILLERY_2;
@@ -2356,7 +2356,7 @@ unsigned char baseDamageGetter (game *data, short attacker, short defender, char
 				baseDamage = DAMAGE_MEGATANK_NEOTANK_2;
 			} else if (unitTypeDefender == MEGATANK) {
 				baseDamage = DAMAGE_MEGATANK_MEGATANK_2;
-			} else if (unitTypeDefender == APC) {
+			} else if (unitTypeDefender == U_APC) {
 				baseDamage = DAMAGE_MEGATANK_APC_2;
 			} else if (unitTypeDefender == ARTILLERY) {
 				baseDamage = DAMAGE_MEGATANK_ARTILLERY_2;
@@ -2413,7 +2413,7 @@ char minimumRangeGetter (game *data, short unitPos) {
 		minimumRange = RANGE_MIN_NEOTANK;
 	} else if (unitType == MEGATANK) {
 		minimumRange = RANGE_MIN_MEGATANK;
-	} else if (unitType == APC) {
+	} else if (unitType == U_APC) {
 		minimumRange = RANGE_MIN_APC;
 	} else if (unitType == ARTILLERY) {
 		minimumRange = RANGE_MIN_ARTILLERY;
@@ -2468,7 +2468,7 @@ char maximumRangeGetter (game *data, short unitPos) {
 		maximumRange = RANGE_MAX_NEOTANK;
 	} else if (unitType == MEGATANK) {
 		maximumRange = RANGE_MAX_MEGATANK;
-	} else if (unitType == APC) {
+	} else if (unitType == U_APC) {
 		maximumRange = RANGE_MAX_APC;
 	} else if (unitType == ARTILLERY) {
 		maximumRange = RANGE_MAX_ARTILLERY;
