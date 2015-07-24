@@ -9,8 +9,79 @@ How will it do that?
     brackets. This should allow it to find the greatest degree of bracket in the
     equation. Ties should be okay.
     Then, knowing the greatest degree of bracket, run through the string again.
-    FIGURE OUT HOW TO DO THIS BEFORE YOU START DOING CODE!
+    Take a substring that is the bracket of the greatest degree.
+    Scan it for the highest order operations, and complete those first.
+        If we do trigonometric functions, those need to be evaluated first.
+        Exponents
+        Multiplication + Division + Modulus
+        Addition + Subtraction
+    To evaluate those, they're all binary operators (they use two numbers).
+    So, we'll create another substring, and evaluate the two operators.
+    Depending on the operator, we'll call a function to evaluate the two
+    numbers.
+    
+    Perhaps we should read the string, and save all the numbers directly.
+    We should save each value (including operators) as a class.
+    That class should store what type it is (number, operator, variable), and
+    what value it has. Operators should have a numerical value that corresponds
+    to what it is (so addition would be 1, subtraction is 2, etc.). Brackets
+    should count as operators technically. Variables should have a name
+    (string) property as well as a value.
 
+    So we read in the string, and we have to convert things to these objects.
+    Basically, we should run left to right and store the values we read.
+        If we see a number (I guess a . would work too), we start reading that
+        as a string, and then convert that string to a double. If we read two
+        decimals, we have to abort and say an error.
+        If we see an operator (and these have to be specific), then we store
+        that as an operator, and move on.
+            If it's a -, we have to double-check whether the last object was a
+            number or a ). If it was, then we're using this - as a binary
+            operator. If it wasn't, then we're using it as an unary negative to
+            a following number. Of course, if we don't get a number, then we're 
+            going to chuck an error after we do the string.
+        If we see a variable name, we check to see if it's a known constant. If
+        it is, we just store it as that.
+        If it's a variable, we may need to set that earlier in the program. The
+        user might need to say "var x = 0" earlier or something just to tell the
+        program that they're using a var called x. If they don't give it a
+        value, we'll just say it's 0.
+        Spaces should be skipped. = should be used to set the left-hand side as
+        the value of the right-hand side. If it's used with two constants, then
+        the whole thing needs to chuck an error. == should be used to compare
+        two things. It cannot be in any brackets.
+    
+How should we store this stuff?
+    Let's have a class called calculatorMemory. This memory will store an array
+    of input strings (for future reference) and the values they equate to. This
+    should also store a value in case of errors. There will be an "all good"
+    value for most operations. We can make that their own class (calcHistory).
+    The calculator will thus have all these functions within itself. Functions
+    that interact with the user-end should be public, and the rest be private.
+    calculatorMemory should have an array of a variable class
+    (calcVariable). These should store the name of the variable and a value. By
+    default, they should all be called "null" and have the value of 0. There
+    should be a few keyword values that you cannot call a variable, particularly
+    "null" and "var".
+    I think the console will store previous entries if the user wants to re-use
+    equations for that session.
+    
+    To calculate equations, we will use a calcEquation class. This will store
+    the original input string, and have an list of "calcObjects". This should
+    store the type of value it is, and a pointer to a created object of whatever
+    type it should be. It should also point to the next object. This should
+    allow for dynamic list lengths, and should allow the computer to simplify
+    the equation down each step.
+        For numbers, it should have a pointer to a double.
+        For operators, it should have a pointer to an enum of its type.
+        For constants, it should have a pointer to an enum of its value.
+        For variables, it should have a pointer to an unsigned int of its index
+        in the calcVariable array. That way, it can access the name and value of
+        it.
+    The last calcObject should be an operator of type "end". This should prevent
+    dereferencing null pointers if that ever comes up.
+
+    
 What operands will it do?
     Addition
     Subtraction
