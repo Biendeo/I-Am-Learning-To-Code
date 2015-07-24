@@ -17,6 +17,36 @@
 #include <cstdlib>
 #include <cmath>
 
+class calc {
+
+    enum operatorType {
+
+    };
+
+    const double e = 2.71;
+    const double pi = 3.14;
+
+    class memory {
+
+    };
+
+    class history {
+
+    };
+
+    class variable {
+
+    };
+
+    class equation {
+
+    };
+
+    class object {
+
+    };
+};
+
 int main(int argc, char *argv[]) {
 
     return EXIT_SUCCESS;
