@@ -69,8 +69,8 @@ class calc {
                 value = 0;
             };
 
-            // The properties are determined after the variable is created, so this
-            // function allows the program to set those.
+            // The properties are determined after the variable is created, so
+            // this function allows the program to set those.
             int setVariable(char *givenName, double givenValue, bool givenConstant) {
                 isConstant = givenConstant;
                 name = givenName;
@@ -107,10 +107,49 @@ class calc {
         variable variables[MAX_VARIABLES];
         int totalVariables;
 
+        // This function is where constants can be added to the program.
+        void intialiseConstants() {
+            addVar("e", 2.71, true);
+            addVar("pi", 3.14, true);
+        };
+
+        // This function returns the name of a stored variable given the ID. It
+        // returns "null" if there's one not stored there.
+        char *getVarNameFromIndex(unsigned int index) {
+            if (index >= MAX_VARIABLES) {
+                return "null";
+            } else {
+                return variables[index].getName();
+            }
+        };
+
+        // This function gets the index of a variable from its name.
+        unsigned int getVarIndex(char *name) {
+            int i = 0;
+            while ((i < MAX_VARIABLES) && (getVarNameFromIndex(i) != name)) {
+                i++;
+            }
+
+            if (i == MAX_VARIABLES) {
+                return -1; // TODO: Enum this error code.
+            } else {
+                return i;
+            }
+        }
+
+        // This function gets the value of a variable from its index.
+        double getVarValueFromIndex(unsigned int index) {
+            if (index >= MAX_VARIABLES) {
+                return 0; // Hopefully this never occurs.
+            } else {
+                return variables[index].getValue();
+            }
+        }
+
         public:
         memory() {
             totalVariables = 0;
-            // When creating constants, call add variable for them.
+            intialiseConstants();
         };
 
         // This function adds a variable to the stored array. It returns an
@@ -128,7 +167,7 @@ class calc {
                 // I feel as if something can go wrong here. If i reaches
                 // MAX_VARIABLES, then there's no fall protection. However, I
                 // feel as if the previous else if solves that. It seems odd.
-                while ((i < MAX_VARIABLES) && (getVarName(i) == "null")) {
+                while ((i < MAX_VARIABLES) && (getVarNameFromIndex(i) == "null")) {
                     i++;
                 }
 
@@ -138,27 +177,10 @@ class calc {
             }
         };
 
-        // This function returns the name of a stored variable given the ID. It
-        // returns "null" if there's one not stored there.
-        char *getVarName(unsigned int index) {
-            if (index >= MAX_VARIABLES) {
-                return "null";
-            } else {
-                return variables[index].getName;
-            }
-        };
-
-        unsigned int getVarIndex(char *name) {
-            int i = 0;
-            while ((i < MAX_VARIABLES) && (getVarName(i) != name)) {
-                i++;
-            }
-
-            if (i == MAX_VARIABLES) {
-                return -1; // TODO: Enum this error code.
-            } else {
-                return i;
-            }
+        // This function gets the value of a stored variable based on its name.
+        double getVarValue(char *name) {
+            unsigned int i = getVarIndex(name);
+            getVarValueFromIndex(i);
         }
     };
 
