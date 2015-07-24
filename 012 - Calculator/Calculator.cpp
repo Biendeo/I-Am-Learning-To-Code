@@ -17,14 +17,44 @@
 #include <cstdlib>
 #include <cmath>
 
+// This is the main calculator class. You only need to pass a pointer of this
+// around to the different functions. It possesses all the memory for the
+// program, and all the various classes used in its operation.
 class calc {
 
+    // This defines the types of operators that the program can use. They are
+    // all case checked for what they all do.
     enum operatorType {
-
+        null,
+        add,
+        subtract,
+        multiply,
+        divide,
+        exponent,
+        modulus
     };
 
-    const double e = 2.71;
-    const double pi = 3.14;
+    // This defines the types of objects that are stored. These are the
+    // different categories of mathematical terms that can be used in the
+    // program.
+    enum objectType {
+        null,
+        number,
+        operatortype,
+        constant,
+        variable
+    };
+
+    // This defines a constant as a usable name in the program, and a value
+    // associated with it. It has a boolean to determine whether it is a
+    // constant or not, which allows it to be modified.
+    class variable {
+        bool isConstant;
+
+        public:
+        char *name;
+        double value;
+    };
 
     class memory {
 
@@ -34,16 +64,18 @@ class calc {
 
     };
 
-    class variable {
-
-    };
-
     class equation {
 
     };
 
+    // This defines a mathematical object as a type and a value of some kind.
+    // type == number,       value == double
+    // type == operatortype, value == operatorType
+    // type == constant,     value == variable
+    // type == variable,     value == variable
     class object {
-
+        objectType type;
+        void *value;          // This void * means that it's not type dependent.
     };
 };
 
