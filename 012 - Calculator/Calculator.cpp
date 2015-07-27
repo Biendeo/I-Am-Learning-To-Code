@@ -124,7 +124,7 @@ class calc {
         };
 
         // This function gets the index of a variable from its name.
-        unsigned int getVarIndex(char *name) {
+        int getVarIndex(char *name) {
             int i = 0;
             while ((i < MAX_VARIABLES) && (getVarNameFromIndex(i) != name)) {
                 i++;
@@ -179,8 +179,19 @@ class calc {
 
         // This function gets the value of a stored variable based on its name.
         double getVarValue(char *name) {
-            unsigned int i = getVarIndex(name);
-            getVarValueFromIndex(i);
+            int i = getVarIndex(name);
+            
+            if (i < 0) {
+                return -1; // TODO: Enum this error.
+            } else {
+                return getVarValueFromIndex(i);
+            }
+        };
+
+        // This function gets the total number of variables that are stored.
+        // This includes constants.
+        int getTotalVariables() {
+            return totalVariables;
         }
     };
 
@@ -200,6 +211,32 @@ class calc {
         objectType type;
         void *value;          // This void * means that it's not type dependent.
         object *next;
+
+        public:
+        // TODO: Create a constructor. It'll probably input the properties. The
+        // string will be handled externally. Next will need to be a null
+        // pointer temporarily, as there will not be a value for it right away.
+        object(objectType givenType) {
+
+        };
+
+        // This function returns the type of this object. It should be called to
+        // check which of the next functions to call.
+        objectType getType() {
+            return type;
+        };
+
+        double getDoubleValue() {
+            // This causes an error because *value is technically void.
+            // TODO: Figure out how to do this.
+            double x = *value;
+
+            if (type == typeNumber) {
+                return x;
+            } else {
+                return 0; // TODO: Error?
+            }
+        }
     };
 
     public:
