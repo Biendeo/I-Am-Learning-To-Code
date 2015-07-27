@@ -201,6 +201,14 @@ class calc {
 
     };
 
+    // This holds the data for what a math object will track. Depending on its
+    // type, it'll hold one of these.
+    union valueOnion {
+        double number;
+        operatorType opType;
+        unsigned int var;
+    };
+
     // This defines a mathematical object as a type and a value of some kind.
     // type == typeNumber,   value == double
     // type == typeOperator, value == operatorType
@@ -209,7 +217,7 @@ class calc {
     // type == typeEnd,      value == NULL
     class object {
         objectType type;
-        void *value;          // This void * means that it's not type dependent.
+        valueOnion value;
         object *next;
 
         public:
@@ -217,6 +225,7 @@ class calc {
         // string will be handled externally. Next will need to be a null
         // pointer temporarily, as there will not be a value for it right away.
         object(objectType givenType) {
+
 
         };
 
@@ -227,16 +236,16 @@ class calc {
         };
 
         double getDoubleValue() {
-            // This causes an error because *value is technically void.
-            // TODO: Figure out how to do this.
-            double x = *value;
+            return value.number;
+        };
 
-            if (type == typeNumber) {
-                return x;
-            } else {
-                return 0; // TODO: Error?
-            }
-        }
+        operatorType getOperatorTypeValue() {
+            return value.opType;
+        };
+
+        unsigned int getVariableValue() {
+            return value.var;
+        };
     };
 
     public:
