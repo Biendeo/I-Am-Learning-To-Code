@@ -195,12 +195,6 @@ class calc {
         }
     };
 
-    // TODO: The equation class.
-    class equation {
-        char *originalEquation;
-
-    };
-
     // This holds the data for what a math object will track. Depending on its
     // type, it'll hold one of these.
     union valueOnion {
@@ -221,13 +215,33 @@ class calc {
         object *next;
 
         public:
-        // TODO: Create a constructor. It'll probably input the properties. The
-        // string will be handled externally. Next will need to be a null
-        // pointer temporarily, as there will not be a value for it right away.
-        object(objectType givenType) {
 
+        // This is the default
+        object() {
+            setType(typeNull);
+            setDoubleValue(0);
+            next = (object *)null;
+        }
 
+        int setType(objectType givenType) {
+            type = givenType;
+            return EXIT_SUCCESS;
         };
+
+        int setDoubleValue(double givenValue) {
+            value.number = givenValue;
+            return EXIT_SUCCESS;
+        };
+
+        int setOperatorTypeValue(operatorType givenOpType) {
+            value.opType = givenOpType;
+            return EXIT_SUCCESS;
+        };
+
+        int setVariableIndex(unsigned int givenVar) {
+            value.var = givenVar;
+            return EXIT_SUCCESS;
+        }
 
         // This function returns the type of this object. It should be called to
         // check which of the next functions to call.
@@ -235,15 +249,19 @@ class calc {
             return type;
         };
 
+        // If getType() returns typeNumber, then call this to get the value.
         double getDoubleValue() {
             return value.number;
         };
 
-        operatorType getOperatorTypeValue() {
+        // If getType() returns typeOperator, then call this to get the value.
+        operatorType getOperatorType() {
             return value.opType;
         };
 
-        unsigned int getVariableValue() {
+        // If getType() returns typeConstant or typeVariable, then call this to
+        // get the value.
+        unsigned int getVariableIndex() {
             return value.var;
         };
     };
@@ -251,6 +269,21 @@ class calc {
     public:
     calc() {
         memory mem;
+    };
+
+    // TODO: The equation class.
+    class equation {
+        // This is the maximum number of objects that can be in an equation
+        // if needed change this value.
+        static const unsigned int MAX_OBJECTS = 250;
+
+        char *originalEquation;
+        object objects[MAX_OBJECTS];
+
+        equation() {
+
+        };
+
     };
 };
 
