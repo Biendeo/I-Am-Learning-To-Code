@@ -78,6 +78,7 @@ class calc {
                 isConstant = givenConstant;
                 name = givenName;
                 value = givenValue;
+                return EXIT_SUCCESS;
             };
 
             // This function returns whether the variable is a constant;
@@ -624,7 +625,9 @@ int main(int argc, char *argv[]) {
 
     // TODO: The program should run some tests before it can be used.
     // TODO: Also make a program.
-    std::string testString = argv[1];
+    std::string testString = "";
+    std::cout << "Type an equation!" << std::endl;
+    std::cin >> testString;
     testProgram(calculator, testString);
 
     delete calculator;
