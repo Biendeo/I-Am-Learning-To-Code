@@ -14,6 +14,7 @@
  */
 
 #include <iostream>
+#include <string>
 #include <cstdlib>
 #include <cmath>
 
@@ -31,7 +32,9 @@ class calc {
         multiply,
         divide,
         exponent,
-        modulus
+        modulus,
+        leftBracket,
+        rightBracket
     };
 
     // This defines the types of objects that are stored. These are the
@@ -212,7 +215,6 @@ class calc {
     class object {
         objectType type;
         valueOnion value;
-        object *next;
 
         public:
 
@@ -220,7 +222,6 @@ class calc {
         object() {
             setType(typeNull);
             setDoubleValue(0);
-            next = (object *)null;
         }
 
         int setType(objectType givenType) {
@@ -243,7 +244,7 @@ class calc {
             return EXIT_SUCCESS;
         }
 
-        // This function returns the type of this object. It should be called to
+        // This function returns the  type of this object. It should be called to
         // check which of the next functions to call.
         objectType getType() {
             return type;
@@ -277,15 +278,345 @@ class calc {
         // if needed change this value.
         static const unsigned int MAX_OBJECTS = 250;
 
-        char *originalEquation;
+        // This is the maximum number of digits a number can occupy.
+        static const unsigned int NUM_LENGTH = 30;
+
+        std::string originalEquation;
         object objects[MAX_OBJECTS];
+        double result;
 
-        equation() {
-
+        public:
+        equation(std::string givenEquation) {
+            originalEquation = givenEquation;
+            result = 0;
         };
 
+        // This function converts the string of the original equation into an
+        // array of math objects. You only need to ever run this once per
+        // equation.
+        void convertEquation() {
+            int currentObj = 0;
+            for (int i = 0; originalEquation[i] != 'EOF'; i++) {
+                // TODO: Add in decimal functionality. Check to see if the user
+                // puts two decimals in a number as well.
+                if (originalEquation[i] >= '0' && originalEquation[i] <= '9') {
+
+                    int pos = 0;
+                    // TODO: Test if this works properly.
+                    std::string numberString = "";
+
+                    while ((originalEquation[i] >= '0' && originalEquation[i] <= '9') && (pos < NUM_LENGTH)) {
+                        numberString[pos] = originalEquation[i];
+                        i++;
+                    }
+
+                    // This will overshoot the next character, so we move back
+                    // one.
+                    i--;
+
+
+                    // TODO: Convert the string to a double.
+                    double convertedNumber = atof(numberString.c_str());
+                    objects[currentObj].setType(typeNumber);
+                    objects[currentObj].setDoubleValue(convertedNumber);
+                    currentObj++;
+                } else if (originalEquation[i] >= 'a' && originalEquation[i] <= 'z') {
+                    // TODO: Expect variables, but add exceptions for trig
+                    // functions.
+                } else {
+                    // For this, we assume the type has to be an operator. If
+                    // it isn't, the default type will pick it up
+                    objects[currentObj].setType(typeOperator);
+                    switch (originalEquation[i]) {
+                        case '+':
+                            objects[currentObj].setOperatorTypeValue(add);
+                            break;
+                        case '-':
+                            objects[currentObj].setOperatorTypeValue(subtract);
+                            break;
+                        case '*':
+                            objects[currentObj].setOperatorTypeValue(multiply);
+                            break;
+                        case '/':
+                            objects[currentObj].setOperatorTypeValue(divide);
+                            break;
+                        case '%':
+                            objects[currentObj].setOperatorTypeValue(modulus);
+                            break;
+                        case '^':
+                            objects[currentObj].setOperatorTypeValue(exponent);
+                            break;
+                        case '(':
+                            objects[currentObj].setOperatorTypeValue(leftBracket);
+                            break;
+                        case ')':
+                            objects[currentObj].setOperatorTypeValue(rightBracket);
+                            break;
+                        default:
+                            objects[currentObj].setType(typeNull);
+                            currentObj--;
+                            break;
+                    }
+                    currentObj++;
+                }
+            }
+
+            objects[currentObj].setType(typeEnd);
+        };
+
+        double getResult() {
+            return result;
+        };
+
+        unsigned int getTotalObjects() {
+            unsigned int i = 0;
+            while (i < MAX_OBJECTS) {
+                switch (objects[i].getType()) {
+                    case typeNumber:
+                        i++;
+                        break;
+                    case typeOperator:
+                        i++;
+                        break;
+                    case typeConstant:
+                        i++;
+                        break;
+                    case typeVariable:
+                        i++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return i;
+        };
+
+        void deleteObject(unsigned int index) {
+            while (index < MAX_OBJECTS - 1) {
+                objects[index].setType(objects[index + 1].getType());
+                switch (objects[index].getType()) {
+                    case typeNumber:
+                        objects[index].setDoubleValue(objects[index + 1].getDoubleValue());
+                        break;
+                    case typeOperator:
+                        objects[index].setOperatorTypeValue(objects[index + 1].getOperatorType());
+                        break;
+                    case typeVariable:
+                        objects[index].setVariableIndex(objects[index + 1].getVariableIndex());
+                        break;;
+                    default:
+                        objects[index].setDoubleValue(0);
+                        break;
+                }
+                index++;
+            }
+            objects[index].setType(typeNull);
+            objects[index].setDoubleValue(0);
+        }
+
+        void evaluateEquation() {
+            while (getTotalObjects() > 1) {
+                bool operationPerformed = false;
+                int highestBracketOrder = 0;
+                int currentBracketOrder = 0;
+
+                while (highestBracketOrder > 0) {
+                    highestBracketOrder = 0;
+                    currentBracketOrder = 0;
+
+                    // Firstly, it scans the equation to find the most inner
+                    // bracket to evaluate.
+                    for (int i = 0; objects[i].getType() != typeEnd; i++) {
+                        if (objects[i].getType() == typeOperator) {
+                            if (objects[i].getOperatorType() == leftBracket) {
+                                currentBracketOrder++;
+                            } else if (objects[i].getOperatorType() == rightBracket) {
+                                currentBracketOrder--;
+                            }
+                        }
+
+                        if (currentBracketOrder > highestBracketOrder) {
+                            highestBracketOrder = currentBracketOrder;
+                        }
+                    }
+
+                    if (currentBracketOrder != 0) {
+                        // TODO: Do an error here.
+                        currentBracketOrder = 0;
+                    }
+
+                    // Now we stop when we reach a highest bracket.
+                    int pos = 0;
+                    while (currentBracketOrder != highestBracketOrder) {
+                        if (objects[pos].getType() == typeOperator) {
+                            if (objects[pos].getOperatorType() == leftBracket) {
+                                currentBracketOrder++;
+                            } else if (objects[pos].getOperatorType() == rightBracket) {
+                                currentBracketOrder--;
+                            }
+                        }
+                        pos++;
+                    }
+
+                    // We've overshot it, so we back up one.
+                    pos--;
+
+                    // If we're sitting on a left bracket, we check to see if
+                    // there's a right bracket either right after, or the one
+                    // after that.
+                    if (operationPerformed == false) {
+                        if (objects[pos].getType() == typeOperator) {
+                            if (objects[pos].getOperatorType() == leftBracket) {
+                                if (objects[pos + 1].getType() == typeOperator) {
+                                    if (objects[pos + 2].getOperatorType() == rightBracket) {
+                                        deleteObject(pos);
+                                        deleteObject(pos);
+                                        operationPerformed = true;
+                                    }
+                                } else if (objects[pos + 2].getType() == typeOperator) {
+                                    if (objects[pos + 2].getOperatorType() == rightBracket) {
+                                        deleteObject(pos);
+                                        deleteObject(pos + 1);
+                                        operationPerformed = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Next, we try to get rid of unary - symbols by merging
+                    // them with any doubles.
+
+                    currentBracketOrder = 0;
+
+                    // TODO: Make this part a function, I call it a lot.
+                    pos = 0;
+                    while (currentBracketOrder != highestBracketOrder) {
+                        if (objects[pos].getType() == typeOperator) {
+                            if (objects[pos].getOperatorType() == leftBracket) {
+                                currentBracketOrder++;
+                            } else if (objects[pos].getOperatorType() == rightBracket) {
+                                currentBracketOrder--;
+                            }
+                        }
+                        pos++;
+                    }
+
+                    if (operationPerformed == false) {
+                        while ((pos < MAX_OBJECTS) && (objects[pos].getType() != rightBracket)) {
+                            if (objects[pos].getType() == typeOperator) {
+                                if (objects[pos].getOperatorType() == subtract) {
+                                    if (objects[pos + 1].getType() == typeNumber) {
+                                        if (pos == 0) {
+                                            deleteObject(pos);
+                                            objects[pos].setDoubleValue(evaluateMultiplication(objects[pos].getDoubleValue(), -1));
+                                            operationPerformed = true;
+                                        } else if (objects[pos - 1].getType() == typeOperator) {
+                                            deleteObject(pos);
+                                            objects[pos].setDoubleValue(evaluateMultiplication(objects[pos].getDoubleValue(), -1));
+                                            operationPerformed = true;
+                                        }
+                                    }
+                                }
+                            }
+                            pos++;
+                        }
+                    }
+
+                    // Finally, we do operations based on two numbers and an
+                    // operator.
+
+                    currentBracketOrder = 0;
+
+                    // TODO: Make this part a function, I call it a lot.
+                    pos = 0;
+                    while (currentBracketOrder != highestBracketOrder) {
+                        if (objects[pos].getType() == typeOperator) {
+                            if (objects[pos].getOperatorType() == leftBracket) {
+                                currentBracketOrder++;
+                            } else if (objects[pos].getOperatorType() == rightBracket) {
+                                currentBracketOrder--;
+                            }
+                        }
+                        pos++;
+                    }
+
+                    if (operationPerformed == false) {
+                        while ((pos < MAX_OBJECTS) && (objects[pos].getType() != rightBracket)) {
+                            if (objects[pos].getType() == typeOperator) {
+                                if (objects[pos - 1].getType() == typeNumber && objects[pos + 1].getType() == typeNumber) {
+                                    objects[pos - 1].setDoubleValue(evaluateExpression(objects[pos - 1].getDoubleValue(), objects[pos + 1].getDoubleValue(), objects[pos].getOperatorType()));
+                                    deleteObject(pos);
+                                    deleteObject(pos);
+                                    operationPerformed = true;
+                                }
+                            }
+                            pos++;
+                        }
+                    }
+                }
+            }
+        };
+
+        double evaluateExpression(double a, double b, operatorType opType) {
+            switch (opType) {
+                case add:
+                    return evaluateAddition(a, b);
+                case subtract:
+                    return evaluateSubtraction(a, b);
+            }
+        };
+
+        double evaluateAddition(double a, double b) {
+            return a + b;
+        };
+
+        double evaluateSubtraction(double a, double b) {
+            return a - b;
+        };
+
+        double evaluateMultiplication(double a, double b) {
+            return a * b;
+        };
+
+        double evaluateDivision(double a, double b) {
+            if (b == 0) {
+                return 0;
+            } else {
+                return a / b;
+            }
+        };
+
+        double evaluateExponent(double a, double b) {
+            return pow(a, b);
+        };
+
+        double evaluateModulus(double a, double b) {
+            if (isItAnInteger(a) == true && isItAnInteger(b) == true) {
+                return (int)a % (int)b;
+            } else {
+                return 0;
+            }
+        };
+
+        bool isItAnInteger(double a) {
+
+            // This variable is the degree of error that a double has.
+            static const double epsilon = 0.00002;
+            if (a > 0) {
+                if ((a - epsilon < roundl(a)) && (a + epsilon > round(a))) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            return true;
+        }
     };
 };
+
+void testProgram(calc *calculator, std::string testString);
 
 int main(int argc, char *argv[]) {
 
@@ -293,8 +624,16 @@ int main(int argc, char *argv[]) {
 
     // TODO: The program should run some tests before it can be used.
     // TODO: Also make a program.
+    std::string testString = argv[1];
+    testProgram(calculator, testString);
 
     delete calculator;
 
     return EXIT_SUCCESS;
+}
+
+void testProgram(calc *calculator, std::string testString) {
+    calc::equation testEquation(testString);
+    testEquation.evaluateEquation();
+    std::cout << testString << " = " << testEquation.getResult() << std::endl;
 }
